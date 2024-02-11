@@ -18,5 +18,5 @@
   * User Story: As an Admin, I want to be able to see submitted edits/additions and be able to click and approve or deny option so that I can choose what information is in the wiki to keep it spoiler-free and updated.
 
 * Epic: Template for creating new shows
-  * User Story: As a user, I want to be able to create a wiki for a new show that doesn't have a wiki yet so that I can share spoiler-free information with others watching the show
+  * User Story: As a admin, I want to be able to create a wiki for a new show that doesn't have a wiki yet so that I can share spoiler-free information with others watching the show.
   * User Story: As a user, I want to be able to input some basic information about the show/book, and then create summaries and information for the current season/book so that the show wiki is created and has information to populate it.
