@@ -1,16 +1,40 @@
-# temp
+# SpoilerGuard App
 
-A new Flutter project.
+A mobile application that allows users to find information about movies and TV shows without being spoiled.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
-A few resources to get you started if this is your first Flutter project:
+### Prerequisites
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- To be added
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Environment Variables
+
+|       Variable       | Required |              Default               |                              Description                               |
+| :------------------: | :------: | :--------------------------------: | :--------------------------------------------------------------------: |
+
+### Installing
+
+To be added
+
+## Running the tests
+
+To be added
+
+## Deployment
+
+To be added
+
+## Authors
+
+- **Andrew Oneal** - [LinkedIn](https://www.linkedin.com/in/andrewjoneal)
+- **Munene Gatobu** - [LinkedIn](https://www.linkedin.com/in/munenegatobu)
+- **Spencer Yates** - [LinkedIn](https://www.linkedin.com/in/sdy329)
+
+See also the list of [contributors](https://github.com/AndrewOneal/capstone/contributors) who participated in this project.
+
+## License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
