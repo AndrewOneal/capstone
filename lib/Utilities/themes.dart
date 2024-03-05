@@ -138,7 +138,7 @@ final ThemeData defaultTheme = ThemeData(
     ),
     // Card
     cardTheme: CardTheme(
-      color: lightPurple['default'],
+      color: lightPurple['200'],
       shape: RoundedRectangleBorder(
         borderRadius: cardBorderRadius,
       ),
@@ -188,12 +188,12 @@ final ThemeData defaultTheme = ThemeData(
     textTheme: TextTheme(
       bodyLarge: TextStyle(
         fontFamily: font['default'],
-        fontSize: 16.0,
+        fontSize: 17.0,
         color: text['default'],
       ),
       bodyMedium: TextStyle(
         fontFamily: font['default'],
-        fontSize: 16.0,
+        fontSize: 17.0,
         color: text['900'],
       ),
       titleLarge: TextStyle(
@@ -207,8 +207,8 @@ final ThemeData defaultTheme = ThemeData(
         color: mediumPurple['default'],
       ),
       titleSmall: TextStyle(
-        fontFamily: font['header'],
-        fontSize: 48.0,
+        fontFamily: font['default'],
+        fontSize: 25.0,
         color: text['default'],
       ),
     ));
