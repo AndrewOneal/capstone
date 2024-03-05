@@ -8,7 +8,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const titleSpacing = 30.0;
+    const titleSpacing = 40.0;
     const cardSpacing = 16.0;
 
     return Scaffold(
