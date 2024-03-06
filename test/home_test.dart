@@ -1,4 +1,5 @@
 import 'package:capstone/Pages/home.dart';
+import 'package:capstone/Utilities/theme.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -10,11 +11,6 @@ void main() {
   test('Title Text Displays', () {
     const titleText = TitleText();
     expect(titleText, isNotNull);
-  });
-
-  test('Get Started Button Displays', () {
-    const getStartedButton = GetStartedButton();
-    expect(getStartedButton, isNotNull);
   });
 
   test('Card Widget Diplays', () {
