@@ -18,10 +18,6 @@ class HomePage extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {},
-          ),
-          IconButton(
             icon: const Icon(Icons.account_circle),
             onPressed: () {
               Navigator.push(
