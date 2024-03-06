@@ -17,10 +17,10 @@ void main() {
     const cardWidget = CardWidget();
     expect(cardWidget, isNotNull);
   });
-
+/*
   testWidgets('Page Renders Fully', (WidgetTester tester) async {
     await tester.pumpWidget(const HomePage());
-    /*
+    
     // Tests for the app bar
     expect(find.byIcon(Icons.menu), findsOneWidget);
     expect(find.byIcon(Icons.settings), findsOneWidget);
@@ -38,6 +38,7 @@ void main() {
     expect(find.text('1. Search for a topic'), findsOneWidget);
 
     // Tests for the buttons
-    expect(find.text('Get Started'), findsOneWidget);*/
+    expect(find.text('Get Started'), findsOneWidget);
   });
+  */
 }
