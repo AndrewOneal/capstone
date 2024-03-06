@@ -1,5 +1,4 @@
 import 'package:capstone/Pages/home.dart';
-import 'package:capstone/Utilities/theme.dart';
 import 'package:test/test.dart';
 
 void main() {
