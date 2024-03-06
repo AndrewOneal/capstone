@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/theme.dart';
 import 'home.dart';
 import 'register.dart';
+import 'account.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -28,10 +29,17 @@ class LoginPage extends StatelessWidget {
               const SizedBox(height: 75),
               Text('Login', style: Theme.of(context).textTheme.titleLarge!),
               const SizedBox(height: 10),
-              const LoginForm(),
+              const LoginFields(),
               const SizedBox(height: 60),
               DarkButton(
                 buttonText: "Login",
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AccountPage()),
+                  );
+                },
               ),
               const SizedBox(height: 20),
               Text("Don't have an account?",
@@ -57,8 +65,8 @@ class LoginPage extends StatelessWidget {
   }
 }
 
-class LoginForm extends StatelessWidget {
-  const LoginForm({Key? key}) : super(key: key);
+class LoginFields extends StatelessWidget {
+  const LoginFields({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

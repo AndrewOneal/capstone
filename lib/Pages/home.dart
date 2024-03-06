@@ -32,16 +32,19 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const TitleText(),
-            const SizedBox(height: titleSpacing),
-            const CardWidget(),
-            const SizedBox(height: cardSpacing),
-            DarkButton(buttonText: 'Get Started', buttonWidth: double.infinity),
-          ],
+      body: const Center(
+        child: Padding(
+          padding: sideMargins,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TitleText(),
+              SizedBox(height: titleSpacing),
+              CardWidget(),
+              SizedBox(height: cardSpacing),
+              DarkButton(buttonText: 'Get Started'),
+            ],
+          ),
         ),
       ),
     );
@@ -93,7 +96,6 @@ class CardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 4,
-      margin: sideMargins,
       child: Padding(
         padding: cardPadding,
         child: Column(

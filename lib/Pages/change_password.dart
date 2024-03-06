@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/theme.dart';
-import 'home.dart';
-import 'login.dart';
 import 'account.dart';
 
-class RegisterPage extends StatelessWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+class CPPage extends StatelessWidget {
+  const CPPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,9 +12,8 @@ class RegisterPage extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.clear),
           onPressed: () {
-            Navigator.push(
+            Navigator.pop(
               context,
-              MaterialPageRoute(builder: (context) => const HomePage()),
             );
           },
         ),
@@ -27,12 +24,16 @@ class RegisterPage extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 75),
-              Text('Register', style: Theme.of(context).textTheme.titleLarge!),
+              Text('Change Password',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge!
+                      .copyWith(fontSize: 42)),
               const SizedBox(height: 10),
-              const RegisterFields(),
+              const CPFields(),
               const SizedBox(height: 60),
               DarkButton(
-                buttonText: "Register",
+                buttonText: "Change Password",
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -40,22 +41,7 @@ class RegisterPage extends StatelessWidget {
                         builder: (context) => const AccountPage()),
                   );
                 },
-              ),
-              const SizedBox(height: 20),
-              Text("Already have an account?",
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge!
-                      .copyWith(fontSize: 20)),
-              DarkButton(
-                buttonText: "Click to Login",
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
-                  );
-                },
-              ),
+              )
             ],
           ),
         ),
@@ -64,8 +50,8 @@ class RegisterPage extends StatelessWidget {
   }
 }
 
-class RegisterFields extends StatelessWidget {
-  const RegisterFields({Key? key}) : super(key: key);
+class CPFields extends StatelessWidget {
+  const CPFields({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -73,23 +59,19 @@ class RegisterFields extends StatelessWidget {
       children: [
         TextFormField(
           decoration: const InputDecoration(
-            labelText: 'Username',
-          ),
-        ),
-        TextFormField(
-          decoration: const InputDecoration(
-            labelText: 'Email',
-          ),
-        ),
-        TextFormField(
-          decoration: const InputDecoration(
-            labelText: 'Password',
+            labelText: 'Current Password',
           ),
           obscureText: true,
         ),
         TextFormField(
           decoration: const InputDecoration(
-            labelText: 'Confirm Password',
+            labelText: 'New Password',
+          ),
+          obscureText: true,
+        ),
+        TextFormField(
+          decoration: const InputDecoration(
+            labelText: 'Confirm New Password',
           ),
           obscureText: true,
         ),

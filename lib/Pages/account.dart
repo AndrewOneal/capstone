@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/theme.dart';
 import 'home.dart';
-import 'login.dart';
-import 'account.dart';
+import 'change_password.dart';
 
-class RegisterPage extends StatelessWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+class AccountPage extends StatelessWidget {
+  const AccountPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,35 +26,21 @@ class RegisterPage extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 75),
-              Text('Register', style: Theme.of(context).textTheme.titleLarge!),
+              Text('Account', style: Theme.of(context).textTheme.titleLarge!),
               const SizedBox(height: 10),
-              const RegisterFields(),
+              const AccountFields(),
               const SizedBox(height: 60),
-              DarkButton(
-                buttonText: "Register",
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const AccountPage()),
-                  );
-                },
-              ),
+              const DarkButton(buttonText: "Update Account"),
               const SizedBox(height: 20),
-              Text("Already have an account?",
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge!
-                      .copyWith(fontSize: 20)),
               DarkButton(
-                buttonText: "Click to Login",
+                buttonText: "Change Password",
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                    MaterialPageRoute(builder: (context) => const CPPage()),
                   );
                 },
-              ),
+              )
             ],
           ),
         ),
@@ -64,8 +49,8 @@ class RegisterPage extends StatelessWidget {
   }
 }
 
-class RegisterFields extends StatelessWidget {
-  const RegisterFields({Key? key}) : super(key: key);
+class AccountFields extends StatelessWidget {
+  const AccountFields({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -75,17 +60,13 @@ class RegisterFields extends StatelessWidget {
           decoration: const InputDecoration(
             labelText: 'Username',
           ),
+          initialValue: 'Test User',
         ),
         TextFormField(
           decoration: const InputDecoration(
             labelText: 'Email',
           ),
-        ),
-        TextFormField(
-          decoration: const InputDecoration(
-            labelText: 'Password',
-          ),
-          obscureText: true,
+          initialValue: 'Test User Email',
         ),
         TextFormField(
           decoration: const InputDecoration(
