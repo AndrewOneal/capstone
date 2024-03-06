@@ -10,7 +10,7 @@ void main() {
   });
 
   test('Login Form Displays', () {
-    const loginForm = LoginForm();
+    const loginForm = LoginFields();
     expect(loginForm, isNotNull);
   });
 }

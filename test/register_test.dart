@@ -10,7 +10,7 @@ void main() {
   });
 
   test('Register Form Displays', () {
-    const registerForm = RegisterForm();
+    const registerForm = RegisterFields();
     expect(registerForm, isNotNull);
   });
 }
