@@ -1,4 +1,4 @@
-import 'package:capstone/Utilities/themes.dart';
+import 'package:capstone/Utilities/theme.dart';
 import 'package:flutter/material.dart';
 import 'login.dart';
 
@@ -32,15 +32,15 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: const Center(
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TitleText(),
-            SizedBox(height: titleSpacing),
-            CardWidget(),
-            SizedBox(height: cardSpacing),
-            GetStartedButton(),
+            const TitleText(),
+            const SizedBox(height: titleSpacing),
+            const CardWidget(),
+            const SizedBox(height: cardSpacing),
+            DarkButton(buttonText: 'Get Started', buttonWidth: double.infinity),
           ],
         ),
       ),
@@ -110,28 +110,6 @@ class CardWidget extends StatelessWidget {
                 "1. Search for your favorite series\n2. Select the part of the series you are on\n3. Enjoy your spoiler-free experience!",
                 style: Theme.of(context).textTheme.bodyMedium!),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class GetStartedButton extends StatelessWidget {
-  const GetStartedButton({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: sideMargins,
-      child: SizedBox(
-        width: double.infinity,
-        child: ElevatedButton(
-          onPressed: () {},
-          style: ElevatedButton.styleFrom(
-            backgroundColor: buttons['default']!,
-            foregroundColor: text['default']!,
-            textStyle: Theme.of(context).textTheme.bodyLarge,
-          ),
-          child: const Text('Get Started'),
         ),
       ),
     );

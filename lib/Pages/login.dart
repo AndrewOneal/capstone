@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:capstone/Utilities/themes.dart';
+import 'package:capstone/Utilities/theme.dart';
 import 'home.dart';
 import 'register.dart';
 
@@ -30,7 +30,7 @@ class LoginPage extends StatelessWidget {
               const SizedBox(height: 10),
               const LoginForm(),
               const SizedBox(height: 60),
-              const LoginPageButton(
+              DarkButton(
                 buttonText: "Login",
               ),
               const SizedBox(height: 20),
@@ -39,7 +39,7 @@ class LoginPage extends StatelessWidget {
                       .textTheme
                       .bodyLarge!
                       .copyWith(fontSize: 20)),
-              LoginPageButton(
+              DarkButton(
                 buttonText: "Click to Register",
                 onPressed: () {
                   Navigator.push(
@@ -76,34 +76,6 @@ class LoginForm extends StatelessWidget {
           obscureText: true,
         ),
       ],
-    );
-  }
-}
-
-class LoginPageButton extends StatelessWidget {
-  final String buttonText;
-  final VoidCallback? onPressed;
-
-  const LoginPageButton({Key? key, required this.buttonText, this.onPressed})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    const buttonWidth = 300.0;
-    return Padding(
-      padding: sideMargins,
-      child: SizedBox(
-        width: buttonWidth,
-        child: ElevatedButton(
-          onPressed: onPressed,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: buttons['default']!,
-            foregroundColor: text['default']!,
-            textStyle: Theme.of(context).textTheme.bodyLarge,
-          ),
-          child: Text(buttonText),
-        ),
-      ),
     );
   }
 }
