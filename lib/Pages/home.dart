@@ -1,7 +1,6 @@
 import 'package:capstone/Utilities/themes.dart';
 import 'package:flutter/material.dart';
-
-const sideMargins = EdgeInsets.symmetric(horizontal: 25);
+import 'login.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -24,7 +23,12 @@ class HomePage extends StatelessWidget {
           ),
           IconButton(
             icon: const Icon(Icons.account_circle),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginPage()),
+              );
+            },
           ),
         ],
       ),

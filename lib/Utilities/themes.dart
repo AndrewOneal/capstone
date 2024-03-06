@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+const sideMargins = EdgeInsets.symmetric(horizontal: 25);
+
 final Map<String, Color> background = {
   'default': const Color(0xFF333333),
   '900': const Color(0xFF393939),
@@ -121,6 +123,7 @@ final ThemeData defaultTheme = ThemeData(
         return buttons['200']!;
       }),
       foregroundColor: MaterialStateProperty.all(text['900']),
+      minimumSize: MaterialStateProperty.all(const Size(150, 50)),
       shape: MaterialStateProperty.all(
         RoundedRectangleBorder(
           borderRadius: elevatedButtonBorderRadius,

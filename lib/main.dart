@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'SpoilerGuard',
       theme: defaultTheme,
-      home: HomePage(),
+      home: const HomePage(),
     );
   }
 }
