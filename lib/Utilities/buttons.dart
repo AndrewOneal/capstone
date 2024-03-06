@@ -3,10 +3,10 @@ import 'theme.dart';
 
 class DarkButton extends StatelessWidget {
   final String buttonText;
-  VoidCallback? onPressed;
+  final VoidCallback? onPressed;
   final double buttonWidth;
 
-  DarkButton(
+  const DarkButton(
       {Key? key,
       required this.buttonText,
       this.buttonWidth = 300.0,
@@ -15,13 +15,13 @@ class DarkButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    onPressed ??= () {};
+    var function = onPressed ?? () {};
     return Padding(
       padding: sideMargins,
       child: SizedBox(
         width: buttonWidth,
         child: ElevatedButton(
-          onPressed: onPressed,
+          onPressed: function,
           style: ElevatedButton.styleFrom(
             backgroundColor: buttons['default'],
             foregroundColor: text['default'],
