@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/theme.dart';
-import 'home.dart';
+import 'wiki_list.dart';
 import 'change_password.dart';
 
 class AccountPage extends StatelessWidget {
@@ -11,11 +11,11 @@ class AccountPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.clear),
+          icon: const Icon(Icons.home),
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const HomePage()),
+              MaterialPageRoute(builder: (context) => const WikiListPage()),
             );
           },
         ),

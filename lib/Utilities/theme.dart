@@ -116,6 +116,7 @@ final ThemeData defaultTheme = ThemeData(
     // Buttons
     elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
+      alignment: Alignment.centerLeft,
       backgroundColor:
           MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
         if (states.contains(MaterialState.hovered)) {
@@ -138,6 +139,12 @@ final ThemeData defaultTheme = ThemeData(
       foregroundColor: text['default'],
       hoverColor: buttons['900'],
       shape: const CircleBorder(),
+      sizeConstraints: const BoxConstraints(
+        maxHeight: 60,
+        maxWidth: 60,
+        minHeight: 60,
+        minWidth: 60,
+      ),
       splashColor: buttons['800'],
     ),
     // Card
@@ -146,6 +153,12 @@ final ThemeData defaultTheme = ThemeData(
       shape: RoundedRectangleBorder(
         borderRadius: cardBorderRadius,
       ),
+    ),
+    // Divider
+    dividerTheme: DividerThemeData(
+      color: background['500'],
+      space: 0,
+      thickness: 1,
     ),
     // Input
     inputDecorationTheme: InputDecorationTheme(
@@ -214,5 +227,15 @@ final ThemeData defaultTheme = ThemeData(
         fontFamily: font['default'],
         fontSize: 25.0,
         color: text['default'],
+      ),
+      displayMedium: TextStyle(
+        fontFamily: font['default'],
+        fontSize: 20.0,
+        color: text['default'],
+      ),
+      displaySmall: TextStyle(
+        fontFamily: font['default'],
+        fontSize: 20.0,
+        color: text['900'],
       ),
     ));

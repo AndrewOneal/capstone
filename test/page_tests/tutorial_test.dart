@@ -1,21 +1,11 @@
-import 'package:capstone/Pages/home.dart';
+import 'package:capstone/Pages/tutorial.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('Home Page Displays', () {
-    const homePage = HomePage();
+    const homePage = TutorialPage();
     expect(homePage, isNotNull);
-  });
-
-  test('Title Text Displays', () {
-    const titleText = TitleText();
-    expect(titleText, isNotNull);
-  });
-
-  test('Card Widget Diplays', () {
-    const cardWidget = CardWidget();
-    expect(cardWidget, isNotNull);
   });
 /*
   testWidgets('Page Renders Fully', (WidgetTester tester) async {

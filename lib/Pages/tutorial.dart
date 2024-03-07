@@ -1,9 +1,10 @@
 import 'package:capstone/Utilities/theme.dart';
 import 'package:flutter/material.dart';
 import 'login.dart';
+import 'wiki_list.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+class TutorialPage extends StatelessWidget {
+  const TutorialPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,8 +14,13 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.menu),
-          onPressed: () {},
+          icon: const Icon(Icons.home),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const WikiListPage()),
+            );
+          },
         ),
         actions: [
           IconButton(
@@ -28,17 +34,26 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: const Center(
+      body: Center(
         child: Padding(
           padding: sideMargins,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TitleText(),
-              SizedBox(height: titleSpacing),
-              CardWidget(),
-              SizedBox(height: cardSpacing),
-              DarkButton(buttonText: 'Get Started'),
+              const _TitleText(),
+              const SizedBox(height: titleSpacing),
+              const _CardWidget(),
+              const SizedBox(height: cardSpacing),
+              DarkButton(
+                buttonText: 'Get Started',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const WikiListPage()),
+                  );
+                },
+              ),
             ],
           ),
         ),
@@ -47,8 +62,8 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class TitleText extends StatelessWidget {
-  const TitleText({super.key});
+class _TitleText extends StatelessWidget {
+  const _TitleText();
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -82,8 +97,8 @@ class TitleText extends StatelessWidget {
   }
 }
 
-class CardWidget extends StatelessWidget {
-  const CardWidget({super.key});
+class _CardWidget extends StatelessWidget {
+  const _CardWidget({super.key});
 
   final cardPadding = const EdgeInsets.all(10);
   final textSpacing = const SizedBox(height: 20);

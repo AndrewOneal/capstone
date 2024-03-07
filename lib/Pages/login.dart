@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/theme.dart';
-import 'home.dart';
+import 'wiki_list.dart';
 import 'register.dart';
 import 'account.dart';
 
@@ -12,11 +12,11 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.clear),
+          icon: const Icon(Icons.home),
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const HomePage()),
+              MaterialPageRoute(builder: (context) => const WikiListPage()),
             );
           },
         ),
