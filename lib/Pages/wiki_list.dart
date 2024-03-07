@@ -77,14 +77,21 @@ class WikiListPage extends StatelessWidget {
                           return Padding(
                             padding: const EdgeInsets.only(right: 75),
                             child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
-                                Text(
-                                  "Don't see what you're looking for? Hit the plus to create your own community!",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .displayMedium!,
+                                SizedBox(
+                                  height: 100,
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text(
+                                        "Don't see what you're looking for? Hit the plus to create your own community!",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .displayMedium!,
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                const SizedBox(height: 30),
                               ],
                             ),
                           );
