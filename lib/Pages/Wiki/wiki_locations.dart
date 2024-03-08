@@ -4,10 +4,10 @@ import 'package:capstone/main.dart';
 import 'package:capstone/Pages/Account/login.dart';
 import '../Account/wiki_settings.dart';
 
-class WikiCharactersPage extends StatelessWidget {
+class WikiLocationsPage extends StatelessWidget {
   final int wikiID;
   final int wikiSettingID;
-  const WikiCharactersPage(
+  const WikiLocationsPage(
       {Key? key, required this.wikiID, required this.wikiSettingID})
       : super(key: key);
 
@@ -56,7 +56,7 @@ class WikiCharactersPage extends StatelessWidget {
                     color: background['default'],
                     alignment: Alignment.center,
                     child: Text(
-                      "Characters",
+                      "Locations",
                       style: Theme.of(context).textTheme.titleLarge!,
                     ),
                   ),
@@ -86,17 +86,17 @@ class _CharacterList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final characterList = dbHandler.getCharacters(id: wikiID);
+    final locationList = dbHandler.getLocations(id: wikiID);
     return SizedBox(
       height: 300,
       child: ListView.separated(
-        itemCount: characterList.length + 1,
+        itemCount: locationList.length + 1,
         separatorBuilder: (BuildContext context, int index) => const Padding(
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Divider(),
         ),
         itemBuilder: (BuildContext context, int index) {
-          if (index == characterList.length) {
+          if (index == locationList.length) {
             return Padding(
               padding: const EdgeInsets.only(right: 75),
               child: Column(
@@ -107,7 +107,7 @@ class _CharacterList extends StatelessWidget {
                     child: Column(
                       children: <Widget>[
                         Text(
-                          "Don't see the character you're looking for? Hit the edit button to add them!",
+                          "Don't see the location you're looking for? Hit the edit button to add it!",
                           style: Theme.of(context).textTheme.displayMedium!,
                         ),
                       ],
@@ -119,11 +119,11 @@ class _CharacterList extends StatelessWidget {
           } else {
             return index.isEven
                 ? LightPurpleButton2(
-                    buttonText: characterList[index],
+                    buttonText: locationList[index],
                     onPressed: () {},
                   )
                 : LightPurpleButton1(
-                    buttonText: characterList[index],
+                    buttonText: locationList[index],
                     onPressed: () {},
                   );
           }

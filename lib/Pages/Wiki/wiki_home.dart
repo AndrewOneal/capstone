@@ -4,6 +4,9 @@ import 'package:capstone/main.dart';
 import 'package:capstone/Pages/wiki_list.dart';
 import 'package:capstone/Pages/Account/login.dart';
 import '../Account/wiki_settings.dart';
+import 'wiki_characters.dart';
+import 'wiki_sections.dart';
+import 'wiki_locations.dart';
 
 class WikiHome extends StatefulWidget {
   final int wikiID;
@@ -67,7 +70,8 @@ class WikiHomeState extends State<WikiHome> {
               const SizedBox(height: 40),
               _WikiCard(wikiID: widget.wikiID, wikiTitle: widget.wikiTitle),
               const SizedBox(height: 40),
-              _ButtonList(wikiID: widget.wikiID),
+              _ButtonList(
+                  wikiID: widget.wikiID, wikiSettingsID: widget.wikiSettingID!),
             ],
           ),
         ),
@@ -148,24 +152,41 @@ class _WikiCard extends StatelessWidget {
 
 class _ButtonList extends StatelessWidget {
   final int wikiID;
+  final int wikiSettingsID;
 
-  const _ButtonList({required this.wikiID});
+  const _ButtonList({required this.wikiID, required this.wikiSettingsID});
 
   @override
   Widget build(BuildContext context) {
-    final List<String> buttonText = ['Episodes', 'Characters', 'Locations'];
+    final Map<String, Widget> buttonRoutes = {
+      'Sections':
+          WikiSectionsPage(wikiID: wikiID, wikiSettingID: wikiSettingsID),
+      'Characters':
+          WikiCharactersPage(wikiID: wikiID, wikiSettingID: wikiSettingsID),
+      'Locations':
+          WikiLocationsPage(wikiID: wikiID, wikiSettingID: wikiSettingsID),
+    };
+
     return SizedBox(
       height: 300,
       child: ListView.separated(
-        itemCount: buttonText.length,
+        itemCount: buttonRoutes.length,
         separatorBuilder: (BuildContext context, int index) => const Padding(
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Divider(),
         ),
         itemBuilder: (BuildContext context, int index) {
+          final buttonText = buttonRoutes.keys.elementAt(index);
+          final route = buttonRoutes.values.elementAt(index);
+
           return LightPurpleButton1(
-            buttonText: buttonText[index],
-            onPressed: () {},
+            buttonText: buttonText,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => route),
+              );
+            },
           );
         },
       ),

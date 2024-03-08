@@ -4,10 +4,10 @@ import 'package:capstone/main.dart';
 import 'package:capstone/Pages/Account/login.dart';
 import '../Account/wiki_settings.dart';
 
-class WikiCharactersPage extends StatelessWidget {
+class WikiSectionsPage extends StatelessWidget {
   final int wikiID;
   final int wikiSettingID;
-  const WikiCharactersPage(
+  const WikiSectionsPage(
       {Key? key, required this.wikiID, required this.wikiSettingID})
       : super(key: key);
 
@@ -56,12 +56,12 @@ class WikiCharactersPage extends StatelessWidget {
                     color: background['default'],
                     alignment: Alignment.center,
                     child: Text(
-                      "Characters",
+                      "Sections",
                       style: Theme.of(context).textTheme.titleLarge!,
                     ),
                   ),
                   Expanded(
-                    child: _CharacterList(wikiID: wikiID),
+                    child: _SectionList(wikiID: wikiID),
                   ),
                 ],
               ),
@@ -80,23 +80,23 @@ class WikiCharactersPage extends StatelessWidget {
   }
 }
 
-class _CharacterList extends StatelessWidget {
+class _SectionList extends StatelessWidget {
   final int wikiID;
-  const _CharacterList({Key? key, required this.wikiID}) : super(key: key);
+  const _SectionList({Key? key, required this.wikiID}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final characterList = dbHandler.getCharacters(id: wikiID);
+    final sectionList = dbHandler.getSections(id: wikiID);
     return SizedBox(
       height: 300,
       child: ListView.separated(
-        itemCount: characterList.length + 1,
+        itemCount: sectionList.length + 1,
         separatorBuilder: (BuildContext context, int index) => const Padding(
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Divider(),
         ),
         itemBuilder: (BuildContext context, int index) {
-          if (index == characterList.length) {
+          if (index == sectionList.length) {
             return Padding(
               padding: const EdgeInsets.only(right: 75),
               child: Column(
@@ -107,7 +107,7 @@ class _CharacterList extends StatelessWidget {
                     child: Column(
                       children: <Widget>[
                         Text(
-                          "Don't see the character you're looking for? Hit the edit button to add them!",
+                          "Don't see the section you're looking for? Hit the edit button to add it!",
                           style: Theme.of(context).textTheme.displayMedium!,
                         ),
                       ],
@@ -119,11 +119,11 @@ class _CharacterList extends StatelessWidget {
           } else {
             return index.isEven
                 ? LightPurpleButton2(
-                    buttonText: characterList[index],
+                    buttonText: sectionList[index],
                     onPressed: () {},
                   )
                 : LightPurpleButton1(
-                    buttonText: characterList[index],
+                    buttonText: sectionList[index],
                     onPressed: () {},
                   );
           }

@@ -52,7 +52,7 @@ class WikiListPage extends StatelessWidget {
                     ),
                   ),
                   const Expanded(
-                    child: WikiList(),
+                    child: _WikiList(),
                   ),
                 ],
               ),
@@ -71,8 +71,8 @@ class WikiListPage extends StatelessWidget {
   }
 }
 
-class WikiList extends StatelessWidget {
-  const WikiList({Key? key}) : super(key: key);
+class _WikiList extends StatelessWidget {
+  const _WikiList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
