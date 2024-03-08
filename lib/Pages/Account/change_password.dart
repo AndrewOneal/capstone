@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/theme.dart';
-import 'wiki_list.dart';
-import 'change_password.dart';
+import 'account.dart';
 
-class AccountPage extends StatelessWidget {
-  const AccountPage({Key? key}) : super(key: key);
+class CPPage extends StatelessWidget {
+  const CPPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.home),
+          icon: const Icon(Icons.clear),
           onPressed: () {
-            Navigator.push(
+            Navigator.pop(
               context,
-              MaterialPageRoute(builder: (context) => const WikiListPage()),
             );
           },
         ),
@@ -26,18 +24,23 @@ class AccountPage extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 75),
-              Text('Account', style: Theme.of(context).textTheme.titleLarge!),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  'Change Password',
+                  style: Theme.of(context).textTheme.titleLarge!,
+                ),
+              ),
               const SizedBox(height: 10),
-              const AccountFields(),
+              const CPFields(),
               const SizedBox(height: 60),
-              const DarkButton(buttonText: "Update Account"),
-              const SizedBox(height: 20),
               DarkButton(
                 buttonText: "Change Password",
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const CPPage()),
+                    MaterialPageRoute(
+                        builder: (context) => const AccountPage()),
                   );
                 },
               )
@@ -49,8 +52,8 @@ class AccountPage extends StatelessWidget {
   }
 }
 
-class AccountFields extends StatelessWidget {
-  const AccountFields({Key? key}) : super(key: key);
+class CPFields extends StatelessWidget {
+  const CPFields({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -58,19 +61,19 @@ class AccountFields extends StatelessWidget {
       children: [
         TextFormField(
           decoration: const InputDecoration(
-            labelText: 'Username',
+            labelText: 'Current Password',
           ),
-          initialValue: 'Test User',
+          obscureText: true,
         ),
         TextFormField(
           decoration: const InputDecoration(
-            labelText: 'Email',
+            labelText: 'New Password',
           ),
-          initialValue: 'Test User Email',
+          obscureText: true,
         ),
         TextFormField(
           decoration: const InputDecoration(
-            labelText: 'Confirm Password',
+            labelText: 'Confirm New Password',
           ),
           obscureText: true,
         ),

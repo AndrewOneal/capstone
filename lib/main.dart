@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'Utilities/theme.dart';
 import 'pages/tutorial.dart';
 import 'pages/wiki_list.dart';
+import 'Utilities/db_util.dart';
 
 int? initScreen;
+DBHandler dbHandler = DBHandler();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

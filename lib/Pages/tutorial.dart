@@ -1,6 +1,6 @@
 import 'package:capstone/Utilities/theme.dart';
 import 'package:flutter/material.dart';
-import 'login.dart';
+import 'Account/login.dart';
 import 'wiki_list.dart';
 
 class TutorialPage extends StatelessWidget {

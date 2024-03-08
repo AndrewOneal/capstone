@@ -160,6 +160,14 @@ final ThemeData defaultTheme = ThemeData(
       space: 0,
       thickness: 1,
     ),
+    // Dropdown
+    dropdownMenuTheme: DropdownMenuThemeData(
+      textStyle: TextStyle(
+        fontFamily: font['default'],
+        fontSize: 20.0,
+        color: text['default'],
+      ),
+    ),
     // Input
     inputDecorationTheme: InputDecorationTheme(
       activeIndicatorBorder: BorderSide(

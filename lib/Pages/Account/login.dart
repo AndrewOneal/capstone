@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/theme.dart';
+import '../wiki_list.dart';
+import 'register.dart';
 import 'account.dart';
 
-class CPPage extends StatelessWidget {
-  const CPPage({Key? key}) : super(key: key);
+class LoginPage extends StatelessWidget {
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.clear),
+          icon: const Icon(Icons.home),
           onPressed: () {
-            Navigator.pop(
+            Navigator.push(
               context,
+              MaterialPageRoute(builder: (context) => const WikiListPage()),
             );
           },
         ),
@@ -24,16 +27,12 @@ class CPPage extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 75),
-              Text('Change Password',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(fontSize: 42)),
+              Text('Login', style: Theme.of(context).textTheme.titleLarge!),
               const SizedBox(height: 10),
-              const CPFields(),
+              const LoginFields(),
               const SizedBox(height: 60),
               DarkButton(
-                buttonText: "Change Password",
+                buttonText: "Login",
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -41,7 +40,23 @@ class CPPage extends StatelessWidget {
                         builder: (context) => const AccountPage()),
                   );
                 },
-              )
+              ),
+              const SizedBox(height: 20),
+              Text("Don't have an account?",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .copyWith(fontSize: 20)),
+              DarkButton(
+                buttonText: "Click to Register",
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const RegisterPage()),
+                  );
+                },
+              ),
             ],
           ),
         ),
@@ -50,8 +65,8 @@ class CPPage extends StatelessWidget {
   }
 }
 
-class CPFields extends StatelessWidget {
-  const CPFields({Key? key}) : super(key: key);
+class LoginFields extends StatelessWidget {
+  const LoginFields({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -59,19 +74,12 @@ class CPFields extends StatelessWidget {
       children: [
         TextFormField(
           decoration: const InputDecoration(
-            labelText: 'Current Password',
+            labelText: 'Username',
           ),
-          obscureText: true,
         ),
         TextFormField(
           decoration: const InputDecoration(
-            labelText: 'New Password',
-          ),
-          obscureText: true,
-        ),
-        TextFormField(
-          decoration: const InputDecoration(
-            labelText: 'Confirm New Password',
+            labelText: 'Password',
           ),
           obscureText: true,
         ),

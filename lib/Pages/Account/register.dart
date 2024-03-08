@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/theme.dart';
-import 'wiki_list.dart';
+import '../wiki_list.dart';
 import 'login.dart';
 import 'account.dart';
 

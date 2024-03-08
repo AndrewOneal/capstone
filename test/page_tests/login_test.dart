@@ -1,4 +1,4 @@
-import 'package:capstone/Pages/login.dart';
+import 'package:capstone/Pages/Account/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:capstone/main.dart';
