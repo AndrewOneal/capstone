@@ -23,6 +23,7 @@ class WikiSettingsState extends State<WikiSettings> {
     final Global global = Global();
     final EdgeInsets sideMargins = global.sideMargins;
     final SizedBox titleSizedBox = global.titleSizedBox;
+    final SizedBox mediumSizedBox = global.mediumSizedBox;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -39,9 +40,9 @@ class WikiSettingsState extends State<WikiSettings> {
             children: [
               titleSizedBox,
               _TitleText(wikiTitle: dbHandler.getTitle(id: widget.wikiID)),
-              const SizedBox(height: 20),
+              mediumSizedBox,
               _SectionDropdown(),
-              const SizedBox(height: 20),
+              mediumSizedBox,
               _SaveSettingsButton(wikiID: widget.wikiID, sectionID: sectionID),
             ],
           ),

@@ -16,6 +16,10 @@ class Global {
 
   EdgeInsets sideMargins = const EdgeInsets.symmetric(horizontal: 25);
   SizedBox titleSizedBox = const SizedBox(height: 75);
+  SizedBox smallSizedBox = const SizedBox(height: 10);
+  SizedBox mediumSizedBox = const SizedBox(height: 20);
+  SizedBox largeSizedBox = const SizedBox(height: 40);
+  SizedBox extraLargeSizedBox = const SizedBox(height: 60);
 }
 
 class ListTitle extends StatelessWidget {

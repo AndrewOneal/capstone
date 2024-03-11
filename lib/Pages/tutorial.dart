@@ -10,8 +10,7 @@ class TutorialPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final Global global = Global();
     final EdgeInsets sideMargins = global.sideMargins;
-    const titleSpacing = 40.0;
-    const cardSpacing = 16.0;
+    final SizedBox mediumSizedBox = global.mediumSizedBox;
 
     return Scaffold(
       appBar: AppBar(
@@ -43,9 +42,9 @@ class TutorialPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const _TitleText(),
-              const SizedBox(height: titleSpacing),
+              mediumSizedBox,
               const _CardWidget(),
-              const SizedBox(height: cardSpacing),
+              mediumSizedBox,
               DarkButton(
                 buttonText: 'Get Started',
                 onPressed: () {

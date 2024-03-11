@@ -12,6 +12,9 @@ class LoginPage extends StatelessWidget {
     final Global global = Global();
     final EdgeInsets sideMargins = global.sideMargins;
     final SizedBox titleSizedBox = global.titleSizedBox;
+    final SizedBox smallSizedBox = global.smallSizedBox;
+    final SizedBox extraLargeSizedBox = global.extraLargeSizedBox;
+    final SizedBox mediumSizedBox = global.mediumSizedBox;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -31,9 +34,9 @@ class LoginPage extends StatelessWidget {
             children: [
               titleSizedBox,
               Text('Login', style: Theme.of(context).textTheme.titleLarge!),
-              const SizedBox(height: 10),
+              smallSizedBox,
               const LoginFields(),
-              const SizedBox(height: 60),
+              extraLargeSizedBox,
               DarkButton(
                 buttonText: "Login",
                 onPressed: () {
@@ -44,7 +47,7 @@ class LoginPage extends StatelessWidget {
                   );
                 },
               ),
-              const SizedBox(height: 20),
+              mediumSizedBox,
               Text("Don't have an account?",
                   style: Theme.of(context)
                       .textTheme

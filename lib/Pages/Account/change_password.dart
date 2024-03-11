@@ -10,6 +10,8 @@ class CPPage extends StatelessWidget {
     final Global global = Global();
     final EdgeInsets sideMargins = global.sideMargins;
     final SizedBox titleSizedBox = global.titleSizedBox;
+    final SizedBox smallSizedBox = global.smallSizedBox;
+    final SizedBox extraLargeSizedBox = global.extraLargeSizedBox;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -34,9 +36,9 @@ class CPPage extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleLarge!,
                 ),
               ),
-              const SizedBox(height: 10),
+              smallSizedBox,
               const CPFields(),
-              const SizedBox(height: 60),
+              extraLargeSizedBox,
               DarkButton(
                 buttonText: "Change Password",
                 onPressed: () {

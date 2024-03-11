@@ -11,6 +11,9 @@ class AccountPage extends StatelessWidget {
     final Global global = Global();
     final EdgeInsets sideMargins = global.sideMargins;
     final SizedBox titleSizedBox = global.titleSizedBox;
+    final SizedBox smallSizedBox = global.smallSizedBox;
+    final SizedBox extraLargeSizedBox = global.extraLargeSizedBox;
+    final SizedBox mediumSizedBox = global.mediumSizedBox;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -30,11 +33,11 @@ class AccountPage extends StatelessWidget {
             children: [
               titleSizedBox,
               Text('Account', style: Theme.of(context).textTheme.titleLarge!),
-              const SizedBox(height: 10),
+              smallSizedBox,
               const AccountFields(),
-              const SizedBox(height: 60),
+              extraLargeSizedBox,
               const DarkButton(buttonText: "Update Account"),
-              const SizedBox(height: 20),
+              mediumSizedBox,
               DarkButton(
                 buttonText: "Change Password",
                 onPressed: () {

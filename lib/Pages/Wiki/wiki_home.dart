@@ -29,6 +29,7 @@ class WikiHomeState extends State<WikiHome> {
     final Global global = Global();
     final EdgeInsets sideMargins = global.sideMargins;
     final SizedBox titleSizedBox = global.titleSizedBox;
+    final SizedBox largeSizedBox = global.largeSizedBox;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -69,9 +70,9 @@ class WikiHomeState extends State<WikiHome> {
             children: [
               titleSizedBox,
               _TitleText(wikiTitle: widget.wikiTitle),
-              const SizedBox(height: 40),
+              largeSizedBox,
               _WikiCard(wikiID: widget.wikiID, wikiTitle: widget.wikiTitle),
-              const SizedBox(height: 40),
+              largeSizedBox,
               _ButtonList(
                   wikiID: widget.wikiID, wikiSettingsID: widget.wikiSettingID!),
             ],
