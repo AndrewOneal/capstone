@@ -12,6 +12,8 @@ class WikiLocationsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Global global = Global();
+    final EdgeInsets sideMargins = global.sideMargins;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -76,6 +78,7 @@ class _CharacterList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DBHandler dbHandler = DBHandler();
     final locationList = dbHandler.getLocations(id: wikiID);
     return SizedBox(
       height: 300,

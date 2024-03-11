@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
-import '../wiki_list.dart';
+import 'package:capstone/Pages/wiki_list.dart';
 import 'change_password.dart';
 
 class AccountPage extends StatelessWidget {
@@ -8,6 +8,9 @@ class AccountPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Global global = Global();
+    final EdgeInsets sideMargins = global.sideMargins;
+    final SizedBox titleSizedBox = global.titleSizedBox;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(

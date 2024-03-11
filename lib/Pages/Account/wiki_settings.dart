@@ -17,8 +17,12 @@ class WikiSettings extends StatefulWidget {
 }
 
 class WikiSettingsState extends State<WikiSettings> {
+  final DBHandler dbHandler = DBHandler();
   @override
   Widget build(BuildContext context) {
+    final Global global = Global();
+    final EdgeInsets sideMargins = global.sideMargins;
+    final SizedBox titleSizedBox = global.titleSizedBox;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -118,6 +122,7 @@ class _SaveSettingsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DBHandler dbHandler = DBHandler();
     final wikiSettingID = sectionID;
     return DarkButton(
       buttonText: "Save Settings",

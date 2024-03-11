@@ -3,15 +3,13 @@ import 'package:flutter/material.dart';
 import 'Utilities/global.dart';
 import 'pages/tutorial.dart';
 import 'pages/wiki_list.dart';
-import 'Utilities/db_util.dart';
 
-int? initScreen;
-DBHandler dbHandler = DBHandler();
+int? _initScreen;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  initScreen = prefs.getInt('initScreen');
+  _initScreen = prefs.getInt('initScreen');
   await prefs.setInt('initScreen', 1);
   runApp(const MyApp());
 }
@@ -21,7 +19,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var homePage = initScreen == 0 || initScreen == null
+    var homePage = _initScreen == 0 || _initScreen == null
         ? const TutorialPage()
         : const WikiListPage();
 

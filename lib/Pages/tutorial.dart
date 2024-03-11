@@ -8,6 +8,8 @@ class TutorialPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Global global = Global();
+    final EdgeInsets sideMargins = global.sideMargins;
     const titleSpacing = 40.0;
     const cardSpacing = 16.0;
 

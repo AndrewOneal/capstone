@@ -1,4 +1,12 @@
 class DBHandler {
+  static final DBHandler _instance = DBHandler._internal();
+
+  factory DBHandler() {
+    return _instance;
+  }
+
+  DBHandler._internal();
+
   final List<String> titles = [
     "Avatar: The Last Airbender",
     "Darling in the Franxx",

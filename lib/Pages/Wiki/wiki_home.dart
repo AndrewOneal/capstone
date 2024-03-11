@@ -26,6 +26,9 @@ class WikiHome extends StatefulWidget {
 class WikiHomeState extends State<WikiHome> {
   @override
   Widget build(BuildContext context) {
+    final Global global = Global();
+    final EdgeInsets sideMargins = global.sideMargins;
+    final SizedBox titleSizedBox = global.titleSizedBox;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -129,6 +132,7 @@ class _WikiCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DBHandler dbHandler = DBHandler();
     return Card(
       elevation: 4,
       child: Padding(

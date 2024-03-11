@@ -3,9 +3,7 @@ import 'theme.dart';
 export 'theme.dart';
 export 'package:capstone/main.dart';
 export 'buttons.dart';
-
-const sideMargins = EdgeInsets.symmetric(horizontal: 25);
-const titleSizedBox = SizedBox(height: 75);
+export 'db_util.dart';
 
 class Global {
   static final Global _instance = Global._internal();

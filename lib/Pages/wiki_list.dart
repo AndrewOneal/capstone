@@ -9,6 +9,8 @@ class WikiListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Global global = Global();
+    final EdgeInsets sideMargins = global.sideMargins;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -32,10 +34,10 @@ class WikiListPage extends StatelessWidget {
           ),
         ],
       ),
-      body: const Center(
+      body: Center(
         child: Padding(
           padding: sideMargins,
-          child: Stack(
+          child: const Stack(
             children: <Widget>[
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -66,6 +68,7 @@ class _WikiList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DBHandler dbHandler = DBHandler();
     final wikiTitles = dbHandler.getTitles();
     return ListView.separated(
       itemCount: wikiTitles.length + 1,

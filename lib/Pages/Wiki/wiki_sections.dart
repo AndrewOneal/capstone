@@ -12,6 +12,8 @@ class WikiSectionsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Global global = Global();
+    final EdgeInsets sideMargins = global.sideMargins;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -76,6 +78,7 @@ class _SectionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DBHandler dbHandler = DBHandler();
     final sectionList = dbHandler.getSections(id: wikiID);
     return SizedBox(
       height: 300,
