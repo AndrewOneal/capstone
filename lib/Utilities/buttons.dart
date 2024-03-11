@@ -82,7 +82,7 @@ class LightPurpleButton2 extends StatelessWidget {
       child: ElevatedButton(
         onPressed: function,
         style: ElevatedButton.styleFrom(
-          backgroundColor: buttons['400'],
+          backgroundColor: buttons['300'],
         ),
         child:
             Text(buttonText, style: Theme.of(context).textTheme.displaySmall!),

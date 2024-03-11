@@ -1,7 +1,8 @@
 import 'package:capstone/Utilities/global.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/Pages/Account/login.dart';
-import '../Account/wiki_settings.dart';
+import 'package:capstone/Pages/Account/wiki_settings.dart';
+import 'wiki_details.dart';
 
 class WikiSectionsPage extends StatelessWidget {
   final int wikiID;
@@ -53,7 +54,8 @@ class WikiSectionsPage extends StatelessWidget {
                 children: <Widget>[
                   const ListTitle(title: "Sections"),
                   Expanded(
-                    child: _SectionList(wikiID: wikiID),
+                    child: _SectionList(
+                        wikiID: wikiID, wikiSettingID: wikiSettingID),
                   ),
                 ],
               ),
@@ -74,7 +76,10 @@ class WikiSectionsPage extends StatelessWidget {
 
 class _SectionList extends StatelessWidget {
   final int wikiID;
-  const _SectionList({Key? key, required this.wikiID}) : super(key: key);
+  final int wikiSettingID;
+  const _SectionList(
+      {Key? key, required this.wikiID, required this.wikiSettingID})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -113,11 +118,31 @@ class _SectionList extends StatelessWidget {
             return index.isEven
                 ? LightPurpleButton2(
                     buttonText: sectionList[index],
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => WikiDetailsPage(
+                                wikiID: wikiID,
+                                wikiSettingID: wikiSettingID,
+                                wikiDetailTitle: sectionList[index],
+                                wikiDetailID: index)),
+                      );
+                    },
                   )
                 : LightPurpleButton1(
                     buttonText: sectionList[index],
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => WikiDetailsPage(
+                                wikiID: wikiID,
+                                wikiSettingID: wikiSettingID,
+                                wikiDetailTitle: sectionList[index],
+                                wikiDetailID: index)),
+                      );
+                    },
                   );
           }
         },

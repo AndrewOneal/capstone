@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Pages/wiki_list.dart';
 import 'package:capstone/Pages/Account/login.dart';
-import '../Account/wiki_settings.dart';
+import 'package:capstone/Pages/Account/wiki_settings.dart';
 import 'wiki_characters.dart';
 import 'wiki_sections.dart';
 import 'wiki_locations.dart';

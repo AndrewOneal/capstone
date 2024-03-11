@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Pages/Account/login.dart';
-import '../Account/wiki_settings.dart';
+import 'package:capstone/Pages/Account/wiki_settings.dart';
+import 'wiki_details.dart';
 
 class WikiLocationsPage extends StatelessWidget {
   final int wikiID;
@@ -53,7 +54,8 @@ class WikiLocationsPage extends StatelessWidget {
                 children: <Widget>[
                   const ListTitle(title: "Locations"),
                   Expanded(
-                    child: _CharacterList(wikiID: wikiID),
+                    child: _CharacterList(
+                        wikiID: wikiID, wikiSettingID: wikiSettingID),
                   ),
                 ],
               ),
@@ -74,7 +76,10 @@ class WikiLocationsPage extends StatelessWidget {
 
 class _CharacterList extends StatelessWidget {
   final int wikiID;
-  const _CharacterList({Key? key, required this.wikiID}) : super(key: key);
+  final int wikiSettingID;
+  const _CharacterList(
+      {Key? key, required this.wikiID, required this.wikiSettingID})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -113,11 +118,31 @@ class _CharacterList extends StatelessWidget {
             return index.isEven
                 ? LightPurpleButton2(
                     buttonText: locationList[index],
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => WikiDetailsPage(
+                                wikiID: wikiID,
+                                wikiSettingID: wikiSettingID,
+                                wikiDetailTitle: locationList[index],
+                                wikiDetailID: index)),
+                      );
+                    },
                   )
                 : LightPurpleButton1(
                     buttonText: locationList[index],
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => WikiDetailsPage(
+                                wikiID: wikiID,
+                                wikiSettingID: wikiSettingID,
+                                wikiDetailTitle: locationList[index],
+                                wikiDetailID: index)),
+                      );
+                    },
                   );
           }
         },
