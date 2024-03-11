@@ -17,15 +17,19 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Installing
 
+Installing the dependencies
+
+```sh-session
+flutter pub get
+```
+
 To be added
 
 ## Running the tests
 
-To be added
-
-## Deployment
-
-To be added
+```sh-session
+flutter test
+```
 
 ## Authors
 
