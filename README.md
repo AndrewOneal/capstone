@@ -17,13 +17,24 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Installing
 
-Installing the dependencies
+Install the dependencies
 
 ```sh-session
 flutter pub get
 ```
 
-To be added
+#### Android
+
+Connect your device to your computer and run the following commands
+
+```sh-session
+flutter build apk
+flutter install
+```
+
+#### iOS
+
+To Be Added
 
 ## Running the tests
 
