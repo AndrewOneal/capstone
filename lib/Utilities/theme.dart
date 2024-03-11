@@ -168,7 +168,7 @@ final ThemeData defaultTheme = ThemeData(
     // Input
     inputDecorationTheme: InputDecorationTheme(
       activeIndicatorBorder: BorderSide(
-        color: background['800']!,
+        color: background['600']!,
       ),
       alignLabelWithHint: true,
       errorBorder: UnderlineInputBorder(
@@ -178,7 +178,7 @@ final ThemeData defaultTheme = ThemeData(
       ),
       enabledBorder: UnderlineInputBorder(
         borderSide: BorderSide(
-          color: background['800']!,
+          color: background['600']!,
         ),
       ),
       floatingLabelAlignment: FloatingLabelAlignment.start,
@@ -202,7 +202,7 @@ final ThemeData defaultTheme = ThemeData(
         fontFamily: font['default'],
       ),
       labelStyle: TextStyle(
-        color: background['800'],
+        color: background['600'],
         fontFamily: font['default'],
       ),
     ),
