@@ -9,8 +9,8 @@ int? _initScreen;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  _initScreen = prefs.getInt('initScreen');
-  await prefs.setInt('initScreen', 1);
+  _initScreen = prefs.getInt('_initScreen');
+  await prefs.setInt('_initScreen', 1);
   runApp(const MyApp());
 }
 
