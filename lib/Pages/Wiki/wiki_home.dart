@@ -1,6 +1,5 @@
-import 'package:capstone/Utilities/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:capstone/main.dart';
+import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Pages/wiki_list.dart';
 import 'package:capstone/Pages/Account/login.dart';
 import '../Account/wiki_settings.dart';
@@ -65,7 +64,7 @@ class WikiHomeState extends State<WikiHome> {
           padding: sideMargins,
           child: Column(
             children: [
-              const SizedBox(height: 75),
+              titleSizedBox,
               _TitleText(wikiTitle: widget.wikiTitle),
               const SizedBox(height: 40),
               _WikiCard(wikiID: widget.wikiID, wikiTitle: widget.wikiTitle),

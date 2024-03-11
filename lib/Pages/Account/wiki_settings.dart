@@ -1,9 +1,8 @@
-import 'package:capstone/Utilities/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:capstone/main.dart';
+import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Pages/Wiki/wiki_home.dart';
 
-int chapterID = 0;
+int sectionID = 0;
 
 class WikiSettings extends StatefulWidget {
   final int wikiID;
@@ -34,12 +33,12 @@ class WikiSettingsState extends State<WikiSettings> {
           padding: sideMargins,
           child: Column(
             children: [
-              const SizedBox(height: 75),
+              titleSizedBox,
               _TitleText(wikiTitle: dbHandler.getTitle(id: widget.wikiID)),
               const SizedBox(height: 20),
-              _ChapterDropdown(),
+              _SectionDropdown(),
               const SizedBox(height: 20),
-              _SaveSettingsButton(wikiID: widget.wikiID, chapterID: chapterID),
+              _SaveSettingsButton(wikiID: widget.wikiID, sectionID: sectionID),
             ],
           ),
         ),
@@ -74,29 +73,29 @@ class _TitleText extends StatelessWidget {
   }
 }
 
-class _ChapterDropdown extends StatefulWidget {
+class _SectionDropdown extends StatefulWidget {
   @override
-  _ChapterDropdownState createState() => _ChapterDropdownState();
+  _SectionDropdownState createState() => _SectionDropdownState();
 }
 
-class _ChapterDropdownState extends State<_ChapterDropdown> {
-  final List<String> chapters = <String>[
-    'Chapter 1',
-    'Chapter 2',
-    'Chapter 3',
+class _SectionDropdownState extends State<_SectionDropdown> {
+  final List<String> sections = <String>[
+    'Section 1',
+    'Section 2',
+    'Section 3',
   ];
 
   @override
   Widget build(BuildContext context) {
     return DropdownButton<int>(
-      value: chapterID,
+      value: sectionID,
       isExpanded: true,
       onChanged: (index) {
         setState(() {
-          chapterID = index!;
+          sectionID = index!;
         });
       },
-      items: chapters.asMap().entries.map<DropdownMenuItem<int>>((entry) {
+      items: sections.asMap().entries.map<DropdownMenuItem<int>>((entry) {
         final index = entry.key;
         final value = entry.value;
         return DropdownMenuItem<int>(
@@ -110,16 +109,16 @@ class _ChapterDropdownState extends State<_ChapterDropdown> {
 
 class _SaveSettingsButton extends StatelessWidget {
   final int wikiID;
-  final int chapterID;
+  final int sectionID;
   const _SaveSettingsButton({
     Key? key,
     required this.wikiID,
-    required this.chapterID,
+    required this.sectionID,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final wikiSettingID = chapterID;
+    final wikiSettingID = sectionID;
     return DarkButton(
       buttonText: "Save Settings",
       onPressed: () {

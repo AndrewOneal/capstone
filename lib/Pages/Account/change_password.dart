@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:capstone/Utilities/theme.dart';
+import 'package:capstone/Utilities/global.dart';
 import 'account.dart';
 
 class CPPage extends StatelessWidget {
@@ -23,7 +23,7 @@ class CPPage extends StatelessWidget {
           padding: sideMargins,
           child: Column(
             children: [
-              const SizedBox(height: 75),
+              titleSizedBox,
               FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Text(

@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-export 'buttons.dart';
-
-const sideMargins = EdgeInsets.symmetric(horizontal: 25);
 
 final Map<String, Color> background = {
   'default': const Color(0xFF333333),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:capstone/Utilities/theme.dart';
+import 'package:capstone/Utilities/global.dart';
 import '../wiki_list.dart';
 import 'change_password.dart';
 
@@ -25,7 +25,7 @@ class AccountPage extends StatelessWidget {
           padding: sideMargins,
           child: Column(
             children: [
-              const SizedBox(height: 75),
+              titleSizedBox,
               Text('Account', style: Theme.of(context).textTheme.titleLarge!),
               const SizedBox(height: 10),
               const AccountFields(),

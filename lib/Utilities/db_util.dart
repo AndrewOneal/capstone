@@ -83,12 +83,4 @@ class DBHandler {
     // TODO: Implement logic to retrieve sections list from db
     return sections;
   }
-
-  void insertData(String data) {}
-
-  void updateData(String data) {}
-
-  void deleteData(String data) {}
-
-  void saveSettings(String data) {}
 }

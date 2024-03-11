@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
-import 'Utilities/theme.dart';
+import 'Utilities/global.dart';
 import 'pages/tutorial.dart';
 import 'pages/wiki_list.dart';
 import 'Utilities/db_util.dart';

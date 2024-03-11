@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:capstone/Utilities/theme.dart';
+import 'package:capstone/Utilities/global.dart';
 import '../wiki_list.dart';
 import 'login.dart';
 import 'account.dart';
@@ -26,7 +26,7 @@ class RegisterPage extends StatelessWidget {
           padding: sideMargins,
           child: Column(
             children: [
-              const SizedBox(height: 75),
+              titleSizedBox,
               Text('Register', style: Theme.of(context).textTheme.titleLarge!),
               const SizedBox(height: 10),
               const RegisterFields(),

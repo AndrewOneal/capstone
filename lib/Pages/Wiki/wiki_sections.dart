@@ -1,6 +1,5 @@
-import 'package:capstone/Utilities/theme.dart';
+import 'package:capstone/Utilities/global.dart';
 import 'package:flutter/material.dart';
-import 'package:capstone/main.dart';
 import 'package:capstone/Pages/Account/login.dart';
 import '../Account/wiki_settings.dart';
 
@@ -50,16 +49,7 @@ class WikiSectionsPage extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  Container(
-                    width: double.infinity,
-                    height: 100,
-                    color: background['default'],
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Sections",
-                      style: Theme.of(context).textTheme.titleLarge!,
-                    ),
-                  ),
+                  const ListTitle(title: "Sections"),
                   Expanded(
                     child: _SectionList(wikiID: wikiID),
                   ),

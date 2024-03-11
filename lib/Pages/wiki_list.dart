@@ -1,8 +1,7 @@
-import 'package:capstone/Utilities/theme.dart';
 import 'package:flutter/material.dart';
 import 'Account/login.dart';
 import 'tutorial.dart';
-import 'package:capstone/main.dart';
+import 'package:capstone/Utilities/global.dart';
 import 'Wiki/wiki_home.dart';
 
 class WikiListPage extends StatelessWidget {
@@ -33,7 +32,7 @@ class WikiListPage extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
+      body: const Center(
         child: Padding(
           padding: sideMargins,
           child: Stack(
@@ -41,17 +40,8 @@ class WikiListPage extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  Container(
-                    width: double.infinity,
-                    height: 100,
-                    color: background['default'],
-                    alignment: Alignment.center,
-                    child: Text(
-                      "All Wikis",
-                      style: Theme.of(context).textTheme.titleLarge!,
-                    ),
-                  ),
-                  const Expanded(
+                  ListTitle(title: "All Wikis"),
+                  Expanded(
                     child: _WikiList(),
                   ),
                 ],

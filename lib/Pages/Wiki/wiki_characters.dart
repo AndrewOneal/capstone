@@ -1,6 +1,5 @@
-import 'package:capstone/Utilities/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:capstone/main.dart';
+import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Pages/Account/login.dart';
 import '../Account/wiki_settings.dart';
 
@@ -50,16 +49,7 @@ class WikiCharactersPage extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  Container(
-                    width: double.infinity,
-                    height: 100,
-                    color: background['default'],
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Characters",
-                      style: Theme.of(context).textTheme.titleLarge!,
-                    ),
-                  ),
+                  const ListTitle(title: "Characters"),
                   Expanded(
                     child: _CharacterList(wikiID: wikiID),
                   ),
