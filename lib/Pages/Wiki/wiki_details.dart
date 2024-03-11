@@ -51,22 +51,22 @@ class WikiDetailsPage extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
-        child: Padding(
-          padding: sideMargins,
-          child: Stack(
-            children: <Widget>[
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  ListTitle(title: detailName),
-                  /*Expanded(
-                    child: _CharacterList(wikiID: wikiID),
-                  ),*/
-                ],
-              ),
-            ],
-          ),
+      body: Padding(
+        padding: sideMargins,
+        child: Stack(
+          children: <Widget>[
+            Column(
+              children: <Widget>[
+                ListTitle(title: detailName, fontSize: 40),
+                Expanded(
+                  child: _DetailList(
+                      wikiID: wikiID,
+                      wikiSettingID: wikiSettingID,
+                      wikiDetailID: wikiDetailID),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
       floatingActionButton: Padding(
@@ -77,5 +77,63 @@ class WikiDetailsPage extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class _DetailList extends StatelessWidget {
+  final int wikiID;
+  final int wikiSettingID;
+  final int wikiDetailID;
+  const _DetailList(
+      {Key? key,
+      required this.wikiID,
+      required this.wikiSettingID,
+      required this.wikiDetailID})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    DBHandler dbHandler = DBHandler();
+    Global global = Global();
+    SizedBox mediumSizedBox = global.mediumSizedBox;
+    String loremIpsum = global.loremIpsum;
+    return FutureBuilder<List<String>>(
+        future: Future.value(DBHandler().getWikiDetailsPage(
+            wikiID: wikiID,
+            wikiSettingID: wikiSettingID,
+            wikiDetailID: wikiDetailID)),
+        builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return ErrorWidget(snapshot.error!);
+          } else {
+            final headerList = snapshot.data!;
+            return SizedBox(
+              height: 400,
+              child: ListView.separated(
+                itemCount: headerList.length,
+                separatorBuilder: (BuildContext context, int index) =>
+                    mediumSizedBox,
+                itemBuilder: (BuildContext context, int index) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        headerList[index],
+                        style: Theme.of(context).textTheme.headlineMedium!,
+                      ),
+                      const Divider(),
+                      Text(
+                        loremIpsum,
+                        style: Theme.of(context).textTheme.bodyLarge!,
+                      ),
+                    ],
+                  );
+                },
+              ),
+            );
+          }
+        });
   }
 }

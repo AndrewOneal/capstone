@@ -91,4 +91,11 @@ class DBHandler {
     // TODO: Implement logic to retrieve sections list from db
     return sections;
   }
+
+  List<String> getWikiDetailsPage(
+      {required int wikiID,
+      required int wikiSettingID,
+      required int wikiDetailID}) {
+    return ["Header 1", "Header 2", "Header 3"];
+  }
 }

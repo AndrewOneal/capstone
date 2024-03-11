@@ -83,70 +83,82 @@ class _SectionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DBHandler dbHandler = DBHandler();
-    final sectionList = dbHandler.getSections(id: wikiID);
-    return SizedBox(
-      height: 300,
-      child: ListView.separated(
-        itemCount: sectionList.length + 1,
-        separatorBuilder: (BuildContext context, int index) => const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: Divider(),
-        ),
-        itemBuilder: (BuildContext context, int index) {
-          if (index == sectionList.length) {
-            return Padding(
-              padding: const EdgeInsets.only(right: 75),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(
-                    height: 100,
+    return FutureBuilder<List<String>>(
+      future: Future.value(DBHandler().getSections(id: wikiID)),
+      builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return ErrorWidget(snapshot.error!);
+        } else {
+          final sectionList = snapshot.data!;
+          return SizedBox(
+            height: 300,
+            child: ListView.separated(
+              itemCount: sectionList.length + 1,
+              separatorBuilder: (BuildContext context, int index) =>
+                  const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: Divider(),
+              ),
+              itemBuilder: (BuildContext context, int index) {
+                if (index == sectionList.length) {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 75),
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        Text(
-                          "Don't see the section you're looking for? Hit the edit button to add it!",
-                          style: Theme.of(context).textTheme.displayMedium!,
+                        SizedBox(
+                          height: 100,
+                          child: Column(
+                            children: <Widget>[
+                              Text(
+                                "Don't see the section you're looking for? Hit the edit button to add it!",
+                                style:
+                                    Theme.of(context).textTheme.displayMedium!,
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                ],
-              ),
-            );
-          } else {
-            return index.isEven
-                ? LightPurpleButton2(
-                    buttonText: sectionList[index],
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => WikiDetailsPage(
-                                wikiID: wikiID,
-                                wikiSettingID: wikiSettingID,
-                                wikiDetailTitle: sectionList[index],
-                                wikiDetailID: index)),
-                      );
-                    },
-                  )
-                : LightPurpleButton1(
-                    buttonText: sectionList[index],
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => WikiDetailsPage(
-                                wikiID: wikiID,
-                                wikiSettingID: wikiSettingID,
-                                wikiDetailTitle: sectionList[index],
-                                wikiDetailID: index)),
-                      );
-                    },
                   );
-          }
-        },
-      ),
+                } else {
+                  return index.isEven
+                      ? LightPurpleButton2(
+                          buttonText: sectionList[index],
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => WikiDetailsPage(
+                                      wikiID: wikiID,
+                                      wikiSettingID: wikiSettingID,
+                                      wikiDetailTitle: sectionList[index],
+                                      wikiDetailID: 0)),
+                            );
+                          },
+                        )
+                      : LightPurpleButton1(
+                          buttonText: sectionList[index],
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => WikiDetailsPage(
+                                      wikiID: wikiID,
+                                      wikiSettingID: wikiSettingID,
+                                      wikiDetailTitle: sectionList[index],
+                                      wikiDetailID: 0)),
+                            );
+                          },
+                        );
+                }
+              },
+            ),
+          );
+        }
+      },
     );
   }
 }

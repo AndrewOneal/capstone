@@ -83,70 +83,82 @@ class _CharacterList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DBHandler dbHandler = DBHandler();
-    final characterList = dbHandler.getCharacters(id: wikiID);
-    return SizedBox(
-      height: 300,
-      child: ListView.separated(
-        itemCount: characterList.length + 1,
-        separatorBuilder: (BuildContext context, int index) => const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: Divider(),
-        ),
-        itemBuilder: (BuildContext context, int index) {
-          if (index == characterList.length) {
-            return Padding(
-              padding: const EdgeInsets.only(right: 75),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(
-                    height: 100,
+    return FutureBuilder<List<String>>(
+      future: Future.value(DBHandler().getCharacters(id: wikiID)),
+      builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return ErrorWidget(snapshot.error!);
+        } else {
+          final characterList = snapshot.data!;
+          return SizedBox(
+            height: 300,
+            child: ListView.separated(
+              itemCount: characterList.length + 1,
+              separatorBuilder: (BuildContext context, int index) =>
+                  const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: Divider(),
+              ),
+              itemBuilder: (BuildContext context, int index) {
+                if (index == characterList.length) {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 75),
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        Text(
-                          "Don't see the character you're looking for? Hit the edit button to add them!",
-                          style: Theme.of(context).textTheme.displayMedium!,
+                        SizedBox(
+                          height: 100,
+                          child: Column(
+                            children: <Widget>[
+                              Text(
+                                "Don't see the character you're looking for? Hit the edit button to add them!",
+                                style:
+                                    Theme.of(context).textTheme.displayMedium!,
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                ],
-              ),
-            );
-          } else {
-            return index.isEven
-                ? LightPurpleButton2(
-                    buttonText: characterList[index],
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => WikiDetailsPage(
-                                wikiID: wikiID,
-                                wikiSettingID: wikiSettingID,
-                                wikiDetailTitle: characterList[index],
-                                wikiDetailID: index)),
-                      );
-                    },
-                  )
-                : LightPurpleButton1(
-                    buttonText: characterList[index],
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => WikiDetailsPage(
-                                wikiID: wikiID,
-                                wikiSettingID: wikiSettingID,
-                                wikiDetailTitle: characterList[index],
-                                wikiDetailID: index)),
-                      );
-                    },
                   );
-          }
-        },
-      ),
+                } else {
+                  return index.isEven
+                      ? LightPurpleButton2(
+                          buttonText: characterList[index],
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => WikiDetailsPage(
+                                      wikiID: wikiID,
+                                      wikiSettingID: wikiSettingID,
+                                      wikiDetailTitle: characterList[index],
+                                      wikiDetailID: 1)),
+                            );
+                          },
+                        )
+                      : LightPurpleButton1(
+                          buttonText: characterList[index],
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => WikiDetailsPage(
+                                      wikiID: wikiID,
+                                      wikiSettingID: wikiSettingID,
+                                      wikiDetailTitle: characterList[index],
+                                      wikiDetailID: 1)),
+                            );
+                          },
+                        );
+                }
+              },
+            ),
+          );
+        }
+      },
     );
   }
 }

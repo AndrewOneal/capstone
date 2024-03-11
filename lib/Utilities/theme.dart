@@ -210,12 +210,12 @@ final ThemeData defaultTheme = ThemeData(
     textTheme: TextTheme(
       bodyLarge: TextStyle(
         fontFamily: font['default'],
-        fontSize: 17.0,
+        fontSize: 18.0,
         color: text['default'],
       ),
       bodyMedium: TextStyle(
         fontFamily: font['default'],
-        fontSize: 17.0,
+        fontSize: 18.0,
         color: text['900'],
       ),
       titleLarge: TextStyle(
@@ -242,5 +242,10 @@ final ThemeData defaultTheme = ThemeData(
         fontFamily: font['default'],
         fontSize: 20.0,
         color: text['900'],
+      ),
+      headlineMedium: TextStyle(
+        fontFamily: font['header'],
+        fontSize: 30.0,
+        color: text['default'],
       ),
     ));
