@@ -3,6 +3,7 @@ import 'package:capstone/Pages/Account/login.dart';
 import 'package:capstone/Pages/tutorial.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Pages/Wiki/wiki_home.dart';
+import 'package:capstone/Pages/CRUD/new_wiki.dart';
 
 class WikiListPage extends StatelessWidget {
   const WikiListPage({Key? key}) : super(key: key);
@@ -55,7 +56,12 @@ class WikiListPage extends StatelessWidget {
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(20),
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => NewWiki()),
+            );
+          },
           child: const Icon(Icons.add),
         ),
       ),
