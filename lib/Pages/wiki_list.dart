@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'Account/login.dart';
-import 'tutorial.dart';
+import 'package:capstone/Pages/Account/login.dart';
+import 'package:capstone/Pages/tutorial.dart';
 import 'package:capstone/Utilities/global.dart';
-import 'Wiki/wiki_home.dart';
+import 'package:capstone/Pages/Wiki/wiki_home.dart';
 
 class WikiListPage extends StatelessWidget {
   const WikiListPage({Key? key}) : super(key: key);

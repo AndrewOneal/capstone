@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'theme.dart';
-export 'theme.dart';
+import 'package:capstone/Utilities/theme.dart';
+export 'package:capstone/Utilities/theme.dart';
 export 'package:capstone/main.dart';
-export 'buttons.dart';
-export 'db_util.dart';
+export 'package:capstone/Utilities/buttons.dart';
+export 'package:capstone/Utilities/db_util.dart';
 
 class Global {
   static final Global _instance = Global._internal();

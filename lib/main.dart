@@ -1,8 +1,8 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
-import 'Utilities/global.dart';
-import 'pages/tutorial.dart';
-import 'pages/wiki_list.dart';
+import 'package:capstone/Utilities/global.dart';
+import 'package:capstone/Pages/tutorial.dart';
+import 'package:capstone/Pages/wiki_list.dart';
 
 int? _initScreen;
 
