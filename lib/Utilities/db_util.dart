@@ -98,4 +98,11 @@ class DBHandler {
       required int wikiDetailID}) {
     return ["Header 1", "Header 2", "Header 3"];
   }
+
+  void addWiki(
+      {required String title,
+      required String sectionsName,
+      required int numSections,
+      required int numCharacters,
+      required int numLocations}) {}
 }
