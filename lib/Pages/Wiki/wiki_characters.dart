@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Pages/Account/login.dart';
 import 'package:capstone/Pages/Account/wiki_settings.dart';
-import 'wiki_details.dart';
+import 'package:capstone/Pages/Wiki/wiki_details.dart';
 
 class WikiCharactersPage extends StatelessWidget {
   final int wikiID;

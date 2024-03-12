@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Pages/Account/login.dart';
 import 'package:capstone/Pages/Account/wiki_settings.dart';
-import 'wiki_details.dart';
+import 'package:capstone/Pages/Wiki/wiki_details.dart';
 
 class WikiLocationsPage extends StatelessWidget {
   final int wikiID;
@@ -87,7 +87,7 @@ class _LocationList extends StatelessWidget {
       future: Future.value(DBHandler().getLocations(id: wikiID)),
       builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         } else if (snapshot.hasError) {
           return ErrorWidget(snapshot.error!);
         } else {

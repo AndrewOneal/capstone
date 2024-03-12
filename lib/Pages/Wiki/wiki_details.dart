@@ -104,7 +104,7 @@ class _DetailList extends StatelessWidget {
             wikiDetailID: wikiDetailID)),
         builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           } else if (snapshot.hasError) {
             return ErrorWidget(snapshot.error!);
           } else {

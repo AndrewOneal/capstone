@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
-import 'account.dart';
+import 'package:capstone/Pages/Account/account.dart';
 
 class CPPage extends StatelessWidget {
   const CPPage({Key? key}) : super(key: key);

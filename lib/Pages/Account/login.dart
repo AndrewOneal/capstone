@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
-import '../wiki_list.dart';
-import 'register.dart';
-import 'account.dart';
+import 'package:capstone/Pages/wiki_list.dart';
+import 'package:capstone/Pages/Account/register.dart';
+import 'package:capstone/Pages/Account/account.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);

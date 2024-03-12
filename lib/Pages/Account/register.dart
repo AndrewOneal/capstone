@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
-import '../wiki_list.dart';
-import 'login.dart';
-import 'account.dart';
+import 'package:capstone/Pages/wiki_list.dart';
+import 'package:capstone/Pages/Account/login.dart';
+import 'package:capstone/Pages/Account/account.dart';
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage({Key? key}) : super(key: key);
