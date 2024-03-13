@@ -95,7 +95,7 @@ class _WikiList extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         "Don't see what you're looking for? Hit the plus to create your own community!",
-                        style: Theme.of(context).textTheme.displayMedium!,
+                        style: TextStyles.disclaimerText,
                       ),
                     ],
                   ),

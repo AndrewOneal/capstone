@@ -4,22 +4,22 @@ import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Pages/tutorial.dart';
 import 'package:capstone/Pages/wiki_list.dart';
 
-int? _initScreen;
+int? initScreen;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  _initScreen = prefs.getInt('_initScreen');
-  await prefs.setInt('_initScreen', 1);
+  initScreen = prefs.getInt('initScreen');
+  await prefs.setInt('initScreen', 1);
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var homePage = _initScreen == 0 || _initScreen == null
+    var homePage = initScreen == 0 || initScreen == null
         ? const TutorialPage()
         : const WikiListPage();
 

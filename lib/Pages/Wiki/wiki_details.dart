@@ -9,12 +9,11 @@ class WikiDetailsPage extends StatelessWidget {
   final int wikiDetailID;
   final String wikiDetailTitle;
   const WikiDetailsPage(
-      {Key? key,
+      {super.key,
       required this.wikiID,
       required this.wikiSettingID,
       required this.wikiDetailID,
-      this.wikiDetailTitle = ""})
-      : super(key: key);
+      this.wikiDetailTitle = ""});
 
   @override
   Widget build(BuildContext context) {
@@ -85,11 +84,9 @@ class _DetailList extends StatelessWidget {
   final int wikiSettingID;
   final int wikiDetailID;
   const _DetailList(
-      {Key? key,
-      required this.wikiID,
+      {required this.wikiID,
       required this.wikiSettingID,
-      required this.wikiDetailID})
-      : super(key: key);
+      required this.wikiDetailID});
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +123,7 @@ class _DetailList extends StatelessWidget {
                       const Divider(),
                       Text(
                         loremIpsum,
-                        style: Theme.of(context).textTheme.bodyLarge!,
+                        style: Theme.of(context).textTheme.bodyMedium!,
                       ),
                     ],
                   );

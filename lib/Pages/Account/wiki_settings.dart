@@ -65,13 +65,12 @@ class _TitleText extends StatelessWidget {
           fit: BoxFit.scaleDown,
           child: Text(
             wikiTitle,
-            style:
-                Theme.of(context).textTheme.titleMedium!.copyWith(height: 1.2),
+            style: TextStyles.purpleHeader.copyWith(height: 1.2),
           ),
         ),
         Text(
           'Settings',
-          style: Theme.of(context).textTheme.titleLarge!.copyWith(height: 1.2),
+          style: TextStyles.whiteHeader.copyWith(height: 1.2),
         ),
       ],
     );
@@ -105,7 +104,7 @@ class _SectionDropdownState extends State<_SectionDropdown> {
         final value = entry.value;
         return DropdownMenuItem<int>(
           value: index,
-          child: Text(value, style: Theme.of(context).textTheme.displayMedium!),
+          child: Text(value, style: TextStyles.listText),
         );
       }).toList(),
     );

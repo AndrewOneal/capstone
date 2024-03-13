@@ -33,7 +33,7 @@ class LoginPage extends StatelessWidget {
           child: Column(
             children: [
               titleSizedBox,
-              Text('Login', style: Theme.of(context).textTheme.titleLarge!),
+              Text('Login', style: TextStyles.whiteHeader),
               smallSizedBox,
               const LoginFields(),
               extraLargeSizedBox,
@@ -48,11 +48,8 @@ class LoginPage extends StatelessWidget {
                 },
               ),
               mediumSizedBox,
-              Text("Don't have an account?",
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge!
-                      .copyWith(fontSize: 20)),
+              Text("Don't have an account?", style: TextStyles.disclaimerText),
+              smallSizedBox,
               DarkButton(
                 buttonText: "Click to Register",
                 onPressed: () {

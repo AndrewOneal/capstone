@@ -32,7 +32,7 @@ class AccountPage extends StatelessWidget {
           child: Column(
             children: [
               titleSizedBox,
-              Text('Account', style: Theme.of(context).textTheme.titleLarge!),
+              Text('Account', style: TextStyles.whiteHeader),
               smallSizedBox,
               const AccountFields(),
               extraLargeSizedBox,

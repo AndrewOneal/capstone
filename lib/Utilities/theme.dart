@@ -208,44 +208,78 @@ final ThemeData defaultTheme = ThemeData(
     ),
     // Text
     textTheme: TextTheme(
+      // Quill Toolbar RGB Text TextStyle
       bodyLarge: TextStyle(
         fontFamily: font['default'],
         fontSize: 18.0,
         color: text['default'],
       ),
+      // Quill Editor Default TextStyle
       bodyMedium: TextStyle(
         fontFamily: font['default'],
         fontSize: 18.0,
-        color: text['900'],
-      ),
-      titleLarge: TextStyle(
-        fontFamily: font['header'],
-        fontSize: 50.0,
         color: text['default'],
       ),
-      titleMedium: TextStyle(
-        fontFamily: font['header'],
-        fontSize: 50.0,
-        color: mediumPurple['default'],
-      ),
-      titleSmall: TextStyle(
+      // Quill Toolbar Font Size List TextStyle
+      labelLarge: TextStyle(
         fontFamily: font['default'],
+        fontSize: 16.0,
+        color: text['default'],
+      ),
+      // Quill Toolbar RGB Header TextStyle
+      headlineSmall: TextStyle(
+        fontFamily: font['header'],
         fontSize: 25.0,
         color: text['default'],
       ),
-      displayMedium: TextStyle(
-        fontFamily: font['default'],
-        fontSize: 20.0,
-        color: text['default'],
-      ),
-      displaySmall: TextStyle(
-        fontFamily: font['default'],
-        fontSize: 20.0,
-        color: text['900'],
-      ),
-      headlineMedium: TextStyle(
+      // Quill Toolbar RGB List TextStyle
+      titleMedium: TextStyle(
         fontFamily: font['header'],
-        fontSize: 30.0,
+        fontSize: 18.0,
         color: text['default'],
       ),
     ));
+
+class TextStyles {
+  static TextStyle purpleHeader = TextStyle(
+    fontFamily: font['header'],
+    fontSize: 50.0,
+    color: mediumPurple['default'],
+  );
+  static TextStyle whiteHeader = TextStyle(
+    fontFamily: font['header'],
+    fontSize: 50.0,
+    color: text['default'],
+  );
+  static TextStyle titleSmall = TextStyle(
+    fontFamily: font['default'],
+    fontSize: 25.0,
+    color: text['default'],
+  );
+  static TextStyle listText = TextStyle(
+    fontFamily: font['default'],
+    fontSize: 20.0,
+    color: text['default'],
+  );
+  static TextStyle whiteButtonText = TextStyle(
+    fontFamily: font['default'],
+    fontSize: 18.0,
+    color: text['default'],
+  );
+  static TextStyle blackButtonText = TextStyle(
+    fontFamily: font['default'],
+    fontSize: 18.0,
+    color: text['900'],
+  );
+  static TextStyle cardText = TextStyle(
+    fontFamily: font['default'],
+    fontSize: 17.0,
+    color: text['900'],
+  );
+  static TextStyle disclaimerText = TextStyle(
+    fontFamily: font['default'],
+    fontSize: 20.0,
+    color: text['default'],
+    height: 1.1,
+  );
+}

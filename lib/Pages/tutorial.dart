@@ -74,24 +74,18 @@ class _TitleText extends StatelessWidget {
             children: [
               TextSpan(
                 text: 'Spoiler',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(height: 0.8),
+                style: TextStyles.whiteHeader.copyWith(height: 0.8),
               ),
               TextSpan(
                 text: 'Guard',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium!
-                    .copyWith(height: 0.8),
+                style: TextStyles.purpleHeader.copyWith(height: 0.8),
               ),
             ],
           ),
         ),
         Text(
           'The Spoiler-Free Wikipedia',
-          style: Theme.of(context).textTheme.titleSmall!,
+          style: TextStyles.titleSmall,
         ),
       ],
     );
@@ -115,20 +109,14 @@ class _CardWidget extends StatelessWidget {
             Center(
               child: Text(
                 'Welcome to SpoilerGuard, the spoiler-free wikipedia made to keep you safe! Begin your search by following these 3 easy steps.',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(fontSize: 17),
+                style: TextStyles.cardText,
                 textAlign: TextAlign.center,
               ),
             ),
             textSpacing,
             Text(
                 "1. Search for your favorite series\n2. Select the part of the series you are on\n3. Enjoy your spoiler-free experience!",
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(fontSize: 17)),
+                style: TextStyles.cardText),
           ],
         ),
       ),

@@ -114,8 +114,7 @@ class _SectionList extends StatelessWidget {
                             children: <Widget>[
                               Text(
                                 "Don't see the section you're looking for? Hit the edit button to add it!",
-                                style:
-                                    Theme.of(context).textTheme.displayMedium!,
+                                style: TextStyles.disclaimerText,
                               ),
                             ],
                           ),

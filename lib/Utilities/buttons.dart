@@ -24,11 +24,10 @@ class DarkButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: buttons['default'],
           foregroundColor: text['default'],
-          textStyle: Theme.of(context).textTheme.bodyLarge,
+          textStyle: TextStyles.whiteButtonText,
           alignment: Alignment.center,
         ),
-        child:
-            Text(buttonText, style: Theme.of(context).textTheme.displayMedium!),
+        child: Text(buttonText),
       ),
     );
   }
@@ -54,8 +53,7 @@ class LightPurpleButton1 extends StatelessWidget {
       width: buttonWidth,
       child: ElevatedButton(
         onPressed: function,
-        child:
-            Text(buttonText, style: Theme.of(context).textTheme.displaySmall!),
+        child: Text(buttonText, style: TextStyles.blackButtonText),
       ),
     );
   }
@@ -84,8 +82,7 @@ class LightPurpleButton2 extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: buttons['400'],
         ),
-        child:
-            Text(buttonText, style: Theme.of(context).textTheme.displaySmall!),
+        child: Text(buttonText, style: TextStyles.blackButtonText),
       ),
     );
   }

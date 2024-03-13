@@ -33,7 +33,7 @@ class RegisterPage extends StatelessWidget {
           child: Column(
             children: [
               titleSizedBox,
-              Text('Register', style: Theme.of(context).textTheme.titleLarge!),
+              Text('Register', style: TextStyles.whiteHeader),
               smallSizedBox,
               const RegisterFields(),
               extraLargeSizedBox,
@@ -49,10 +49,8 @@ class RegisterPage extends StatelessWidget {
               ),
               mediumSizedBox,
               Text("Already have an account?",
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge!
-                      .copyWith(fontSize: 20)),
+                  style: TextStyles.disclaimerText),
+              smallSizedBox,
               DarkButton(
                 buttonText: "Click to Login",
                 onPressed: () {

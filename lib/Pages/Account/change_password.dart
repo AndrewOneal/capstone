@@ -33,7 +33,7 @@ class CPPage extends StatelessWidget {
                 fit: BoxFit.scaleDown,
                 child: Text(
                   'Change Password',
-                  style: Theme.of(context).textTheme.titleLarge!,
+                  style: TextStyles.whiteHeader,
                 ),
               ),
               smallSizedBox,

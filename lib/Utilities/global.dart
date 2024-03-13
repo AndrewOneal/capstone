@@ -40,10 +40,7 @@ class ListTitle extends StatelessWidget {
       alignment: Alignment.center,
       child: Text(
         title,
-        style: Theme.of(context)
-            .textTheme
-            .titleLarge!
-            .copyWith(fontSize: fontSize),
+        style: TextStyles.whiteHeader.copyWith(fontSize: fontSize),
       ),
     );
   }

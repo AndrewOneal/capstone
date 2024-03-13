@@ -114,8 +114,7 @@ class _CharacterList extends StatelessWidget {
                             children: <Widget>[
                               Text(
                                 "Don't see the character you're looking for? Hit the edit button to add them!",
-                                style:
-                                    Theme.of(context).textTheme.displayMedium!,
+                                style: TextStyles.disclaimerText,
                               ),
                             ],
                           ),

@@ -103,21 +103,19 @@ class _TitleText extends StatelessWidget {
           fit: BoxFit.scaleDown,
           child: Text(
             'Welcome to the',
-            style:
-                Theme.of(context).textTheme.titleLarge!.copyWith(height: 1.2),
+            style: TextStyles.whiteHeader.copyWith(height: 1.2),
           ),
         ),
         FittedBox(
           fit: BoxFit.scaleDown,
           child: Text(
             wikiTitle,
-            style:
-                Theme.of(context).textTheme.titleMedium!.copyWith(height: 1.2),
+            style: TextStyles.purpleHeader.copyWith(height: 1.2),
           ),
         ),
         Text(
           'Wikipedia',
-          style: Theme.of(context).textTheme.titleLarge!.copyWith(height: 1.2),
+          style: TextStyles.whiteHeader.copyWith(height: 1.2),
         ),
       ],
     );
@@ -143,7 +141,7 @@ class _WikiCard extends StatelessWidget {
             Center(
               child: Text(
                 dbHandler.getDescription(id: wikiID),
-                style: Theme.of(context).textTheme.bodyMedium!,
+                style: TextStyles.cardText,
                 textAlign: TextAlign.center,
               ),
             ),
