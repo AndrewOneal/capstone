@@ -61,6 +61,8 @@ class DBHandler {
     "Section 10",
   ];
 
+  List<Map<String, dynamic>> wikiDescription = [];
+
   List<String> getTitles() {
     // TODO: Implement logic to retrieve titles list from db
     return titles;
@@ -104,5 +106,12 @@ class DBHandler {
       required String sectionsName,
       required int numSections,
       required int numCharacters,
-      required int numLocations}) {}
+      required int numLocations,
+      required List<Map<String, dynamic>> description}) {
+    wikiDescription = description;
+  }
+
+  List<Map<String, dynamic>> getWikiDescription() {
+    return wikiDescription;
+  }
 }

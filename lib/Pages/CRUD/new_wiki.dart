@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:capstone/Pages/CRUD/test.dart';
 
 class NewWiki extends StatefulWidget {
   const NewWiki({super.key});
@@ -64,7 +65,9 @@ class _NewWikiForm extends StatelessWidget {
     final SizedBox mediumSizedBox = global.mediumSizedBox;
     final SizedBox largeSizedBox = global.largeSizedBox;
     DBHandler dbHandler = DBHandler();
+    _QuillEditor quillEditor = _QuillEditor();
     return Form(
+      key: _formKey,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -132,21 +135,34 @@ class _NewWikiForm extends StatelessWidget {
             },
           ),
           mediumSizedBox,
-          _QuillEditor(),
+          quillEditor,
           mediumSizedBox,
           DarkButton(
             buttonText: "Submit Wiki",
             onPressed: () {
               if (_formKey.currentState!.validate()) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Processing Data')),
-                );
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(
+                      const SnackBar(content: Text('Submitting Wiki')),
+                    )
+                    .closed
+                    .then((reason) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const TestPage()),
+                  );
+                });
                 dbHandler.addWiki(
                   title: _titleController.text,
                   sectionsName: _sectionNamesController.text,
                   numSections: int.parse(_numSectionsController.text),
                   numCharacters: int.parse(_numCharactersController.text),
                   numLocations: int.parse(_numLocationsController.text),
+                  description: quillEditor.getDocumentJson(),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Please fill out all fields')),
                 );
               }
             },
@@ -160,6 +176,10 @@ class _NewWikiForm extends StatelessWidget {
 
 class _QuillEditor extends StatelessWidget {
   final QuillController _controller = QuillController.basic();
+
+  List<Map<String, dynamic>> getDocumentJson() {
+    return _controller.document.toDelta().toJson();
+  }
 
   @override
   Widget build(BuildContext context) {
