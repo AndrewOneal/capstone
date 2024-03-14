@@ -93,19 +93,20 @@ class _DetailList extends StatelessWidget {
     DBHandler dbHandler = DBHandler();
     Global global = Global();
     SizedBox mediumSizedBox = global.mediumSizedBox;
-    String loremIpsum = global.loremIpsum;
-    return FutureBuilder<List<String>>(
-        future: Future.value(DBHandler().getWikiDetailsPage(
+    return FutureBuilder<Map<String, List<Map<String, dynamic>>>>(
+        future: Future.value(dbHandler.getWikiDetailsPage(
             wikiID: wikiID,
             wikiSettingID: wikiSettingID,
             wikiDetailID: wikiDetailID)),
-        builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+        builder: (BuildContext context,
+            AsyncSnapshot<Map<String, List<Map<String, dynamic>>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const CircularProgressIndicator();
           } else if (snapshot.hasError) {
             return ErrorWidget(snapshot.error!);
           } else {
-            final headerList = snapshot.data!;
+            final headerList = snapshot.data!.keys.toList();
+            final detailList = snapshot.data!.values.toList();
             return SizedBox(
               height: 400,
               child: ListView.separated(
@@ -118,13 +119,10 @@ class _DetailList extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         headerList[index],
-                        style: Theme.of(context).textTheme.headlineMedium!,
+                        style: TextStyles.detailsHeaders,
                       ),
                       const Divider(),
-                      Text(
-                        loremIpsum,
-                        style: Theme.of(context).textTheme.bodyMedium!,
-                      ),
+                      DefaultQuillRead(input: detailList[index]),
                     ],
                   );
                 },

@@ -1,3 +1,5 @@
+import 'package:capstone/Utilities/global.dart';
+
 class DBHandler {
   static final DBHandler _instance = DBHandler._internal();
 
@@ -107,12 +109,39 @@ class DBHandler {
     return sections;
   }
 
-  List<String> getWikiDetailsPage(
+  Map<String, List<Map<String, dynamic>>> getWikiDetailsPage(
       {required int wikiID,
       required int wikiSettingID,
       required int wikiDetailID}) {
     // TODO: Implement logic to retrieve wiki details page from db
-    return ["Header 1", "Header 2", "Header 3"];
+    Global global = Global();
+
+    return {
+      "Header 1": [
+        {
+          "insert": global.loremIpsum,
+        },
+        {
+          "insert": "\n",
+        }
+      ],
+      "Header 2": [
+        {
+          "insert": global.loremIpsum,
+        },
+        {
+          "insert": "\n",
+        }
+      ],
+      "Header 3": [
+        {
+          "insert": global.loremIpsum,
+        },
+        {
+          "insert": "\n",
+        }
+      ],
+    };
   }
 
   void addWiki(

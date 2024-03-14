@@ -256,6 +256,11 @@ class TextStyles {
     fontSize: 25.0,
     color: text['default'],
   );
+  static TextStyle detailsHeaders = TextStyle(
+    fontFamily: font['header'],
+    fontSize: 30.0,
+    color: text['default'],
+  );
   static TextStyle listText = TextStyle(
     fontFamily: font['default'],
     fontSize: 20.0,
