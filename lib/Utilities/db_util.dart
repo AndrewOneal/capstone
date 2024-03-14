@@ -74,9 +74,22 @@ class DBHandler {
     return titles[id];
   }
 
-  String getDescription({required int id}) {
-    // TODO: Implement logic to retrieve description based on ID
-    return "Description for $id / ${getTitle(id: id)}";
+  List<Map<String, dynamic>> getDescription({required int id}) {
+    // TODO: Combine with getWikiDescription to use flutter quill and get the description from db
+    return [
+      {
+        "insert": "Description for $id / ${getTitle(id: id)}",
+        "attributes": {"color": "#FF363942"}
+      },
+      {
+        "insert": "\n",
+      }
+    ];
+  }
+
+  List<Map<String, dynamic>> getWikiDescription() {
+    // TODO: Combine with getDescription to use flutter quill and get the description from db
+    return wikiDescription;
   }
 
   List<String> getCharacters({required int id}) {
@@ -98,6 +111,7 @@ class DBHandler {
       {required int wikiID,
       required int wikiSettingID,
       required int wikiDetailID}) {
+    // TODO: Implement logic to retrieve wiki details page from db
     return ["Header 1", "Header 2", "Header 3"];
   }
 
@@ -105,13 +119,8 @@ class DBHandler {
       {required String title,
       required String sectionsName,
       required int numSections,
-      required int numCharacters,
-      required int numLocations,
       required List<Map<String, dynamic>> description}) {
+    // TODO: Implement logic to add a wiki to db
     wikiDescription = description;
-  }
-
-  List<Map<String, dynamic>> getWikiDescription() {
-    return wikiDescription;
   }
 }

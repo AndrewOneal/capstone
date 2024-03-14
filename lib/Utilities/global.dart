@@ -4,6 +4,7 @@ export 'package:capstone/Utilities/theme.dart';
 export 'package:capstone/main.dart';
 export 'package:capstone/Utilities/buttons.dart';
 export 'package:capstone/Utilities/db_util.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 
 class Global {
   static final Global _instance = Global._internal();
@@ -41,6 +42,29 @@ class ListTitle extends StatelessWidget {
       child: Text(
         title,
         style: TextStyles.whiteHeader.copyWith(fontSize: fontSize),
+      ),
+    );
+  }
+}
+
+class DefaultQuillRead extends StatelessWidget {
+  final List<Map<String, dynamic>> input;
+
+  const DefaultQuillRead({super.key, required this.input});
+
+  @override
+  Widget build(BuildContext context) {
+    QuillController quillController = QuillController.basic();
+    quillController.document = Document.fromJson(input);
+    return QuillEditor.basic(
+      configurations: QuillEditorConfigurations(
+        padding: const EdgeInsets.all(10),
+        controller: quillController,
+        readOnly: true,
+        showCursor: false,
+        sharedConfigurations: const QuillSharedConfigurations(
+          locale: Locale('en', 'US'),
+        ),
       ),
     );
   }

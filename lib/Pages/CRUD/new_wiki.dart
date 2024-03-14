@@ -56,8 +56,6 @@ class _NewWikiForm extends StatelessWidget {
   final _titleController = TextEditingController();
   final _sectionNamesController = TextEditingController();
   final _numSectionsController = TextEditingController();
-  final _numCharactersController = TextEditingController();
-  final _numLocationsController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -108,32 +106,6 @@ class _NewWikiForm extends StatelessWidget {
               return null;
             },
           ),
-          TextFormField(
-            controller: _numCharactersController,
-            decoration: const InputDecoration(
-              labelText: 'Number of Characters',
-            ),
-            keyboardType: TextInputType.number,
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'Please enter the number of characters';
-              }
-              return null;
-            },
-          ),
-          TextFormField(
-            controller: _numLocationsController,
-            decoration: const InputDecoration(
-              labelText: 'Number of Locations',
-            ),
-            keyboardType: TextInputType.number,
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'Please enter the number of locations';
-              }
-              return null;
-            },
-          ),
           mediumSizedBox,
           quillEditor,
           mediumSizedBox,
@@ -156,8 +128,6 @@ class _NewWikiForm extends StatelessWidget {
                   title: _titleController.text,
                   sectionsName: _sectionNamesController.text,
                   numSections: int.parse(_numSectionsController.text),
-                  numCharacters: int.parse(_numCharactersController.text),
-                  numLocations: int.parse(_numLocationsController.text),
                   description: quillEditor.getDocumentJson(),
                 );
               } else {
@@ -175,10 +145,10 @@ class _NewWikiForm extends StatelessWidget {
 }
 
 class _QuillEditor extends StatelessWidget {
-  final QuillController _controller = QuillController.basic();
+  final QuillController _quillController = QuillController.basic();
 
   List<Map<String, dynamic>> getDocumentJson() {
-    return _controller.document.toDelta().toJson();
+    return _quillController.document.toDelta().toJson();
   }
 
   @override
@@ -194,7 +164,7 @@ class _QuillEditor extends StatelessWidget {
       child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
         QuillToolbar.simple(
           configurations: QuillSimpleToolbarConfigurations(
-            controller: _controller,
+            controller: _quillController,
             showFontFamily: false,
             showInlineCode: false,
             showAlignmentButtons: true,
@@ -221,7 +191,7 @@ class _QuillEditor extends StatelessWidget {
             configurations: QuillEditorConfigurations(
               padding: const EdgeInsets.all(10),
               expands: true,
-              controller: _controller,
+              controller: _quillController,
               readOnly: false,
               sharedConfigurations: const QuillSharedConfigurations(
                 locale: Locale('en', 'US'),

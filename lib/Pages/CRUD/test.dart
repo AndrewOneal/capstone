@@ -3,15 +3,16 @@ import 'package:capstone/Utilities/global.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
 class TestPage extends StatelessWidget {
-  const TestPage({Key? key}) : super(key: key);
+  const TestPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final Global global = Global();
     final EdgeInsets sideMargins = global.sideMargins;
     DBHandler dbHandler = DBHandler();
-    QuillController controller = QuillController.basic();
-    controller.document = Document.fromJson(dbHandler.getWikiDescription());
+    QuillController quillController = QuillController.basic();
+    quillController.document =
+        Document.fromJson(dbHandler.getWikiDescription());
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -45,9 +46,9 @@ class TestPage extends StatelessWidget {
                       child: QuillEditor.basic(
                         configurations: QuillEditorConfigurations(
                           padding: const EdgeInsets.all(10),
-                          expands: true,
-                          controller: controller,
+                          controller: quillController,
                           readOnly: true,
+                          showCursor: false,
                           sharedConfigurations: const QuillSharedConfigurations(
                             locale: Locale('en', 'US'),
                           ),

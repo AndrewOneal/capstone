@@ -139,11 +139,8 @@ class _WikiCard extends StatelessWidget {
         child: Column(
           children: [
             Center(
-              child: Text(
-                dbHandler.getDescription(id: wikiID),
-                style: TextStyles.cardText,
-                textAlign: TextAlign.center,
-              ),
+              child:
+                  DefaultQuillRead(input: dbHandler.getDescription(id: wikiID)),
             ),
           ],
         ),
@@ -170,7 +167,7 @@ class _ButtonList extends StatelessWidget {
     };
 
     return SizedBox(
-      height: 300,
+      height: 200,
       child: ListView.separated(
         itemCount: buttonRoutes.length,
         separatorBuilder: (BuildContext context, int index) => const Padding(
