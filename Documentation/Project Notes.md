@@ -2,11 +2,15 @@ Pocketbase credentials:
 Username: yes@gmail.com
 Password: yes@gmail.com
 
-Changes with Final version
-- Create named routes for pages first
-- Use devlogger strategically
-- Build tests in conjunction to development
-- Identify which pages should make API calls vs which pages will use route arguments
+Questions/Potential things to note:
+- Do async DB functions work well with FutureBuilder
+- d
+
+Things to do:
+- Backup DB schema
+- Create list of commands to immediately populate pocketbase with effective dummy data
+- Create tests for each DB function
+
 
 Quill Editor Notes:
 - Data is stored as a Delta and encoded in JSON format

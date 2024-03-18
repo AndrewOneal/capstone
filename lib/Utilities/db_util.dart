@@ -16,6 +16,33 @@ class DBHandler {
 
   List<Map<String, dynamic>> fake_wikiDescription = [];
 
+  Future<int> translateSectionToNo({required String sectionID}) async {
+    // Finds takes sectionID as input and outputs section_no as an integer
+    final record = await pb.collection('sections').getFirstListItem(
+      'id="${sectionID}"',
+      expand: 'relField1,relField2.subRelField',
+    );
+    return record.toJson()['section_no'];
+  }
+
+  Future<dynamic> getSectionID({required String wikiID, required int sectionNo}) async {
+    //retrieves section ID from settings by utilizing wikiID & section number
+    final record = await pb.collection('sections').getFirstListItem(
+      'wiki_id.id="${wikiID}" && section_no="${sectionNo}"',
+      expand: 'relField1,relField2.subRelField',
+    );
+    var sectionID = record.toJson()['id'];
+    return sectionID;
+  }
+
+  Future<String> getCharacterName({required String characterID}) async {
+    final record = await pb.collection('characters').getFirstListItem(
+      'id="${characterID}"',
+      expand: 'relField1,relField2.subRelField',
+    );
+    return record.toJson()['name'];
+  }
+
    Future<List<dynamic>> getWikis() async {
     // TODO: Implement logic to retrieve wiki information list from db
     var wikis = await pb.collection('wikis').getFullList(
@@ -28,29 +55,29 @@ class DBHandler {
     return wikiList;
   }
 
-  Future<Map<String, dynamic>> getWiki({required String wiki_id}) async {
+  Future<Map<String, dynamic>> getWiki({required String wikiID}) async {
     // TODO: Implement logic to retrieve singular wiki title based on wiki id
     final wiki = await pb.collection('wikis').getFirstListItem(
-      'id="${wiki_id}"',
+      'id="${wikiID}"',
       expand: 'relField1,relField2.subRelField',
     );
     return wiki.toJson();
   }
 
-  Future<String> getWikiDescription({required String wiki_id}) async {
+  Future<String> getWikiDescription({required String wikiID}) async {
     // TODO: retrieves wiki description from the database
     final wiki = await pb.collection('wikis').getFirstListItem(
-      'id="${wiki_id}"',
+      'id="${wikiID}"',
       expand: 'relField1,relField2.subRelField',
     );
     return wiki.toJson()['wiki_description'];
   }
 
-  Future<List<dynamic>> getCharacters({required String wiki_id}) async {
+  Future<List<dynamic>> getCharacters({required String wikiID}) async {
     // TODO: Retrieves all characters associated with a specific wiki
     final records = await pb.collection('characters').getFullList(
       sort: '-created',
-      filter: 'wiki_id.id="${wiki_id}"'
+      filter: 'wiki_id.id="${wikiID}"'
     );
     var recordList = [];
     for (var record in records){
@@ -60,12 +87,12 @@ class DBHandler {
   }
 
   //NOT TESTED YET BUT 99% SURE IT's WORKING
-  Future<List<dynamic>> getLocations({required String wiki_id}) async {
+  Future<List<dynamic>> getLocations({required String wikiID}) async {
     // TODO: Implement logic to retrieve locations list from db
     // TODO: Retrieves all characters associated with a specific wiki
     final records = await pb.collection('locations').getFullList(
         sort: '-created',
-        filter: 'wiki_id.id="${wiki_id}"'
+        filter: 'wiki_id.id="${wikiID}"'
     );
     var recordList = [];
     for (var record in records){
@@ -74,12 +101,12 @@ class DBHandler {
     return recordList;
   }
 
-  Future<List<dynamic>> getSections({required String wiki_id}) async {
+  Future<List<dynamic>> getSections({required String wikiID}) async {
     // TODO: Implement logic to retrieve sections list from db
     // TODO: Retrieves all characters associated with a specific wiki
     final records = await pb.collection('sections').getFullList(
         sort: '-created',
-        filter: 'wiki_id.id="${wiki_id}"'
+        filter: 'wiki_id.id="${wikiID}"'
     );
     var recordList = [];
     for (var record in records){
@@ -88,75 +115,50 @@ class DBHandler {
     return recordList;
   }
 
-  Map<String, List<Map<String, dynamic>>> getCharacterDetails(
-      {required int wikiID,
-        required int wikiSectionID,
-        required int wikiCharacterID}) {
+  Future<List<dynamic>> getCharacterDetails(
+      {
+        required int section_no,
+        required String characterID}) async {
     // Retrieves all character details related to a specific wiki part and specific character
-
-
-    return {
-      "Header 1": [
-        {
-          "insert": loremIpsum,
-        },
-        {
-          "insert": "\n",
-        }
-      ],
-      "Header 2": [
-        {
-          "insert": loremIpsum,
-        },
-        {
-          "insert": "\n",
-        }
-      ],
-      "Header 3": [
-        {
-          "insert": loremIpsum,
-        },
-        {
-          "insert": "\n",
-        }
-      ],
-    };
+    // Character details are retrieved as a List of quill formatted json deltas
+    final records = await pb.collection('character_details').getFullList(
+        sort: '-created',
+        filter: 'character_id.id="${characterID}" && character_details_via_sections.id='
+    );
+    var detailsList = [];
+    for (var record in records) {
+      detailsList.add(record.toJson());
+    }
+    return detailsList;
   }
 
-  Map<String, List<Map<String, dynamic>>> getSectionDetails(
-      {required int wikiID,
-      required int wikiSettingID,
-      required int wikiDetailID}) {
-    // TODO: Implement logic to retrieve wiki details page from db
-
-
-    return {
-      "Header 1": [
-        {
-          "insert": loremIpsum,
-        },
-        {
-          "insert": "\n",
-        }
-      ],
-      "Header 2": [
-        {
-          "insert": loremIpsum,
-        },
-        {
-          "insert": "\n",
-        }
-      ],
-      "Header 3": [
-        {
-          "insert": loremIpsum,
-        },
-        {
-          "insert": "\n",
-        }
-      ],
-    };
-  }
+  // TODO: EXAMPLE DELTA OUTPUT NEEDS TO BE MIMICKED
+  // {
+  // "Header 1": [
+  // {
+  // "insert": loremIpsum,
+  // },
+  // {
+  // "insert": "\n",
+  // }
+  // ],
+  // "Header 2": [
+  // {
+  // "insert": loremIpsum,
+  // },
+  // {
+  // "insert": "\n",
+  // }
+  // ],
+  // "Header 3": [
+  // {
+  // "insert": loremIpsum,
+  // },
+  // {
+  // "insert": "\n",
+  // }
+  // ],
+  // };
 
   Map<String, List<Map<String, dynamic>>> getLocationDetails(
       {required int wikiID,
@@ -205,7 +207,9 @@ class DBHandler {
 
 void main() async {
   print("Wiki List: \n");
-  var data = await DBHandler().getSections(wiki_id: "9tk9j8x06yrcy9f");
+  var data = await DBHandler().getCharacterDetails(section_no: 2, characterID: 'nbxynzck218e4qq');
   print(data);
+  // var translation = await DBHandler().getCharacterName(characterID: "nbxynzck218e4qq");
+  // print(translation);
   print("-------------------------------------------");
 }
