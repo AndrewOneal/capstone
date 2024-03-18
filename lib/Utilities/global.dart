@@ -3,7 +3,6 @@ import 'package:capstone/Utilities/theme.dart';
 export 'package:capstone/Utilities/theme.dart';
 export 'package:capstone/main.dart';
 export 'package:capstone/Utilities/buttons.dart';
-export 'package:capstone/Utilities/db_util.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
 class Global {

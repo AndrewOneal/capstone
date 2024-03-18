@@ -3,6 +3,7 @@ import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Pages/Account/login.dart';
 import 'package:capstone/Pages/Account/wiki_settings.dart';
 import 'package:capstone/Pages/Wiki/wiki_details.dart';
+import 'package:capstone/Utilities/db_util.dart';
 
 class WikiCharactersPage extends StatelessWidget {
   final int wikiID;

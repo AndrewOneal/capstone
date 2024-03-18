@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Pages/Wiki/wiki_home.dart';
+import 'package:capstone/Utilities/db_util.dart';
 
 int sectionID = 0;
 
@@ -39,7 +40,7 @@ class WikiSettingsState extends State<WikiSettings> {
           child: Column(
             children: [
               titleSizedBox,
-              _TitleText(wikiTitle: dbHandler.getTitle(id: widget.wikiID)),
+              _TitleText(wikiTitle: dbHandler.getWiki(id: widget.wikiID)),
               mediumSizedBox,
               _SectionDropdown(),
               mediumSizedBox,
@@ -132,7 +133,7 @@ class _SaveSettingsButton extends StatelessWidget {
           MaterialPageRoute(
               builder: (context) => WikiHome(
                   wikiID: wikiID,
-                  wikiTitle: dbHandler.getTitle(id: wikiID),
+                  wikiTitle: dbHandler.getWiki(id: wikiID),
                   wikiSettingID: wikiSettingID)),
         );
       },

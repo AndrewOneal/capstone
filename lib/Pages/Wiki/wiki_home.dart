@@ -6,6 +6,7 @@ import 'package:capstone/Pages/Account/wiki_settings.dart';
 import 'package:capstone/Pages/Wiki/wiki_characters.dart';
 import 'package:capstone/Pages/Wiki/wiki_sections.dart';
 import 'package:capstone/Pages/Wiki/wiki_locations.dart';
+import 'package:capstone/Utilities/db_util.dart';
 
 class WikiHome extends StatefulWidget {
   final int wikiID;
@@ -140,7 +141,7 @@ class _WikiCard extends StatelessWidget {
           children: [
             Center(
               child:
-                  DefaultQuillRead(input: dbHandler.getDescription(id: wikiID)),
+                  DefaultQuillRead(input: dbHandler.getWikiDescription(id: wikiID)),
             ),
           ],
         ),

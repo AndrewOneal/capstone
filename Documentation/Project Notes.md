@@ -1,13 +1,89 @@
-Logging is being done with devlogger tool built into dart
+Pocketbase credentials:
+Username: yes@gmail.com
+Password: yes@gmail.com
 
-Characters/Seasons page should just have the data passed to them through route arguements. I should minimize API calls where possible
+Changes with Final version
+- Create named routes for pages first
+- Use devlogger strategically
+- Build tests in conjunction to development
+- Identify which pages should make API calls vs which pages will use route arguments
 
-need plan for how to properly do error handling when pulling descriptions and names
+Quill Editor Notes:
+- Data is stored as a Delta and encoded in JSON format
+- Data is pulled as a JSON from the database and assigned to the quill document
 
-Need plan for EXACTLY what information will be on each page
+Working with JSON in flutter
+1st method: Using a class to control type safety and logic. 4 functions & 3 datatypes:
+    - toJson(), uses class instance to output a map. #Custom class method
+    - fromJson(), converts map to class instance via a constructor. #Custom class method
+    - jsonDecode(), converts raw JSON string to map<String, dynamic>
+    - jsonEncode(), takes class instance and outputs back to raw JSON string
+    - Idea behind this method is to convert raw JSON string into a class object first to detect compilation issues and data integrity. The logic would be built into the class. Then that class instance would be usable/editable. THEN the jsonEncode function would convert the class instance back into a raw JSON string that can be stored in the database
+2nd method: Just using JSON strings and manually setting up code blocks for the logic. 2 functions and 2 datatypes:
+    - jsonDecode, converts raw JSON string into map<String, Dynamic>
+    - jsonEncode, converts map<String, Dynamic> into raw JSON string
+    - This method is much simpler but also more error-prone. 
 
-Need to CONSTANTLY be testing both android and web platforms to make sure they're both working properly
+POTENTIAL PROBLEMS:
+- If we allow the user to customize the full article page, how do we use logic to determine what information they display? They can effectively write ANYTHING they want?
+- How to support full page customizability without repeating information from previous book entries? If there are 10 entries of one character, should they all be displayed at book 10, should only the book 10 entry be displayed, shoudld the information be merged somehow? 
+    
 
-Database Design:
-USERS [TABLE]:
+Tables:
+[WIKIS]
+- Wiki ID --> String
+- Wiki Name --> String
+- Wiki Admin --> String
+- section_count --> int
+
+[SECTIONS]
+- Section ID --> String
+- Section Name --> String
+- Section # --> Int
+- *Wiki ID --> String
+
+[CHARACTERS]
+- Character ID --> String
+- Character name --> String
+- nickname
+- *Wiki ID --> String
+
+[CHARACTER DETAILS]
+- Character Detail ID --> String
+- Character Description/Detail --> String #JSON in delta/string format from Quill (*Labeled as JSON in pocketbase DB)
+- *Character ID --> String
+- *Section # --> Int
+
+[LOCATIONS]
+- Location ID --> String
+- Location Name --> String
+- Wiki ID --> String
+
+[LOCATION_DETAILS]
+- Location_details ID --> String
+- location_details_summary --> String
+- *Location ID --> String
+- *Section ID --> String
+
+[SETTINGS]
+- user_id --> String
+- wiki_id --> String
+- latest_point --> Int
+
+[USERS]
+- User ID --> String
+- User Name --> String
+- Administrator --> Bool
+
+Pages:
+Home Page 
+    - Named Wiki #(Dialog popup, "Which book are you on?"). Editable on each subsequent wiki page
+        - Characters 
+        - Seasons/Summaries
+        - Timeline
+    - Named/Owned Wiki
+        - Edit/Verification Requests Page
+        - 
+Settings
+Profile
 

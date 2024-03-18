@@ -1,4 +1,9 @@
-import 'package:capstone/Utilities/global.dart';
+import 'package:pocketbase/pocketbase.dart';
+
+final pb = PocketBase('http://127.0.0.1:8090');
+
+String loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ac odio vel purus molestie posuere. Curabitur non ante felis. Fusce volutpat turpis quis velit commodo, a tristique elit tempor. Etiam pulvinar augue ut est consectetur, in volutpat sem varius. Sed id dapibus odio. Cras ullamcorper leo quis hendrerit facilisis. Vivamus in risus euismod, pharetra elit eu, gravida lorem. Etiam dictum efficitur nulla sit amet egestas. Praesent vel mi rhoncus, gravida neque eu, elementum lorem. Integer vulputate quam nec nunc luctus aliquet. Etiam lacinia fringilla purus, vel interdum ligula aliquet vel. Mauris a lorem tempor, fermentum mauris eu, convallis lorem. Vivamus aliquet erat in laoreet efficitur. Aenean nec suscipit mi, non molestie risus. Nulla in leo at lorem porta tristique.";
+
 
 class DBHandler {
   static final DBHandler _instance = DBHandler._internal();
@@ -9,117 +14,91 @@ class DBHandler {
 
   DBHandler._internal();
 
-  final List<String> titles = [
-    "Avatar: The Last Airbender",
-    "Darling in the Franxx",
-    "Fate",
-    "Friends",
-    "Harry Potter",
-    "How I Met Your Mother",
-    "One Piece",
-    "Phineas and Ferb",
-    "Regular Show",
-    "Spongebob",
-    "The Office",
-    "The Wheel of Time",
-  ];
+  List<Map<String, dynamic>> fake_wikiDescription = [];
 
-  final List<String> characters = [
-    "Character 1",
-    "Character 2",
-    "Character 3",
-    "Character 4",
-    "Character 5",
-    "Character 6",
-    "Character 7",
-    "Character 8",
-    "Character 9",
-    "Character 10",
-  ];
-
-  final List<String> locations = [
-    "Location 1",
-    "Location 2",
-    "Location 3",
-    "Location 4",
-    "Location 5",
-    "Location 6",
-    "Location 7",
-    "Location 8",
-    "Location 9",
-    "Location 10",
-  ];
-
-  final List<String> sections = [
-    "Section 1",
-    "Section 2",
-    "Section 3",
-    "Section 4",
-    "Section 5",
-    "Section 6",
-    "Section 7",
-    "Section 8",
-    "Section 9",
-    "Section 10",
-  ];
-
-  List<Map<String, dynamic>> wikiDescription = [];
-
-  List<String> getTitles() {
-    // TODO: Implement logic to retrieve titles list from db
-    return titles;
+   Future<List<dynamic>> getWikis() async {
+    // TODO: Implement logic to retrieve wiki information list from db
+    var wikis = await pb.collection('wikis').getFullList(
+      sort: '-created',
+    );
+    var wikiList = [];
+    for (var element in wikis) {
+      wikiList.add(element.toJson());
+    }
+    return wikiList;
   }
 
-  String getTitle({required int id}) {
-    // TODO: Implement logic to retrieve title based on ID
-
-    return titles[id];
+  Future<Map<String, dynamic>> getWiki({required String wiki_id}) async {
+    // TODO: Implement logic to retrieve singular wiki title based on wiki id
+    final wiki = await pb.collection('wikis').getFirstListItem(
+      'id="${wiki_id}"',
+      expand: 'relField1,relField2.subRelField',
+    );
+    return wiki.toJson();
   }
 
-  List<Map<String, dynamic>> getDescription({required int id}) {
-    // TODO: Combine with getWikiDescription to use flutter quill and get the description from db
-    return [
-      {
-        "insert": "Description for $id / ${getTitle(id: id)}",
-        "attributes": {"color": "#FF363942"}
-      },
-      {
-        "insert": "\n",
-      }
-    ];
+  Future<String> getWikiDescription({required String wiki_id}) async {
+    // TODO: retrieves wiki description from the database
+    final wiki = await pb.collection('wikis').getFirstListItem(
+      'id="${wiki_id}"',
+      expand: 'relField1,relField2.subRelField',
+    );
+    return wiki.toJson()['wiki_description'];
   }
 
-  List<Map<String, dynamic>> getWikiDescription() {
-    // TODO: Combine with getDescription to use flutter quill and get the description from db
-    return wikiDescription;
+  Future<List<dynamic>> getCharacters({required String wiki_id}) async {
+    // TODO: Retrieves all characters associated with a specific wiki
+    final records = await pb.collection('characters').getFullList(
+      sort: '-created',
+      filter: 'wiki_id.id="${wiki_id}"'
+    );
+    var recordList = [];
+    for (var record in records){
+      recordList.add(record.toJson());
+    }
+    return recordList;
   }
 
-  List<String> getCharacters({required int id}) {
-    // TODO: Implement logic to retrieve characters list from db
-    return characters;
-  }
-
-  List<String> getLocations({required int id}) {
+  //NOT TESTED YET BUT 99% SURE IT's WORKING
+  Future<List<dynamic>> getLocations({required String wiki_id}) async {
     // TODO: Implement logic to retrieve locations list from db
-    return locations;
+    // TODO: Retrieves all characters associated with a specific wiki
+    final records = await pb.collection('locations').getFullList(
+        sort: '-created',
+        filter: 'wiki_id.id="${wiki_id}"'
+    );
+    var recordList = [];
+    for (var record in records){
+      recordList.add(record.toJson());
+    }
+    return recordList;
   }
 
-  List<String> getSections({required int id}) {
+  Future<List<dynamic>> getSections({required String wiki_id}) async {
     // TODO: Implement logic to retrieve sections list from db
-    return sections;
+    // TODO: Retrieves all characters associated with a specific wiki
+    final records = await pb.collection('sections').getFullList(
+        sort: '-created',
+        filter: 'wiki_id.id="${wiki_id}"'
+    );
+    var recordList = [];
+    for (var record in records){
+      recordList.add(record.toJson());
+    }
+    return recordList;
   }
 
-  Map<String, List<Map<String, dynamic>>> getWikiDetailsPage(
+  Map<String, List<Map<String, dynamic>>> getCharacterDetails(
       {required int wikiID,
-      required int wikiSettingID,
-      required int wikiDetailID}) {
-    // TODO: Implement logic to retrieve wiki details page from db
-    Global global = Global();
+        required int wikiSectionID,
+        required int wikiCharacterID}) {
+    // Retrieves all character details related to a specific wiki part and specific character
+
 
     return {
       "Header 1": [
         {
-          "insert": global.loremIpsum,
+          "insert": loremIpsum,
         },
         {
           "insert": "\n",
@@ -127,7 +106,7 @@ class DBHandler {
       ],
       "Header 2": [
         {
-          "insert": global.loremIpsum,
+          "insert": loremIpsum,
         },
         {
           "insert": "\n",
@@ -135,7 +114,77 @@ class DBHandler {
       ],
       "Header 3": [
         {
-          "insert": global.loremIpsum,
+          "insert": loremIpsum,
+        },
+        {
+          "insert": "\n",
+        }
+      ],
+    };
+  }
+
+  Map<String, List<Map<String, dynamic>>> getSectionDetails(
+      {required int wikiID,
+      required int wikiSettingID,
+      required int wikiDetailID}) {
+    // TODO: Implement logic to retrieve wiki details page from db
+
+
+    return {
+      "Header 1": [
+        {
+          "insert": loremIpsum,
+        },
+        {
+          "insert": "\n",
+        }
+      ],
+      "Header 2": [
+        {
+          "insert": loremIpsum,
+        },
+        {
+          "insert": "\n",
+        }
+      ],
+      "Header 3": [
+        {
+          "insert": loremIpsum,
+        },
+        {
+          "insert": "\n",
+        }
+      ],
+    };
+  }
+
+  Map<String, List<Map<String, dynamic>>> getLocationDetails(
+      {required int wikiID,
+        required int wikiSettingID,
+        required int wikiDetailID}) {
+    // TODO: Implement logic to retrieve wiki details page from db
+
+
+    return {
+      "Header 1": [
+        {
+          "insert": loremIpsum,
+        },
+        {
+          "insert": "\n",
+        }
+      ],
+      "Header 2": [
+        {
+          "insert": loremIpsum,
+        },
+        {
+          "insert": "\n",
+        }
+      ],
+      "Header 3": [
+        {
+          "insert": loremIpsum,
         },
         {
           "insert": "\n",
@@ -147,9 +196,16 @@ class DBHandler {
   void addWiki(
       {required String title,
       required String sectionsName,
-      required int numSections,
+      required int wiki_section_count,
       required List<Map<String, dynamic>> description}) {
     // TODO: Implement logic to add a wiki to db
-    wikiDescription = description;
+    fake_wikiDescription = description;
   }
+}
+
+void main() async {
+  print("Wiki List: \n");
+  var data = await DBHandler().getSections(wiki_id: "9tk9j8x06yrcy9f");
+  print(data);
+  print("-------------------------------------------");
 }

@@ -4,6 +4,7 @@ import 'package:capstone/Pages/tutorial.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Pages/Wiki/wiki_home.dart';
 import 'package:capstone/Pages/CRUD/new_wiki.dart';
+import 'package:capstone/Utilities/db_util.dart';
 
 class WikiListPage extends StatelessWidget {
   const WikiListPage({Key? key}) : super(key: key);
@@ -75,7 +76,7 @@ class _WikiList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DBHandler dbHandler = DBHandler();
-    final wikiTitles = dbHandler.getTitles();
+    final wikiTitles = dbHandler.getWikis();
     return ListView.separated(
       itemCount: wikiTitles.length + 1,
       separatorBuilder: (BuildContext context, int index) => const Padding(

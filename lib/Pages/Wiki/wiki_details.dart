@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Pages/Account/login.dart';
 import 'package:capstone/Pages/Account/wiki_settings.dart';
+import 'package:capstone/Utilities/db_util.dart';
 
 class WikiDetailsPage extends StatelessWidget {
   final int wikiID;
@@ -94,7 +95,7 @@ class _DetailList extends StatelessWidget {
     Global global = Global();
     SizedBox mediumSizedBox = global.mediumSizedBox;
     return FutureBuilder<Map<String, List<Map<String, dynamic>>>>(
-        future: Future.value(dbHandler.getWikiDetailsPage(
+        future: Future.value(dbHandler.getSectionDetails(
             wikiID: wikiID,
             wikiSettingID: wikiSettingID,
             wikiDetailID: wikiDetailID)),

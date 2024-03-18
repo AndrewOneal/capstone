@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:capstone/Pages/CRUD/test.dart';
+import 'package:capstone/Utilities/db_util.dart';
 
 class NewWiki extends StatefulWidget {
   const NewWiki({super.key});
@@ -127,7 +128,7 @@ class _NewWikiForm extends StatelessWidget {
                 dbHandler.addWiki(
                   title: _titleController.text,
                   sectionsName: _sectionNamesController.text,
-                  numSections: int.parse(_numSectionsController.text),
+                  wiki_section_count: int.parse(_numSectionsController.text),
                   description: quillEditor.getDocumentJson(),
                 );
               } else {
