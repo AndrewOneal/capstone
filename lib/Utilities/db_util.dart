@@ -121,9 +121,14 @@ class DBHandler {
         required String characterID}) async {
     // Retrieves all character details related to a specific wiki part and specific character
     // Character details are retrieved as a List of quill formatted json deltas
-    final records = await pb.collection('character_details').getFullList(
+    // final records = await pb.collection('character_details').getFullList(
+    //     sort: '-created',
+    //     filter: 'character_id.id="${characterID}" && character_details_via_sections.id='
+    // );
+    final records = await pb.collection('sections').getFullList(
         sort: '-created',
-        filter: 'character_id.id="${characterID}" && character_details_via_sections.id='
+        filter: 'section_no="${section_no}"',
+        expand: 'characterDetails_via_section.character_id'
     );
     var detailsList = [];
     for (var record in records) {
