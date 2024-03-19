@@ -4,7 +4,8 @@ Password: yes@gmail.com
 
 Questions/Potential things to note:
 - Do async DB functions work well with FutureBuilder
-- d
+- Querying characters and locations across 2 different wikis
+- How to handle verification request system in relation to the database
 
 Things to do:
 - Backup DB schema
@@ -45,6 +46,11 @@ Tables:
 - Section Name --> String
 - Section # --> Int
 - *Wiki ID --> String
+
+[SECTION_DETAILS]
+- section_details_id --> String
+- *section_id --> String
+- details_description
 
 [CHARACTERS]
 - Character ID --> String
