@@ -43,6 +43,27 @@ class DBHandler {
     return record.toJson()['name'];
   }
 
+  Future<String> getCharacterIDFromName({required String characterName, required String wikiID}) async {
+    final record = await pb.collection('characters').getFirstListItem(
+      'name~"$characterName" && wiki_id.id="$wikiID"'
+    );
+    return record.toJson()['id'];
+  }
+
+  Future<String> getWikiIDFromName({required String wikiName}) async {
+    final record = await pb.collection('wikis').getFirstListItem(
+        'wiki_name~"$wikiName"'
+    );
+    return record.toJson()['id'];
+  }
+
+  Future<String> getLocationIDFromName({required String locationName}) async {
+    final record = await pb.collection('locations').getFirstListItem(
+        'name~"$locationName"'
+    );
+    return record.toJson()['id'];
+  }
+
    Future<List<dynamic>> getWikis() async {
     // TODO: Implement logic to retrieve wiki information list from db
     var wikis = await pb.collection('wikis').getFullList(
@@ -188,7 +209,8 @@ class DBHandler {
     return detailsList;
   }
 
-  void addWiki({required String wiki_name, required int wiki_section_count, required String wiki_description}) async {
+  void createWiki({required String wiki_name, required int wiki_section_count, required String wiki_description, required String section_name}) async {
+    //Create new wiki record
     final body = <String, dynamic>{
       "wiki_name": "${wiki_name}",
       "wiki_admin": null,
@@ -199,6 +221,110 @@ class DBHandler {
     try{
       final record = await pb.collection('wikis').create(body: body);
       print("Wiki Successfully created");
+      print("Creating new sections for wiki...");
+      for (var i = 1; i <= wiki_section_count; i++){
+        DBHandler().createSection(section_name: section_name, associated_wiki_id: await DBHandler().getWikiIDFromName(wikiName: wiki_name), section_no: i);
+      }
+      print("${wiki_section_count} sections created for ${wiki_name} wiki");
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void createCharacter({required String character_name, required String associated_wiki_id, nickname}) async {
+    if (nickname != String) {nickname = "";}
+    // Create new character record
+    final body = <String, dynamic>{
+      "name": "${character_name}",
+      "nickname": nickname,
+      "wiki_id": [
+        "${associated_wiki_id}"
+      ]
+    };
+    try {
+      print("Creating Character...");
+      final record = await pb.collection('characters').create(body: body);
+      print("New Character successfully created");
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void createCharacterDetail({required String details_description, required String associated_character_id, required String associated_section_id}) async {
+    // Create new character detail record
+    final body = <String, dynamic>{
+      "details_description": "${details_description}",
+      "character_id": "${associated_character_id}",
+      "section_id": "${associated_section_id}"
+    };
+    try {
+      print("Creating new character detail...");
+      final record = await pb.collection('character_details').create(body: body);
+      print("New character detail succesfully created");
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void createLocation({required String location_name, required String associated_wiki_id}) async {
+    // Create new location record
+    final body = <String, dynamic>{
+      "name": "${location_name}",
+      "wiki_id": [
+        "${associated_wiki_id}"
+      ]
+    };
+    try {
+      print("Creating Location...");
+      final record = await pb.collection('locations').create(body: body);
+      print("New location successfully created");
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void createLocationDetail({required String details_description, required String associated_location_id, required String associated_section_id}) async {
+    // Create new location detail record
+    final body = <String, dynamic>{
+      "details_description": "${details_description}",
+      "location_id": "${associated_location_id}",
+      "section_id": "${associated_section_id}"
+    };
+    try {
+      print("Creating new location detail...");
+      final record = await pb.collection('location_details').create(body: body);
+      print("New location detail succesfully created");
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void createSection({required String section_name, required String associated_wiki_id, required int section_no}) async {
+    // Create new section record
+    final body = <String, dynamic>{
+      "section_name": "${section_name}",
+      "wiki_id": "${associated_wiki_id}",
+      "section_no": section_no
+    };
+    try {
+      print("Creating new section...");
+      final record = await pb.collection('sections').create(body: body);
+      print("New section successfully created");
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void createSectionDetail({required String details_description, required String associated_section_id}) async {
+    // Create new section detail record
+    final body = <String, dynamic>{
+      "details_description": "${details_description}",
+      "section_id": "${associated_section_id}"
+    };
+    try {
+      print("Creating new section detail...");
+      final record = await pb.collection('section_details').create(body: body);
+      print("New section detail succesfully created");
     } catch (e) {
       print(e);
     }
@@ -218,6 +344,16 @@ void main() async {
   // print(translation);
   // var locations = await DBHandler().getLocations(wikiID: "ndlh8nkyr4uyjw4");
   // print(locations);
+  // var characterID = await DBHandler().getWikiIDFromName(wikiName: "Avatar: The Last Airbender");
+  // print(characterID);
 
-  DBHandler().addWiki(wiki_name: "Star Wars", wiki_section_count: 9, wiki_description: "Covers the star wars movies 1-9");
+  //DBHandler().createCharacter(character_name: "Azula", associated_wiki_id: "ndlh8nkyr4uyjw4");
+  //DBHandler().createCharacterDetail(details_description: '{"String":"New detail about azula for book 1"}', associated_character_id: "h1u69fa7cq5t9a7", associated_section_id: "g8294277htd9p13");
+  DBHandler().createWiki(wiki_name: "Star Wars", wiki_section_count: 9, wiki_description: "Covers the star wars movies 1-9", section_name: 'Movie');
+
+  //DBHandler().createLocation(location_name: "Southern Water Tribe", associated_wiki_id: await DBHandler().getWikiIDFromName(wikiName: "Breaking"));
+  //DBHandler().createLocationDetail(details_description: '{"String":"New detail about Omashu for book 3"}', associated_location_id: "jogmpljl9j6ibfu", associated_section_id: "jz7pr9z31nfadbf");
+
+  //DBHandler().createSection(section_name: "Season 6", associated_wiki_id: "9tk9j8x06yrcy9f", section_no: 6);
+  //DBHandler().createSectionDetail(details_description: '{"String":"This is a new section detail about breaking bad season 6"}', associated_section_id: "5l1b2evenu2gt8g");
 }

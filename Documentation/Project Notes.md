@@ -7,10 +7,14 @@ Questions/Potential things to note:
 - Querying characters and locations across 2 different wikis
 - How to handle verification request system in relation to the database
 
-Things to do:
+DB things to clean up/Do:
 - Backup DB schema
 - Create list of commands to immediately populate pocketbase with effective dummy data
 - Create tests for each DB function
+- CRUD for settings & users
+- Adding error handling to READ operations
+- Fixing comments
+- 
 
 
 Quill Editor Notes:

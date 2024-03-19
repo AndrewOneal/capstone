@@ -125,7 +125,7 @@ class _NewWikiForm extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => const TestPage()),
                   );
                 });
-                dbHandler.addWiki(
+                dbHandler.createWiki(
                   title: _titleController.text,
                   sectionsName: _sectionNamesController.text,
                   wiki_section_count: int.parse(_numSectionsController.text),
