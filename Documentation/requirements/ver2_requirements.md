@@ -32,13 +32,16 @@
 
  * Epic: As a wiki user, I want to be able to update data in the database so that I can change my password, toggle administrator privileges, and edit data within the application, so that I can use all the features of the application.
   * User Story: As an admin, I want a database function to change my role to access the administrator privileges, so that I can use my privileges properly.
-  * As a wiki user, I want a database function to update my password, so that I can secure my account or reset my password if I forget it.
-  * As a wiki user, I want a database function to edit part summaries, character details, and wiki details, so that I can correct wiki information.
+  * User Story: As a wiki user, I want a database function to update my password, so that I can secure my account or reset my password if I forget it.
+  * User Story: As a wiki user, I want a database function to edit part summaries, character details, and wiki details, so that I can correct wiki information.
 
 * Epic: As a wiki user, I want to be able to delete data in the database, so that I can remove unnessecary or incorrect information or delete my account
   * User Story: As a wiki user, I want a database function to remove character information, part summaries, and the wiki itself, so that I can remove unnessecary or incorrect information or simply start fresh.
   * User Story: As a wiki user, I want a database function to delete my account, so that I can delete my account when I am done with it and remove my user data.
- *   
+    
+* Epic: As a wiki user, I want to to be bale to read data in the database, so that I can view the data in the application and read the information in the wiki.
+  * User Story: As a wiki user, I want a database function to retrieve my login details, so that I can log in and use my stored settings for the application.
+  * User Story: As a wiki user, I want a database function to retrieve character details, wiki details, and part summaries, so that I can read the wiki's information and learn more about the current show I am watching.
 
 
 
