@@ -418,13 +418,85 @@ class DBHandler {
   }
 
   Future<Map<String, dynamic>> updateWiki({required String wikiID, required String new_name, required String new_description}) async {
-    //Setting default admin ID for validation
     final body = <String, dynamic>{
       "wiki_name": new_name,
       "wiki_description": new_description
     };
     try {
       var record = await pb.collection('wikis').update(wikiID, body: body);
+      return record.toJson();
+    } catch (e) {
+      return {"Error":"${e}"};
+    }
+  }
+
+  Future<Map<String, dynamic>> updateCharacter({required String characterID, required String new_name, required String new_nickname}) async {
+    final body = <String, dynamic>{
+      "name": new_name,
+      "nickname": new_nickname
+    };
+    try {
+      var record = await pb.collection('characters').update(characterID, body: body);
+      return record.toJson();
+    } catch (e) {
+      return {"Error":"${e}"};
+    }
+  }
+
+  Future<Map<String, dynamic>> updateLocation({required String locationID, required String new_location_name}) async {
+    final body = <String, dynamic>{
+      "name": new_location_name,
+    };
+    try {
+      var record = await pb.collection('locations').update(locationID, body: body);
+      return record.toJson();
+    } catch (e) {
+      return {"Error":"${e}"};
+    }
+  }
+
+  Future<Map<String, dynamic>> updateSection({required String sectionID, required String new_section_name}) async {
+    final body = <String, dynamic>{
+      "section_name": new_section_name,
+    };
+    try {
+      var record = await pb.collection('sections').update(sectionID, body: body);
+      return record.toJson();
+    } catch (e) {
+      return {"Error":"${e}"};
+    }
+  }
+
+  Future<Map<String, dynamic>> updateCharacterDetail({required String characterDetailsID, required String new_details_description}) async {
+    final body = <String, dynamic>{
+      "details_description": new_details_description,
+    };
+    try {
+      var record = await pb.collection('character_details').update(characterDetailsID, body: body);
+      return record.toJson();
+    } catch (e) {
+      return {"Error":"${e}"};
+    }
+  }
+
+  Future<Map<String, dynamic>> updateLocationDetail({required String locationDetailID, required String new_details_description}) async {
+    final body = <String, dynamic>{
+      "details_description": new_details_description,
+    };
+    try {
+      var record = await pb.collection('location_details').update(locationDetailID, body: body);
+      return record.toJson();
+    } catch (e) {
+      return {"Error":"${e}"};
+    }
+  }
+
+  Future<Map<String, dynamic>> updateSectionDetail({required String sectionDetailID, required String new_details_description}) async {
+    final body = <String, dynamic>{
+      "details_description": new_details_description,
+    };
+    try {
+      var record = await pb.collection('section_details').update(sectionDetailID, body: body);
       return record.toJson();
     } catch (e) {
       return {"Error":"${e}"};
@@ -463,5 +535,11 @@ Future<void> main() async {
   // await DBHandler().createCharacterDetail(details_description: '{"String":"New detail about Anakin from movie 2"}', associated_character_id: await DBHandler().getCharacterIDFromName(characterName: "Anakin", wikiID: await DBHandler().getWikiIDFromName(wikiName: "Star Wars")), associated_section_id: await DBHandler().getSectionID(wikiID: await DBHandler().getWikiIDFromName(wikiName: "Star Wars"), sectionNo: 2));
   // await DBHandler().createLocation(location_name: "Coruscant", associated_wiki_id: await DBHandler().getWikiIDFromName(wikiName: "Star Wars"));
 
-
+  // await DBHandler().updateCharacter(characterID: "hhzw467jzyqqcf8", new_name: "Iroh (Zuko Uncle)", new_nickname: "Dragon of the West");
+  // await DBHandler().updateLocation(locationID: "9cu0atfmbsvi1di", new_location_name: "Ba Sing Se (Earth Kingdom Capital)");
+  // await DBHandler().updateSection(new_section_name: "Book 2: Earth", sectionID: '3c0t4afrp16l7zs');
+  // await DBHandler().updateCharacterDetail(characterDetailsID: "tjamf8homoiwwpw", new_details_description: '{"String":"Aang discovers his people are dead in book 1 and onwawrd"}');
+  // await DBHandler().updateLocationDetail(locationDetailID: "tj0ck5ike5em9k5", new_details_description: '{"String": "New detail about Omashu for book 3 and onward"}');
+  // await DBHandler().updateSectionDetail(sectionDetailID: "6ats0591e6qgtbv", new_details_description: '{"String": "This is a new section detail about breaking bad season 6 and onward"}');
+  //
 }

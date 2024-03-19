@@ -14,6 +14,7 @@ DB things to clean up/Do:
 - CRUD for settings & users
 - Adding error handling to READ operations
 - Fixing comments
+- Providing functionality to update relational fields in UPDATE functions
 
 PLAN for settings/Authentication:
 - 
