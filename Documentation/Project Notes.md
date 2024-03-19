@@ -113,3 +113,10 @@ Home Page
 Settings
 Profile
 
+WIKI Creation commands:
+Creates star wars wiki:
+await DBHandler().createWiki(wiki_name: "Star Wars", wiki_section_count: 9, wiki_description: "Covers the star wars movies 1-9", section_name: 'Movie');
+await DBHandler().createCharacter(character_name: "Anakin", associated_wiki_id: await DBHandler().getWikiIDFromName(wikiName: "Star Wars"));
+await DBHandler().createCharacterDetail(details_description: '{"String":"New detail about Anakin from movie 2"}', associated_character_id: await DBHandler().getCharacterIDFromName(characterName: "Anakin", wikiID: await DBHandler().getWikiIDFromName(wikiName: "Star Wars")), associated_section_id: await DBHandler().getSectionID(wikiID: await DBHandler().getWikiIDFromName(wikiName: "Star Wars"), sectionNo: 2));
+await DBHandler().createLocation(location_name: "Coruscant", associated_wiki_id: await DBHandler().getWikiIDFromName(wikiName: "Star Wars"));
+
