@@ -30,7 +30,7 @@
   * User Story: As a wiki user, I want to have a database function to register my account, so that my account can be properly created and saved in the database.
   * User Story: As a wiki user, I want to have a database function to create new wiki, character details, and part summaries, so that my added content can be properly created and stored in the database.
 
- * Epic: As a wiki user, I want to be able to update data in the database so that I can change my password, toggle administrator privileges, and edit data within the application, so that I can use all the features of the application.
+* Epic: As a wiki user, I want to be able to update data in the database so that I can change my password, toggle administrator privileges, and edit data within the application, so that I can use all the features of the application.
   * User Story: As an admin, I want a database function to change my role to access the administrator privileges, so that I can use my privileges properly.
   * User Story: As a wiki user, I want a database function to update my password, so that I can secure my account or reset my password if I forget it.
   * User Story: As a wiki user, I want a database function to edit part summaries, character details, and wiki details, so that I can correct wiki information.
