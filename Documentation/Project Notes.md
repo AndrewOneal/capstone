@@ -14,8 +14,24 @@ DB things to clean up/Do:
 - CRUD for settings & users
 - Adding error handling to READ operations
 - Fixing comments
+
+PLAN for settings/Authentication:
 - 
 
+PLAN for Deleting/Updating information:
+- When a parent record is deleted, it's children should also be deleted with cascade deletes. (Ex: Deleting a wiki should delete every other record in the database associated to that wiki)
+- Deleting Wiki = Delete all locations/details, all characters/details, and all sections/details
+- Deleting Character = Remove all related character details
+- Deleting Location = Remove all related location details
+- Deleting Section = MUST cascade delete ALL characters/location details related to that section
+- Deleting Section detail = Remove a specific section detail using ID
+- Updating wiki = wiki name, section count, and description can be changed
+- Updating Sections = can ONLY change section name, nothing else
+- Updating Section details = can ONLY change details description
+- Updating Characters = can ONLY change name, and nickname
+- Updating Character details = can ONLY change details description
+- Updating Locations = can ONLY change location name
+- Updating Location Details = can ONLY change details description
 
 Quill Editor Notes:
 - Data is stored as a Delta and encoded in JSON format
@@ -33,10 +49,6 @@ Working with JSON in flutter
     - jsonEncode, converts map<String, Dynamic> into raw JSON string
     - This method is much simpler but also more error-prone. 
 
-POTENTIAL PROBLEMS:
-- If we allow the user to customize the full article page, how do we use logic to determine what information they display? They can effectively write ANYTHING they want?
-- How to support full page customizability without repeating information from previous book entries? If there are 10 entries of one character, should they all be displayed at book 10, should only the book 10 entry be displayed, shoudld the information be merged somehow? 
-    
 
 Tables:
 [WIKIS]
