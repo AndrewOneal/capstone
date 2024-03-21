@@ -1,24 +1,21 @@
+//import 'package:capstone/Pages/apis.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Pages/wiki_list.dart';
-import 'package:capstone/Pages/Account/login.dart';
-import 'package:capstone/Pages/Account/wiki_settings.dart';
+//import 'package:capstone/Pages/Account/login.dart';
+//import 'package:capstone/Pages/Account/wiki_settings.dart';
 import 'package:capstone/Pages/Wiki/wiki_characters.dart';
 import 'package:capstone/Pages/Wiki/wiki_sections.dart';
 import 'package:capstone/Pages/Wiki/wiki_locations.dart';
-import 'package:capstone/Utilities/db_util.dart';
+//import 'package:capstone/Utilities/db_util.dart';
 
 class WikiHome extends StatefulWidget {
-  final int wikiID;
-  final String wikiTitle;
-  final int? wikiSettingID;
+  final Map<String, dynamic> wikiMap;
 
-  const WikiHome(
-      {Key? key,
-      required this.wikiID,
-      required this.wikiTitle,
-      this.wikiSettingID = 0})
-      : super(key: key);
+  const WikiHome({
+    Key? key,
+    required this.wikiMap,
+  }) : super(key: key);
 
   @override
   WikiHomeState createState() => WikiHomeState();
@@ -27,6 +24,9 @@ class WikiHome extends StatefulWidget {
 class WikiHomeState extends State<WikiHome> {
   @override
   Widget build(BuildContext context) {
+    final String wikiTitle = widget.wikiMap['wiki_name'];
+    final String wikiDescription = widget.wikiMap['wiki_description'];
+    final String wikiID = widget.wikiMap['id'];
     final Global global = Global();
     final EdgeInsets sideMargins = global.sideMargins;
     final SizedBox titleSizedBox = global.titleSizedBox;
@@ -46,20 +46,20 @@ class WikiHomeState extends State<WikiHome> {
           IconButton(
               icon: const Icon(Icons.settings),
               onPressed: () {
-                Navigator.push(
+                /*Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
                           WikiSettings(wikiID: widget.wikiID)),
-                );
+                );*/
               }),
           IconButton(
             icon: const Icon(Icons.account_circle),
             onPressed: () {
-              Navigator.push(
+              /*Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const LoginPage()),
-              );
+              );*/
             },
           ),
         ],
@@ -67,16 +67,21 @@ class WikiHomeState extends State<WikiHome> {
       body: Center(
         child: Padding(
           padding: sideMargins,
-          child: Column(
-            children: [
-              titleSizedBox,
-              _TitleText(wikiTitle: widget.wikiTitle),
-              largeSizedBox,
-              _WikiCard(wikiID: widget.wikiID, wikiTitle: widget.wikiTitle),
-              largeSizedBox,
-              _ButtonList(
-                  wikiID: widget.wikiID, wikiSettingsID: widget.wikiSettingID!),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                titleSizedBox,
+                _TitleText(wikiTitle: wikiTitle),
+                largeSizedBox,
+                SingleChildScrollView(
+                  child: _WikiCard(wikiDescription: wikiDescription),
+                ),
+                largeSizedBox,
+                SingleChildScrollView(
+                  child: _ButtonList(wikiID: wikiID),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -124,15 +129,13 @@ class _TitleText extends StatelessWidget {
 }
 
 class _WikiCard extends StatelessWidget {
-  final int wikiID;
-  final String wikiTitle;
+  final String wikiDescription;
   final cardPadding = const EdgeInsets.symmetric(horizontal: 10, vertical: 20);
 
-  const _WikiCard({required this.wikiID, required this.wikiTitle});
+  const _WikiCard({required this.wikiDescription});
 
   @override
   Widget build(BuildContext context) {
-    DBHandler dbHandler = DBHandler();
     return Card(
       elevation: 4,
       child: Padding(
@@ -140,8 +143,15 @@ class _WikiCard extends StatelessWidget {
         child: Column(
           children: [
             Center(
-              child:
-                  DefaultQuillRead(input: dbHandler.getWikiDescription(id: wikiID)),
+              child: DefaultQuillRead(input: [
+                {
+                  "insert": "Description for $wikiDescription",
+                  "attributes": {"color": "#FF363942"}
+                },
+                {
+                  "insert": "\n",
+                }
+              ]),
             ),
           ],
         ),
@@ -151,20 +161,16 @@ class _WikiCard extends StatelessWidget {
 }
 
 class _ButtonList extends StatelessWidget {
-  final int wikiID;
-  final int wikiSettingsID;
+  final String wikiID;
 
-  const _ButtonList({required this.wikiID, required this.wikiSettingsID});
+  const _ButtonList({required this.wikiID});
 
   @override
   Widget build(BuildContext context) {
     final Map<String, Widget> buttonRoutes = {
-      'Sections':
-          WikiSectionsPage(wikiID: wikiID, wikiSettingID: wikiSettingsID),
-      'Characters':
-          WikiCharactersPage(wikiID: wikiID, wikiSettingID: wikiSettingsID),
-      'Locations':
-          WikiLocationsPage(wikiID: wikiID, wikiSettingID: wikiSettingsID),
+      'Sections': WikiSectionsPage(wikiID: wikiID),
+      'Characters': WikiCharactersPage(wikiID: wikiID),
+      'Locations': WikiLocationsPage(wikiID: wikiID),
     };
 
     return SizedBox(

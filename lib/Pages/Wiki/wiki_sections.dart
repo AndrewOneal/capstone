@@ -1,16 +1,13 @@
 import 'package:capstone/Utilities/global.dart';
 import 'package:flutter/material.dart';
-import 'package:capstone/Pages/Account/login.dart';
-import 'package:capstone/Pages/Account/wiki_settings.dart';
-import 'package:capstone/Pages/Wiki/wiki_details.dart';
+//import 'package:capstone/Pages/Account/login.dart';
+//import 'package:capstone/Pages/Account/wiki_settings.dart';
+//import 'package:capstone/Pages/Wiki/wiki_details.dart';
 import 'package:capstone/Utilities/db_util.dart';
 
 class WikiSectionsPage extends StatelessWidget {
-  final int wikiID;
-  final int wikiSettingID;
-  const WikiSectionsPage(
-      {Key? key, required this.wikiID, required this.wikiSettingID})
-      : super(key: key);
+  final String wikiID;
+  const WikiSectionsPage({Key? key, required this.wikiID}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,19 +25,19 @@ class WikiSectionsPage extends StatelessWidget {
           IconButton(
               icon: const Icon(Icons.settings),
               onPressed: () {
-                Navigator.push(
+                /*Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => WikiSettings(wikiID: wikiID)),
-                );
+                );*/
               }),
           IconButton(
             icon: const Icon(Icons.account_circle),
             onPressed: () {
-              Navigator.push(
+              /*Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const LoginPage()),
-              );
+              );*/
             },
           ),
         ],
@@ -55,8 +52,7 @@ class WikiSectionsPage extends StatelessWidget {
                 children: <Widget>[
                   const ListTitle(title: "Sections"),
                   Expanded(
-                    child: _SectionList(
-                        wikiID: wikiID, wikiSettingID: wikiSettingID),
+                    child: _SectionList(wikiID: wikiID),
                   ),
                 ],
               ),
@@ -76,86 +72,98 @@ class WikiSectionsPage extends StatelessWidget {
 }
 
 class _SectionList extends StatelessWidget {
-  final int wikiID;
-  final int wikiSettingID;
-  const _SectionList(
-      {Key? key, required this.wikiID, required this.wikiSettingID})
-      : super(key: key);
+  final String wikiID;
+  const _SectionList({Key? key, required this.wikiID}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<String>>(
-      future: Future.value(DBHandler().getSections(id: wikiID)),
-      builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+    const String disclaimerText =
+        "Don't see the section you're looking for? Hit the edit button to add them!";
+    return FutureBuilder<List<dynamic>>(
+      future: DBHandler().getSections(wikiID: wikiID),
+      builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
+          return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
-          return ErrorWidget(snapshot.error!);
+          return Center(child: Text('Error: ${snapshot.error}'));
         } else {
-          final sectionList = snapshot.data!;
-          return SizedBox(
-            height: 300,
-            child: ListView.separated(
-              itemCount: sectionList.length + 1,
-              separatorBuilder: (BuildContext context, int index) =>
-                  const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: Divider(),
-              ),
-              itemBuilder: (BuildContext context, int index) {
-                if (index == sectionList.length) {
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 75),
+          if (snapshot.data!.isEmpty) {
+            return Padding(
+              padding: const EdgeInsets.only(right: 75),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(
+                    height: 100,
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        SizedBox(
-                          height: 100,
-                          child: Column(
-                            children: <Widget>[
-                              Text(
-                                "Don't see the section you're looking for? Hit the edit button to add it!",
-                                style: TextStyles.disclaimerText,
-                              ),
-                            ],
-                          ),
+                        Text(
+                          disclaimerText,
+                          style: TextStyles.disclaimerText,
                         ),
                       ],
                     ),
-                  );
-                } else {
-                  return index.isEven
-                      ? LightPurpleButton2(
-                          buttonText: sectionList[index],
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => WikiDetailsPage(
-                                      wikiID: wikiID,
-                                      wikiSettingID: wikiSettingID,
-                                      wikiDetailTitle: sectionList[index],
-                                      wikiDetailID: 0)),
-                            );
-                          },
-                        )
-                      : LightPurpleButton1(
-                          buttonText: sectionList[index],
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => WikiDetailsPage(
-                                      wikiID: wikiID,
-                                      wikiSettingID: wikiSettingID,
-                                      wikiDetailTitle: sectionList[index],
-                                      wikiDetailID: 0)),
-                            );
-                          },
-                        );
-                }
-              },
+                  ),
+                ],
+              ),
+            );
+          }
+          List<dynamic> wikiSections = snapshot.data!;
+          return ListView.separated(
+            itemCount: wikiSections.length + 1,
+            separatorBuilder: (BuildContext context, int index) =>
+                const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Divider(),
             ),
+            itemBuilder: (BuildContext context, int index) {
+              if (index == wikiSections.length) {
+                return Padding(
+                  padding: const EdgeInsets.only(right: 75),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(
+                        height: 100,
+                        child: Column(
+                          children: <Widget>[
+                            Text(
+                              disclaimerText,
+                              style: TextStyles.disclaimerText,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                return index.isEven
+                    ? LightPurpleButton2(
+                        buttonText: wikiSections[index]['section_name'],
+                        onPressed: () {
+                          /*Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  WikiHome(wikiMap: wikiTitles[index]),
+                            ),
+                          );*/
+                        },
+                      )
+                    : LightPurpleButton1(
+                        buttonText: wikiSections[index]['section_name'],
+                        onPressed: () {
+                          /*Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    WikiHome(wikiMap: wikiTitles[index])),
+                          );*/
+                        },
+                      );
+              }
+            },
           );
         }
       },

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:capstone/Pages/Account/login.dart';
+//import 'package:capstone/Pages/Account/login.dart';
 import 'package:capstone/Pages/tutorial.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Pages/Wiki/wiki_home.dart';
-import 'package:capstone/Pages/CRUD/new_wiki.dart';
+//import 'package:capstone/Pages/CRUD/new_wiki.dart';
 import 'package:capstone/Utilities/db_util.dart';
 
 class WikiListPage extends StatelessWidget {
@@ -28,10 +28,10 @@ class WikiListPage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.account_circle),
             onPressed: () {
-              Navigator.push(
+              /*Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const LoginPage()),
-              );
+              );*/
             },
           ),
         ],
@@ -58,10 +58,10 @@ class WikiListPage extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: FloatingActionButton(
           onPressed: () {
-            Navigator.push(
+            /*Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => NewWiki()),
-            );
+            );*/
           },
           child: const Icon(Icons.add),
         ),
@@ -75,65 +75,71 @@ class _WikiList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DBHandler dbHandler = DBHandler();
-    final wikiTitles = dbHandler.getWikis();
-    return ListView.separated(
-      itemCount: wikiTitles.length + 1,
-      separatorBuilder: (BuildContext context, int index) => const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: Divider(),
-      ),
-      itemBuilder: (BuildContext context, int index) {
-        if (index == wikiTitles.length) {
-          return Padding(
-            padding: const EdgeInsets.only(right: 75),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(
-                  height: 100,
+    return FutureBuilder<List<dynamic>>(
+      future: DBHandler().getWikis(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else {
+          List<dynamic> wikiTitles = snapshot.data!;
+          return ListView.separated(
+            itemCount: wikiTitles.length + 1,
+            separatorBuilder: (BuildContext context, int index) =>
+                const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Divider(),
+            ),
+            itemBuilder: (BuildContext context, int index) {
+              if (index == wikiTitles.length) {
+                return Padding(
+                  padding: const EdgeInsets.only(right: 75),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      Text(
-                        "Don't see what you're looking for? Hit the plus to create your own community!",
-                        style: TextStyles.disclaimerText,
+                      SizedBox(
+                        height: 100,
+                        child: Column(
+                          children: <Widget>[
+                            Text(
+                              "Don't see what you're looking for? Hit the plus to create your own community!",
+                              style: TextStyles.disclaimerText,
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
-                ),
-              ],
-            ),
-          );
-        } else {
-          return index.isEven
-              ? LightPurpleButton2(
-                  buttonText: wikiTitles[index],
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => WikiHome(
-                          wikiTitle: wikiTitles[index],
-                          wikiID: index,
-                        ),
-                      ),
-                    );
-                  },
-                )
-              : LightPurpleButton1(
-                  buttonText: wikiTitles[index],
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => WikiHome(
-                          wikiTitle: wikiTitles[index],
-                          wikiID: index,
-                        ),
-                      ),
-                    );
-                  },
                 );
+              } else {
+                return index.isEven
+                    ? LightPurpleButton2(
+                        buttonText: wikiTitles[index]['wiki_name'],
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  WikiHome(wikiMap: wikiTitles[index]),
+                            ),
+                          );
+                        },
+                      )
+                    : LightPurpleButton1(
+                        buttonText: wikiTitles[index]['wiki_name'],
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    WikiHome(wikiMap: wikiTitles[index])),
+                          );
+                        },
+                      );
+              }
+            },
+          );
         }
       },
     );

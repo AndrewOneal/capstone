@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:capstone/Pages/Account/login.dart';
+//import 'package:capstone/Pages/Account/login.dart';
 import 'package:capstone/Pages/wiki_list.dart';
 import 'package:capstone/Utilities/global.dart';
+import 'package:capstone/Pages/apis.dart';
 
 class TutorialPage extends StatelessWidget {
   const TutorialPage({Key? key}) : super(key: key);
@@ -29,7 +30,7 @@ class TutorialPage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const LoginPage()),
+                MaterialPageRoute(builder: (context) => const APIListPage()),
               );
             },
           ),
