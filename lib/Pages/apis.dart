@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:capstone/Pages/tutorial.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Utilities/db_util.dart';
 
@@ -54,7 +53,16 @@ class _APIList extends StatelessWidget {
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else {
-              return Text('${snapshot.data}');
+              return DefaultQuillRead(
+                input: [
+                  {
+                    "insert": snapshot.data?.toString(),
+                  },
+                  {
+                    "insert": '\n',
+                  }
+                ],
+              );
             }
           },
         ),
@@ -74,7 +82,16 @@ class _APIList extends StatelessWidget {
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else {
-              return Text('${snapshot.data}');
+              return DefaultQuillRead(
+                input: [
+                  {
+                    "insert": snapshot.data?.toString(),
+                  },
+                  {
+                    "insert": '\n',
+                  }
+                ],
+              );
             }
           },
         ),
@@ -94,7 +111,16 @@ class _APIList extends StatelessWidget {
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else {
-              return Text('${snapshot.data}');
+              return DefaultQuillRead(
+                input: [
+                  {
+                    "insert": snapshot.data?.toString(),
+                  },
+                  {
+                    "insert": '\n',
+                  }
+                ],
+              );
             }
           },
         ),
@@ -114,7 +140,135 @@ class _APIList extends StatelessWidget {
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else {
-              return Text('${snapshot.data}');
+              return DefaultQuillRead(
+                input: [
+                  {
+                    "insert": snapshot.data?.toString(),
+                  },
+                  {
+                    "insert": '\n',
+                  }
+                ],
+              );
+            }
+          },
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Divider(),
+        SizedBox(
+          height: 10,
+        ),
+        ListTitle(title: "Character Details"),
+        FutureBuilder<List<dynamic>>(
+          future: DBHandler().getCharacterDetails(
+              characterID: "nbxynzck218e4qq", section_no: 3),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else {
+              return DefaultQuillRead(
+                input: [
+                  {
+                    "insert": snapshot.data?.toString(),
+                  },
+                  {
+                    "insert": '\n',
+                  }
+                ],
+              );
+            }
+          },
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Divider(),
+        SizedBox(
+          height: 10,
+        ),
+        ListTitle(title: "Section Details"),
+        FutureBuilder<List<dynamic>>(
+          future: DBHandler()
+              .getSectionDetails(section_no: 3, wiki_id: "ndlh8nkyr4uyjw4"),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else {
+              return DefaultQuillRead(
+                input: [
+                  {
+                    "insert": snapshot.data?.toString(),
+                  },
+                  {
+                    "insert": '\n',
+                  }
+                ],
+              );
+            }
+          },
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Divider(),
+        SizedBox(
+          height: 10,
+        ),
+        ListTitle(title: "Location Details"),
+        FutureBuilder<List<dynamic>>(
+          future: DBHandler()
+              .getLocationDetails(section_no: 3, locationID: "9cu0atfmbsvi1di"),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else {
+              return DefaultQuillRead(
+                input: [
+                  {
+                    "insert": snapshot.data?.toString(),
+                  },
+                  {
+                    "insert": '\n',
+                  }
+                ],
+              );
+            }
+          },
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Divider(),
+        SizedBox(
+          height: 10,
+        ),
+        ListTitle(title: "Cache"),
+        FutureBuilder<Map<String, dynamic>>(
+          future: CacheManager().getCache(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else {
+              return DefaultQuillRead(
+                input: [
+                  {
+                    "insert": snapshot.data?.toString(),
+                  },
+                  {
+                    "insert": '\n',
+                  }
+                ],
+              );
             }
           },
         ),

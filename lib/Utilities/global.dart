@@ -4,6 +4,7 @@ export 'package:capstone/Utilities/theme.dart';
 export 'package:capstone/main.dart';
 export 'package:capstone/Utilities/buttons.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+export 'package:capstone/Utilities/cache.dart';
 
 class Global {
   static final Global _instance = Global._internal();

@@ -2,7 +2,7 @@ import 'package:capstone/Utilities/global.dart';
 import 'package:flutter/material.dart';
 //import 'package:capstone/Pages/Account/login.dart';
 //import 'package:capstone/Pages/Account/wiki_settings.dart';
-//import 'package:capstone/Pages/Wiki/wiki_details.dart';
+import 'package:capstone/Pages/Wiki/wiki_details.dart';
 import 'package:capstone/Utilities/db_util.dart';
 
 class WikiSectionsPage extends StatelessWidget {
@@ -77,10 +77,11 @@ class _SectionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DBHandler dbHandler = DBHandler();
     const String disclaimerText =
         "Don't see the section you're looking for? Hit the edit button to add them!";
     return FutureBuilder<List<dynamic>>(
-      future: DBHandler().getSections(wikiID: wikiID),
+      future: dbHandler.getSections(wikiID: wikiID),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -142,24 +143,35 @@ class _SectionList extends StatelessWidget {
                     ? LightPurpleButton2(
                         buttonText: wikiSections[index]['section_name'],
                         onPressed: () {
-                          /*Navigator.push(
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  WikiHome(wikiMap: wikiTitles[index]),
+                              builder: (context) => WikiDetailsPage(
+                                wikiID: wikiID,
+                                wikiSettingID: 3,
+                                wikiDetailID: wikiSections[index]['id'],
+                                detailName: wikiSections[index]['section_name'],
+                                detailType: 'Section',
+                              ),
                             ),
-                          );*/
+                          );
                         },
                       )
                     : LightPurpleButton1(
                         buttonText: wikiSections[index]['section_name'],
                         onPressed: () {
-                          /*Navigator.push(
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    WikiHome(wikiMap: wikiTitles[index])),
-                          );*/
+                              builder: (context) => WikiDetailsPage(
+                                wikiID: wikiID,
+                                wikiSettingID: 3,
+                                wikiDetailID: wikiSections[index]['id'],
+                                detailName: wikiSections[index]['section_name'],
+                                detailType: 'Section',
+                              ),
+                            ),
+                          );
                         },
                       );
               }

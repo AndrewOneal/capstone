@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Pages/wiki_list.dart';
 //import 'package:capstone/Pages/Account/login.dart';
-//import 'package:capstone/Pages/Account/wiki_settings.dart';
+import 'package:capstone/Pages/Account/wiki_settings.dart';
 import 'package:capstone/Pages/Wiki/wiki_characters.dart';
 import 'package:capstone/Pages/Wiki/wiki_sections.dart';
 import 'package:capstone/Pages/Wiki/wiki_locations.dart';
@@ -22,6 +22,32 @@ class WikiHome extends StatefulWidget {
 }
 
 class WikiHomeState extends State<WikiHome> {
+  late int sectionNo;
+
+  @override
+  void initState() {
+    super.initState();
+    _updateSectionNo();
+  }
+
+  Future<void> _updateSectionNo() async {
+    final CacheManager cacheManager = CacheManager();
+    final String wikiID = widget.wikiMap['id'];
+    final isInCache = await cacheManager.isWikiIDInCache(wikiID);
+
+    if (isInCache) {
+      final newSectionNo = await cacheManager.getSectionNo(wikiID);
+      setState(() {
+        sectionNo = newSectionNo;
+      });
+    } else {
+      await cacheManager.addToCache(wikiID, 1);
+      setState(() {
+        sectionNo = 1;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final String wikiTitle = widget.wikiMap['wiki_name'];
@@ -31,6 +57,7 @@ class WikiHomeState extends State<WikiHome> {
     final EdgeInsets sideMargins = global.sideMargins;
     final SizedBox titleSizedBox = global.titleSizedBox;
     final SizedBox largeSizedBox = global.largeSizedBox;
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -46,12 +73,12 @@ class WikiHomeState extends State<WikiHome> {
           IconButton(
               icon: const Icon(Icons.settings),
               onPressed: () {
-                /*Navigator.push(
+                Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          WikiSettings(wikiID: widget.wikiID)),
-                );*/
+                      builder: (context) => WikiSettings(
+                          wikiMap: widget.wikiMap, sectionNo: sectionNo)),
+                );
               }),
           IconButton(
             icon: const Icon(Icons.account_circle),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
 //import 'package:capstone/Pages/Account/login.dart';
 //import 'package:capstone/Pages/Account/wiki_settings.dart';
-//import 'package:capstone/Pages/Wiki/wiki_details.dart';
+import 'package:capstone/Pages/Wiki/wiki_details.dart';
 import 'package:capstone/Utilities/db_util.dart';
 
 class WikiCharactersPage extends StatelessWidget {
@@ -77,10 +77,11 @@ class _CharacterList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DBHandler dbHandler = DBHandler();
     const String disclaimerText =
         "Don't see the character you're looking for? Hit the edit button to add them!";
     return FutureBuilder<List<dynamic>>(
-      future: DBHandler().getCharacters(wikiID: wikiID),
+      future: dbHandler.getCharacters(wikiID: wikiID),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -142,24 +143,35 @@ class _CharacterList extends StatelessWidget {
                     ? LightPurpleButton2(
                         buttonText: wikiCharacters[index]['name'],
                         onPressed: () {
-                          /*Navigator.push(
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  WikiHome(wikiMap: wikiTitles[index]),
+                              builder: (context) => WikiDetailsPage(
+                                wikiID: wikiID,
+                                wikiSettingID: 3,
+                                wikiDetailID: wikiCharacters[index]['id'],
+                                detailName: wikiCharacters[index]['name'],
+                                detailType: 'Character',
+                              ),
                             ),
-                          );*/
+                          );
                         },
                       )
                     : LightPurpleButton1(
                         buttonText: wikiCharacters[index]['name'],
                         onPressed: () {
-                          /*Navigator.push(
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    WikiHome(wikiMap: wikiTitles[index])),
-                          );*/
+                              builder: (context) => WikiDetailsPage(
+                                wikiID: wikiID,
+                                wikiSettingID: 3,
+                                wikiDetailID: wikiCharacters[index]['id'],
+                                detailName: wikiCharacters[index]['name'],
+                                detailType: 'Character',
+                              ),
+                            ),
+                          );
                         },
                       );
               }

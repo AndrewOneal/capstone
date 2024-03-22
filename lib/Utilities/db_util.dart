@@ -2,8 +2,8 @@ import 'package:pocketbase/pocketbase.dart';
 
 final pb = PocketBase('http://127.0.0.1:8090');
 
-String loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ac odio vel purus molestie posuere. Curabitur non ante felis. Fusce volutpat turpis quis velit commodo, a tristique elit tempor. Etiam pulvinar augue ut est consectetur, in volutpat sem varius. Sed id dapibus odio. Cras ullamcorper leo quis hendrerit facilisis. Vivamus in risus euismod, pharetra elit eu, gravida lorem. Etiam dictum efficitur nulla sit amet egestas. Praesent vel mi rhoncus, gravida neque eu, elementum lorem. Integer vulputate quam nec nunc luctus aliquet. Etiam lacinia fringilla purus, vel interdum ligula aliquet vel. Mauris a lorem tempor, fermentum mauris eu, convallis lorem. Vivamus aliquet erat in laoreet efficitur. Aenean nec suscipit mi, non molestie risus. Nulla in leo at lorem porta tristique.";
-
+String loremIpsum =
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ac odio vel purus molestie posuere. Curabitur non ante felis. Fusce volutpat turpis quis velit commodo, a tristique elit tempor. Etiam pulvinar augue ut est consectetur, in volutpat sem varius. Sed id dapibus odio. Cras ullamcorper leo quis hendrerit facilisis. Vivamus in risus euismod, pharetra elit eu, gravida lorem. Etiam dictum efficitur nulla sit amet egestas. Praesent vel mi rhoncus, gravida neque eu, elementum lorem. Integer vulputate quam nec nunc luctus aliquet. Etiam lacinia fringilla purus, vel interdum ligula aliquet vel. Mauris a lorem tempor, fermentum mauris eu, convallis lorem. Vivamus aliquet erat in laoreet efficitur. Aenean nec suscipit mi, non molestie risus. Nulla in leo at lorem porta tristique.";
 
 class DBHandler {
   static final DBHandler _instance = DBHandler._internal();
@@ -19,56 +19,57 @@ class DBHandler {
   Future<int> translateSectionToNo({required String sectionID}) async {
     // Finds takes sectionID as input and outputs section_no as an integer
     final record = await pb.collection('sections').getFirstListItem(
-      'id="${sectionID}"',
-      expand: 'relField1,relField2.subRelField',
-    );
+          'id="${sectionID}"',
+          expand: 'relField1,relField2.subRelField',
+        );
     return record.toJson()['section_no'];
   }
 
-  Future<dynamic> getSectionID({required String wikiID, required int sectionNo}) async {
+  Future<dynamic> getSectionID(
+      {required String wikiID, required int sectionNo}) async {
     //retrieves section ID from settings by utilizing wikiID & section number
     final record = await pb.collection('sections').getFirstListItem(
-      'wiki_id.id="${wikiID}" && section_no="${sectionNo}"',
-      expand: 'relField1,relField2.subRelField',
-    );
+          'wiki_id.id="${wikiID}" && section_no="${sectionNo}"',
+          expand: 'relField1,relField2.subRelField',
+        );
     var sectionID = record.toJson()['id'];
     return sectionID;
   }
 
   Future<String> getCharacterName({required String characterID}) async {
     final record = await pb.collection('characters').getFirstListItem(
-      'id="${characterID}"',
-      expand: 'relField1,relField2.subRelField',
-    );
+          'id="${characterID}"',
+          expand: 'relField1,relField2.subRelField',
+        );
     return record.toJson()['name'];
   }
 
-  Future<String> getCharacterIDFromName({required String characterName, required String wikiID}) async {
-    final record = await pb.collection('characters').getFirstListItem(
-      'name~"$characterName" && wiki_id.id="$wikiID"'
-    );
+  Future<String> getCharacterIDFromName(
+      {required String characterName, required String wikiID}) async {
+    final record = await pb
+        .collection('characters')
+        .getFirstListItem('name~"$characterName" && wiki_id.id="$wikiID"');
     return record.toJson()['id'];
   }
 
   Future<String> getWikiIDFromName({required String wikiName}) async {
-    final record = await pb.collection('wikis').getFirstListItem(
-        'wiki_name~"$wikiName"'
-    );
+    final record =
+        await pb.collection('wikis').getFirstListItem('wiki_name~"$wikiName"');
     return record.toJson()['id'];
   }
 
   Future<String> getLocationIDFromName({required String locationName}) async {
-    final record = await pb.collection('locations').getFirstListItem(
-        'name~"$locationName"'
-    );
+    final record = await pb
+        .collection('locations')
+        .getFirstListItem('name~"$locationName"');
     return record.toJson()['id'];
   }
 
   Future<List<dynamic>> getUsers() async {
     // TODO: Implement logic to retrieve wiki information list from db
     var users = await pb.collection('users').getFullList(
-      sort: '-created',
-    );
+          sort: '-created',
+        );
     var userList = [];
     for (var element in users) {
       userList.add(element.toJson());
@@ -79,8 +80,8 @@ class DBHandler {
   Future<List<dynamic>> getUserIDList() async {
     // TODO: Implement logic to retrieve wiki information list from db
     var users = await pb.collection('users').getFullList(
-      sort: '-created',
-    );
+          sort: '-created',
+        );
     var userIDList = [];
     for (var element in users) {
       userIDList.add(element.toJson()['id']);
@@ -91,8 +92,8 @@ class DBHandler {
   Future<List<dynamic>> getWikis() async {
     // TODO: Implement logic to retrieve wiki information list from db
     var wikis = await pb.collection('wikis').getFullList(
-      sort: '-created',
-    );
+          sort: '-created',
+        );
     var wikiList = [];
     for (var element in wikis) {
       wikiList.add(element.toJson());
@@ -103,29 +104,28 @@ class DBHandler {
   Future<Map<String, dynamic>> getWiki({required String wikiID}) async {
     // TODO: Implement logic to retrieve singular wiki title based on wiki id
     final wiki = await pb.collection('wikis').getFirstListItem(
-      'id="${wikiID}"',
-      expand: 'relField1,relField2.subRelField',
-    );
+          'id="${wikiID}"',
+          expand: 'relField1,relField2.subRelField',
+        );
     return wiki.toJson();
   }
 
   Future<String> getWikiDescription({required String wikiID}) async {
     // TODO: retrieves wiki description from the database
     final wiki = await pb.collection('wikis').getFirstListItem(
-      'id="${wikiID}"',
-      expand: 'relField1,relField2.subRelField',
-    );
+          'id="${wikiID}"',
+          expand: 'relField1,relField2.subRelField',
+        );
     return wiki.toJson()['wiki_description'];
   }
 
   Future<List<dynamic>> getCharacters({required String wikiID}) async {
     // TODO: Retrieves all characters associated with a specific wiki
-    final records = await pb.collection('characters').getFullList(
-      sort: '-created',
-      filter: 'wiki_id.id="${wikiID}"'
-    );
+    final records = await pb
+        .collection('characters')
+        .getFullList(sort: '-created', filter: 'wiki_id.id="${wikiID}"');
     var recordList = [];
-    for (var record in records){
+    for (var record in records) {
       recordList.add(record.toJson());
     }
     return recordList;
@@ -135,12 +135,11 @@ class DBHandler {
   Future<List<dynamic>> getLocations({required String wikiID}) async {
     // TODO: Implement logic to retrieve locations list from db
     // TODO: Retrieves all characters associated with a specific wiki
-    final records = await pb.collection('locations').getFullList(
-        sort: '-created',
-        filter: 'wiki_id.id="${wikiID}"'
-    );
+    final records = await pb
+        .collection('locations')
+        .getFullList(sort: '-created', filter: 'wiki_id.id="${wikiID}"');
     var recordList = [];
-    for (var record in records){
+    for (var record in records) {
       recordList.add(record.toJson());
     }
     return recordList;
@@ -149,12 +148,11 @@ class DBHandler {
   Future<List<dynamic>> getSections({required String wikiID}) async {
     // TODO: Implement logic to retrieve sections list from db
     // TODO: Retrieves all characters associated with a specific wiki
-    final records = await pb.collection('sections').getFullList(
-        sort: '-created',
-        filter: 'wiki_id.id="${wikiID}"'
-    );
+    final records = await pb
+        .collection('sections')
+        .getFullList(sort: '-created', filter: 'wiki_id.id="${wikiID}"');
     var recordList = [];
-    for (var record in records){
+    for (var record in records) {
       recordList.add(record.toJson());
     }
     return recordList;
@@ -165,20 +163,20 @@ class DBHandler {
     //Retrieves all details about a specific character based on series location and character id
     final records = await pb.collection('character_details').getFullList(
         sort: '-created',
-        filter: 'character_id.id = "${characterID}" && section_id.section_no<="${section_no}"',
-        expand: 'section_id'
-    );
+        filter:
+            'character_id.id = "${characterID}" && section_id.section_no<="${section_no}"',
+        expand: 'section_id');
     var detailsList = [];
     //Loop to format and prettify output for easy front-end use
     for (var record in records) {
       var newRecord = record.toJson();
       var newMap = {
-        "id":"${newRecord["id"]}",
-        "details_description":"${newRecord["details_description"]}",
-        "character_id":"${newRecord["character_id"]}",
-        "section_name":"${newRecord["expand"]["section_id"]["section_name"]}",
-        "section_no":"${newRecord["expand"]["section_id"]["section_no"]}",
-        "section_id":"${newRecord["section_id"]}"
+        "id": "${newRecord["id"]}",
+        "details_description": "${newRecord["details_description"]}",
+        "character_id": "${newRecord["character_id"]}",
+        "section_name": "${newRecord["expand"]["section_id"]["section_name"]}",
+        "section_no": "${newRecord["expand"]["section_id"]["section_no"]}",
+        "section_id": "${newRecord["section_id"]}"
       };
       detailsList.add(newMap);
     }
@@ -190,50 +188,55 @@ class DBHandler {
     //Retrieves all details about a specific location based location id and section number
     final records = await pb.collection('location_details').getFullList(
         sort: '-created',
-        filter: 'location_id.id = "${locationID}" && section_id.section_no<="${section_no}"',
-        expand: 'section_id'
-    );
+        filter:
+            'location_id.id = "${locationID}" && section_id.section_no<="${section_no}"',
+        expand: 'section_id');
     var detailsList = [];
     //Loop to format and prettify output for easy front-end use
     for (var record in records) {
       var newRecord = record.toJson();
       var newMap = {
-        "id":"${newRecord["id"]}",
-        "details_description":"${newRecord["details_description"]}",
-        "location_id":"${newRecord["location_id"]}",
-        "section_name":"${newRecord["expand"]["section_id"]["section_name"]}",
-        "section_no":"${newRecord["expand"]["section_id"]["section_no"]}",
-        "section_id":"${newRecord["section_id"]}"
+        "id": "${newRecord["id"]}",
+        "details_description": "${newRecord["details_description"]}",
+        "location_id": "${newRecord["location_id"]}",
+        "section_name": "${newRecord["expand"]["section_id"]["section_name"]}",
+        "section_no": "${newRecord["expand"]["section_id"]["section_no"]}",
+        "section_id": "${newRecord["section_id"]}"
       };
       detailsList.add(newMap);
     }
     return detailsList;
   }
 
-  Future<List<dynamic>> getSectionDetails({required int section_no, required String wiki_id}) async {
+  Future<List<dynamic>> getSectionDetails(
+      {required int section_no, required String wiki_id}) async {
     //Retrieves all details about a specific section based on the section number inputted
     final records = await pb.collection('section_details').getFullList(
         sort: '-created',
-        filter: 'section_id.wiki_id ="${wiki_id}" && section_id.section_no<="${section_no}"',
-        expand: 'section_id'
-    );
+        filter:
+            'section_id.wiki_id ="${wiki_id}" && section_id.section_no="${section_no}"',
+        expand: 'section_id');
     var detailsList = [];
     //Loop to format and prettify output for easy front-end use
     for (var record in records) {
       var newRecord = record.toJson();
       var newMap = {
-        "id":"${newRecord["id"]}",
-        "details_description":"${newRecord["details_description"]}",
-        "section_name":"${newRecord["expand"]["section_id"]["section_name"]}",
-        "section_no":"${newRecord["expand"]["section_id"]["section_no"]}",
-        "section_id":"${newRecord["section_id"]}"
+        "id": "${newRecord["id"]}",
+        "details_description": "${newRecord["details_description"]}",
+        "section_name": "${newRecord["expand"]["section_id"]["section_name"]}",
+        "section_no": "${newRecord["expand"]["section_id"]["section_no"]}",
+        "section_id": "${newRecord["section_id"]}"
       };
       detailsList.add(newMap);
     }
     return detailsList;
   }
 
-  Future<void> createWiki({required String wiki_name, required int wiki_section_count, required String wiki_description, required String section_name}) async {
+  Future<void> createWiki(
+      {required String wiki_name,
+      required int wiki_section_count,
+      required String wiki_description,
+      required String section_name}) async {
     //Create new wiki record
     final body = <String, dynamic>{
       "wiki_name": "${wiki_name}",
@@ -242,12 +245,16 @@ class DBHandler {
       "wiki_description": "${wiki_description}"
     };
     print("Creating new wiki...");
-    try{
+    try {
       final record = await pb.collection('wikis').create(body: body);
       print("Wiki Successfully created");
       print("Creating new sections for wiki...");
-      for (var i = 1; i <= wiki_section_count; i++){
-        DBHandler().createSection(section_name: "${section_name} ${i}", associated_wiki_id: await DBHandler().getWikiIDFromName(wikiName: wiki_name), section_no: i);
+      for (var i = 1; i <= wiki_section_count; i++) {
+        DBHandler().createSection(
+            section_name: "${section_name} ${i}",
+            associated_wiki_id:
+                await DBHandler().getWikiIDFromName(wikiName: wiki_name),
+            section_no: i);
       }
       print("${wiki_section_count} sections created for ${wiki_name} wiki");
     } catch (e) {
@@ -255,15 +262,18 @@ class DBHandler {
     }
   }
 
-  Future<void> createCharacter({required String character_name, required String associated_wiki_id, nickname}) async {
-    if (nickname != String) {nickname = "";}
+  Future<void> createCharacter(
+      {required String character_name,
+      required String associated_wiki_id,
+      nickname}) async {
+    if (nickname != String) {
+      nickname = "";
+    }
     // Create new character record
     final body = <String, dynamic>{
       "name": "${character_name}",
       "nickname": nickname,
-      "wiki_id": [
-        "${associated_wiki_id}"
-      ]
+      "wiki_id": ["${associated_wiki_id}"]
     };
     try {
       print("Creating Character...");
@@ -274,7 +284,10 @@ class DBHandler {
     }
   }
 
-  Future<void> createCharacterDetail({required String details_description, required String associated_character_id, required String associated_section_id}) async {
+  Future<void> createCharacterDetail(
+      {required String details_description,
+      required String associated_character_id,
+      required String associated_section_id}) async {
     // Create new character detail record
     final body = <String, dynamic>{
       "details_description": "${details_description}",
@@ -283,20 +296,21 @@ class DBHandler {
     };
     try {
       print("Creating new character detail...");
-      final record = await pb.collection('character_details').create(body: body);
+      final record =
+          await pb.collection('character_details').create(body: body);
       print("New character detail succesfully created");
     } catch (e) {
       print(e);
     }
   }
 
-  Future<void> createLocation({required String location_name, required String associated_wiki_id}) async {
+  Future<void> createLocation(
+      {required String location_name,
+      required String associated_wiki_id}) async {
     // Create new location record
     final body = <String, dynamic>{
       "name": "${location_name}",
-      "wiki_id": [
-        "${associated_wiki_id}"
-      ]
+      "wiki_id": ["${associated_wiki_id}"]
     };
     try {
       print("Creating Location...");
@@ -307,7 +321,10 @@ class DBHandler {
     }
   }
 
-  Future<void> createLocationDetail({required String details_description, required String associated_location_id, required String associated_section_id}) async {
+  Future<void> createLocationDetail(
+      {required String details_description,
+      required String associated_location_id,
+      required String associated_section_id}) async {
     // Create new location detail record
     final body = <String, dynamic>{
       "details_description": "${details_description}",
@@ -323,7 +340,10 @@ class DBHandler {
     }
   }
 
-  Future<void> createSection({required String section_name, required String associated_wiki_id, required int section_no}) async {
+  Future<void> createSection(
+      {required String section_name,
+      required String associated_wiki_id,
+      required int section_no}) async {
     // Create new section record
     final body = <String, dynamic>{
       "section_name": "${section_name}",
@@ -339,7 +359,9 @@ class DBHandler {
     }
   }
 
-  Future<void> createSectionDetail({required String details_description, required String associated_section_id}) async {
+  Future<void> createSectionDetail(
+      {required String details_description,
+      required String associated_section_id}) async {
     // Create new section detail record
     final body = <String, dynamic>{
       "details_description": "${details_description}",
@@ -390,7 +412,8 @@ class DBHandler {
     }
   }
 
-  Future<void> deleteCharacterDetail({required String characterDetailID}) async {
+  Future<void> deleteCharacterDetail(
+      {required String characterDetailID}) async {
     try {
       await pb.collection('character_details').delete('${characterDetailID}');
       print("Succesfully deleted character detail");
@@ -417,7 +440,10 @@ class DBHandler {
     }
   }
 
-  Future<Map<String, dynamic>> updateWiki({required String wikiID, required String new_name, required String new_description}) async {
+  Future<Map<String, dynamic>> updateWiki(
+      {required String wikiID,
+      required String new_name,
+      required String new_description}) async {
     final body = <String, dynamic>{
       "wiki_name": new_name,
       "wiki_description": new_description
@@ -426,80 +452,97 @@ class DBHandler {
       var record = await pb.collection('wikis').update(wikiID, body: body);
       return record.toJson();
     } catch (e) {
-      return {"Error":"${e}"};
+      return {"Error": "${e}"};
     }
   }
 
-  Future<Map<String, dynamic>> updateCharacter({required String characterID, required String new_name, required String new_nickname}) async {
-    final body = <String, dynamic>{
-      "name": new_name,
-      "nickname": new_nickname
-    };
+  Future<Map<String, dynamic>> updateCharacter(
+      {required String characterID,
+      required String new_name,
+      required String new_nickname}) async {
+    final body = <String, dynamic>{"name": new_name, "nickname": new_nickname};
     try {
-      var record = await pb.collection('characters').update(characterID, body: body);
+      var record =
+          await pb.collection('characters').update(characterID, body: body);
       return record.toJson();
     } catch (e) {
-      return {"Error":"${e}"};
+      return {"Error": "${e}"};
     }
   }
 
-  Future<Map<String, dynamic>> updateLocation({required String locationID, required String new_location_name}) async {
+  Future<Map<String, dynamic>> updateLocation(
+      {required String locationID, required String new_location_name}) async {
     final body = <String, dynamic>{
       "name": new_location_name,
     };
     try {
-      var record = await pb.collection('locations').update(locationID, body: body);
+      var record =
+          await pb.collection('locations').update(locationID, body: body);
       return record.toJson();
     } catch (e) {
-      return {"Error":"${e}"};
+      return {"Error": "${e}"};
     }
   }
 
-  Future<Map<String, dynamic>> updateSection({required String sectionID, required String new_section_name}) async {
+  Future<Map<String, dynamic>> updateSection(
+      {required String sectionID, required String new_section_name}) async {
     final body = <String, dynamic>{
       "section_name": new_section_name,
     };
     try {
-      var record = await pb.collection('sections').update(sectionID, body: body);
+      var record =
+          await pb.collection('sections').update(sectionID, body: body);
       return record.toJson();
     } catch (e) {
-      return {"Error":"${e}"};
+      return {"Error": "${e}"};
     }
   }
 
-  Future<Map<String, dynamic>> updateCharacterDetail({required String characterDetailsID, required String new_details_description}) async {
+  Future<Map<String, dynamic>> updateCharacterDetail(
+      {required String characterDetailsID,
+      required String new_details_description}) async {
     final body = <String, dynamic>{
       "details_description": new_details_description,
     };
     try {
-      var record = await pb.collection('character_details').update(characterDetailsID, body: body);
+      var record = await pb
+          .collection('character_details')
+          .update(characterDetailsID, body: body);
       return record.toJson();
     } catch (e) {
-      return {"Error":"${e}"};
+      return {"Error": "${e}"};
     }
   }
 
-  Future<Map<String, dynamic>> updateLocationDetail({required String locationDetailID, required String new_details_description}) async {
+  Future<Map<String, dynamic>> updateLocationDetail(
+      {required String locationDetailID,
+      required String new_details_description}) async {
     final body = <String, dynamic>{
       "details_description": new_details_description,
     };
     try {
-      var record = await pb.collection('location_details').update(locationDetailID, body: body);
+      var record = await pb
+          .collection('location_details')
+          .update(locationDetailID, body: body);
       return record.toJson();
     } catch (e) {
-      return {"Error":"${e}"};
+      return {"Error": "${e}"};
     }
   }
 
-  Future<Map<String, dynamic>> updateSectionDetail({required String sectionDetailID, required String new_details_description}) async {
+  Future<Map<String, dynamic>> updateSectionDetail(
+      {required String sectionDetailID,
+      required String new_details_description}) async {
     final body = <String, dynamic>{
       "details_description": new_details_description,
     };
     try {
-      var record = await pb.collection('section_details').update(sectionDetailID, body: body);
+      var record = await pb
+          .collection('section_details')
+          .update(sectionDetailID, body: body);
       return record.toJson();
     } catch (e) {
-      return {"Error":"${e}"};
+      return {"Error": "${e}"};
     }
   }
 }
