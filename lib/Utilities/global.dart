@@ -39,9 +39,12 @@ class ListTitle extends StatelessWidget {
       height: 100,
       color: background['default'],
       alignment: Alignment.center,
-      child: Text(
-        title,
-        style: TextStyles.whiteHeader.copyWith(fontSize: fontSize),
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Text(
+          title,
+          style: TextStyles.whiteHeader.copyWith(fontSize: fontSize),
+        ),
       ),
     );
   }
