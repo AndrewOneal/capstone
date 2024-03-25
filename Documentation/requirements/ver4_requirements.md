@@ -28,6 +28,12 @@
   * User Story: As an admin, I want to have a general page for reviewing requests for edits, so that I can quickly confirm whether an edit should be approved or denied.
   * User Story: As an admin, I want to have a general page for reviewing new wiki requests, so that I can review the requests for the new wikis and decide which should be added, and which should not.
   * User Story: As an admin, I want to have a general page for reviewing new part, character, and summary requests for a certain wiki, so that I can quickyl decide whether to allow the new content to be added.
+ 
+* Epic: Edit page done
+
+* Epic: Finish auth page
+
+* Epic: Verification request form page approve or deny page
 
 ## Back End
 
@@ -46,9 +52,12 @@
     
 * Epic: As a wiki user, I want to to be bale to read data in the database, so that I can view the data in the application and read the information in the wiki.
   * User Story: As a wiki user, I want a database function to retrieve my login details, so that I can log in and use my stored settings for the application.
-  *  User Story: As a wiki user, I want a database function to retrieve character details, wiki details, and part summaries, so that I can read the wiki's information and learn more about the current show I am watching.
+  * User Story: As a wiki user, I want a database function to retrieve character details, wiki details, and part summaries, so that I can read the wiki's information and learn more about the current show I am watching. 
 
-
+* CRUD for verfication request
+  * Create
+  * Read
+  * Delete
 
 ## Misc.
 * Epic: As a user, I want to be able to run this application on IOS, so that I can use my iPhone to access the application.
