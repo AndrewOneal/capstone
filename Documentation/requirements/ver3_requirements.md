@@ -20,7 +20,7 @@
   * User Story: As a wiki creator, I want to have a "Create a Wiki" form page to create a new wiki, so that I can input a title, section names, number of sections, number of characters, and a description of series for the wiki I am creating.
     
 * Epic: As a wiki user, I want to be able to edit the information in a wiki, so that I can correct missing or incorrect information.
-  * User Story: As a wiki editor, I want to have a persistent add button on the parts list and part pagees, so that I can add missing parts anywhere in the parts section of the application.
+  * User Story: As a wiki editor, I want to have a persistent add button on the parts list and part pages, so that I can add missing parts anywhere in the parts section of the application.
   * User Story: As a wiki editor, I want to have a persistent edit button to edit the list of characters, so that when I notice something is out of place or missing, I can fix it.
   * User Story: As a wiki editor, I want to have a persistent edit button on the character page to edit the part sections of the character, so that when I notice something is out of place or missing, I can fix it.
 
@@ -41,4 +41,7 @@
     
 * Epic: As a wiki user, I want to to be bale to read data in the database, so that I can view the data in the application and read the information in the wiki.
   * User Story: As a wiki user, I want a database function to retrieve my login details, so that I can log in and use my stored settings for the application.
-  * User Story: As a wiki user, I want a database function to retrieve character details, wiki details, and part summaries, so that I can read the wiki's information and learn more about the current show I am watching.
+  *  User Story: As a wiki user, I want a database function to retrieve character details, wiki details, and part summaries, so that I can read the wiki's information and learn more about the current show I am watching.
+
+## General
+* Epic: As a user, I want to be able to run this application on IOS, so that I can use my iPhone to access the application.
