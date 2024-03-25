@@ -2,6 +2,22 @@ Pocketbase credentials:
 Username: yes@gmail.com
 Password: yes@gmail.com
 
+Actual Tasks:
+- Finalize all dummy data
+  - create dummy data using quill's delta format for details pages
+  - Get example data for all tables (Make commands to auto populate/backup the database)
+- Test pocketbase plugin for running server on IOS
+- Create/Find All necessary CRUD operations for authentication
+  - Delete account function
+  - create account function
+  - login function
+- *Create back-end support for verification request system
+  - Create verification requests table (should be tied to wiki/user)
+  - Create CRUD functions for verification request table
+  - Test logic for auto updating page based on a specific verification request
+- Create tests for every back-end function
+- Adjust functions to sort alphabetically
+
 Questions/Potential things to note:
 - Do async DB functions work well with FutureBuilder
 - Querying characters and locations across 2 different wikis
@@ -15,9 +31,6 @@ DB things to clean up/Do:
 - Adding error handling to READ operations
 - Fixing comments
 - Providing functionality to update relational fields in UPDATE functions
-
-PLAN for settings/Authentication:
-- 
 
 PLAN for Deleting/Updating information:
 - When a parent record is deleted, it's children should also be deleted with cascade deletes. (Ex: Deleting a wiki should delete every other record in the database associated to that wiki)
