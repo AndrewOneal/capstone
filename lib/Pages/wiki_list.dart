@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:capstone/Pages/tutorial.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Pages/Wiki/wiki_home.dart';
-//import 'package:capstone/Pages/CRUD/new_wiki.dart';
+import 'package:capstone/Pages/CRUD/new_wiki.dart';
 import 'package:capstone/Utilities/db_util.dart';
 
 class WikiListPage extends StatelessWidget {
@@ -58,10 +58,10 @@ class WikiListPage extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: FloatingActionButton(
           onPressed: () {
-            /*Navigator.push(
+            Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => NewWiki()),
-            );*/
+            );
           },
           child: const Icon(Icons.add),
         ),

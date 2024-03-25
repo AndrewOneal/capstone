@@ -172,7 +172,7 @@ class _WikiCard extends StatelessWidget {
             Center(
               child: DefaultQuillRead(input: [
                 {
-                  "insert": "Description for $wikiDescription",
+                  "insert": "$wikiDescription",
                   "attributes": {"color": "#FF363942"}
                 },
                 {
