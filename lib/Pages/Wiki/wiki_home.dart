@@ -52,7 +52,6 @@ class WikiHomeState extends State<WikiHome> {
   Widget build(BuildContext context) {
     final String wikiTitle = widget.wikiMap['wiki_name'];
     final String wikiDescription = widget.wikiMap['wiki_description'];
-    final String wikiID = widget.wikiMap['id'];
     final Global global = Global();
     final EdgeInsets sideMargins = global.sideMargins;
     final SizedBox titleSizedBox = global.titleSizedBox;
@@ -105,7 +104,8 @@ class WikiHomeState extends State<WikiHome> {
                 ),
                 largeSizedBox,
                 SingleChildScrollView(
-                  child: _ButtonList(wikiID: wikiID),
+                  child: _ButtonList(
+                      wikiMap: widget.wikiMap, sectionNo: sectionNo),
                 ),
               ],
             ),
@@ -188,16 +188,20 @@ class _WikiCard extends StatelessWidget {
 }
 
 class _ButtonList extends StatelessWidget {
-  final String wikiID;
+  final Map<String, dynamic> wikiMap;
+  final int sectionNo;
 
-  const _ButtonList({required this.wikiID});
+  const _ButtonList({required this.sectionNo, required this.wikiMap});
 
   @override
   Widget build(BuildContext context) {
     final Map<String, Widget> buttonRoutes = {
-      'Sections': WikiSectionsPage(wikiID: wikiID),
-      'Characters': WikiCharactersPage(wikiID: wikiID),
-      'Locations': WikiLocationsPage(wikiID: wikiID),
+      'Sections': WikiSectionsPage(
+        wikiMap: wikiMap,
+        sectionNo: sectionNo,
+      ),
+      'Characters': WikiCharactersPage(wikiMap: wikiMap, sectionNo: sectionNo),
+      'Locations': WikiLocationsPage(wikiMap: wikiMap, sectionNo: sectionNo),
     };
 
     return SizedBox(

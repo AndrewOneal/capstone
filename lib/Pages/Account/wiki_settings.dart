@@ -3,8 +3,6 @@ import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Pages/Wiki/wiki_home.dart';
 import 'package:capstone/Utilities/db_util.dart';
 
-int sectionSetting = 1;
-
 class WikiSettings extends StatefulWidget {
   final Map<String, dynamic> wikiMap;
   final int sectionNo;
@@ -20,9 +18,16 @@ class WikiSettings extends StatefulWidget {
 }
 
 class WikiSettingsState extends State<WikiSettings> {
+  final SectionNoHandler sectionNoHandler = SectionNoHandler();
+
+  @override
+  void initState() {
+    super.initState();
+    sectionNoHandler.setSectionNo(widget.sectionNo);
+  }
+
   @override
   Widget build(BuildContext context) {
-    sectionSetting = widget.sectionNo;
     final Global global = Global();
     final EdgeInsets sideMargins = global.sideMargins;
     final SizedBox titleSizedBox = global.titleSizedBox;
@@ -44,10 +49,12 @@ class WikiSettingsState extends State<WikiSettings> {
               titleSizedBox,
               _TitleText(wikiTitle: widget.wikiMap['wiki_name']),
               mediumSizedBox,
-              _SectionDropdown(wikiID: widget.wikiMap['id']),
+              _SectionDropdown(
+                  wikiID: widget.wikiMap['id'],
+                  sectionNoHandler: sectionNoHandler),
               mediumSizedBox,
               _SaveSettingsButton(
-                  wikiMap: widget.wikiMap, sectionNo: sectionSetting),
+                  wikiMap: widget.wikiMap, sectionNoHandler: sectionNoHandler),
             ],
           ),
         ),
@@ -83,8 +90,10 @@ class _TitleText extends StatelessWidget {
 
 class _SectionDropdown extends StatefulWidget {
   final String wikiID;
+  final SectionNoHandler sectionNoHandler;
 
-  const _SectionDropdown({required this.wikiID});
+  const _SectionDropdown(
+      {required this.wikiID, required this.sectionNoHandler});
 
   @override
   _SectionDropdownState createState() => _SectionDropdownState();
@@ -98,7 +107,7 @@ class _SectionDropdownState extends State<_SectionDropdown> {
   void initState() {
     super.initState();
     sections = [];
-    sectionNo = 1;
+    sectionNo = widget.sectionNoHandler.getSectionNo();
     fetchSections();
   }
 
@@ -118,7 +127,7 @@ class _SectionDropdownState extends State<_SectionDropdown> {
       onChanged: (index) {
         setState(() {
           sectionNo = index!;
-          sectionSetting = sectionNo;
+          widget.sectionNoHandler.setSectionNo(sectionNo);
         });
       },
       items: sections.map<DropdownMenuItem<int>>((section) {
@@ -135,12 +144,12 @@ class _SectionDropdownState extends State<_SectionDropdown> {
 
 class _SaveSettingsButton extends StatelessWidget {
   final Map<String, dynamic> wikiMap;
-  final int sectionNo;
+  final SectionNoHandler sectionNoHandler;
 
   const _SaveSettingsButton({
     Key? key,
     required this.wikiMap,
-    required this.sectionNo,
+    required this.sectionNoHandler,
   }) : super(key: key);
 
   @override
@@ -149,6 +158,7 @@ class _SaveSettingsButton extends StatelessWidget {
       buttonText: "Save Settings",
       onPressed: () {
         final String wikiID = wikiMap['id'];
+        final int sectionNo = sectionNoHandler.getSectionNo();
 
         CacheManager cacheManager = CacheManager();
         cacheManager.updateExistingEntry(wikiID, sectionNo);
@@ -159,5 +169,19 @@ class _SaveSettingsButton extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+class SectionNoHandler {
+  late int sectionNo;
+
+  SectionNoHandler();
+
+  int getSectionNo() {
+    return sectionNo;
+  }
+
+  void setSectionNo(int newSectionNo) {
+    sectionNo = newSectionNo;
   }
 }

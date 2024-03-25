@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
 //import 'package:capstone/Pages/Account/login.dart';
-//import 'package:capstone/Pages/Account/wiki_settings.dart';
+import 'package:capstone/Pages/Account/wiki_settings.dart';
 import 'package:capstone/Utilities/db_util.dart';
 
 class WikiDetailsPage extends StatelessWidget {
-  final String wikiID;
-  final int wikiSettingID;
+  final Map<String, dynamic> wikiMap;
+  final int sectionNo;
   final String wikiDetailID;
   final String detailName;
   final String detailType;
   const WikiDetailsPage({
     super.key,
-    required this.wikiID,
-    required this.wikiSettingID,
+    required this.wikiMap,
+    required this.sectionNo,
     required this.wikiDetailID,
     required this.detailName,
     required this.detailType,
@@ -21,6 +21,7 @@ class WikiDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String wikiID = wikiMap['id'];
     final Global global = Global();
     final EdgeInsets sideMargins = global.sideMargins;
     return Scaffold(
@@ -35,11 +36,12 @@ class WikiDetailsPage extends StatelessWidget {
           IconButton(
               icon: const Icon(Icons.settings),
               onPressed: () {
-                /*Navigator.push(
+                Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => WikiSettings(wikiID: wikiID)),
-                );*/
+                      builder: (context) =>
+                          WikiSettings(wikiMap: wikiMap, sectionNo: sectionNo)),
+                );
               }),
           IconButton(
             icon: const Icon(Icons.account_circle),
@@ -62,7 +64,7 @@ class WikiDetailsPage extends StatelessWidget {
                 Expanded(
                   child: _DetailList(
                       wikiID: wikiID,
-                      wikiSettingID: wikiSettingID,
+                      wikiSettingID: sectionNo,
                       wikiDetailID: wikiDetailID,
                       detailType: detailType),
                 ),

@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
 //import 'package:capstone/Pages/Account/login.dart';
-//import 'package:capstone/Pages/Account/wiki_settings.dart';
+import 'package:capstone/Pages/Account/wiki_settings.dart';
 import 'package:capstone/Pages/Wiki/wiki_details.dart';
 import 'package:capstone/Utilities/db_util.dart';
 
 class WikiLocationsPage extends StatelessWidget {
-  final String wikiID;
-  const WikiLocationsPage({Key? key, required this.wikiID}) : super(key: key);
+  final Map<String, dynamic> wikiMap;
+  final int sectionNo;
+  const WikiLocationsPage(
+      {Key? key, required this.wikiMap, required this.sectionNo})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +28,12 @@ class WikiLocationsPage extends StatelessWidget {
           IconButton(
               icon: const Icon(Icons.settings),
               onPressed: () {
-                /*Navigator.push(
+                Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => WikiSettings(wikiID: wikiID)),
-                );*/
+                      builder: (context) =>
+                          WikiSettings(wikiMap: wikiMap, sectionNo: sectionNo)),
+                );
               }),
           IconButton(
             icon: const Icon(Icons.account_circle),
@@ -52,7 +56,8 @@ class WikiLocationsPage extends StatelessWidget {
                 children: <Widget>[
                   const ListTitle(title: "Locations"),
                   Expanded(
-                    child: _LocationList(wikiID: wikiID),
+                    child:
+                        _LocationList(wikiMap: wikiMap, sectionNo: sectionNo),
                   ),
                 ],
               ),
@@ -72,11 +77,15 @@ class WikiLocationsPage extends StatelessWidget {
 }
 
 class _LocationList extends StatelessWidget {
-  final String wikiID;
-  const _LocationList({Key? key, required this.wikiID}) : super(key: key);
+  final Map<String, dynamic> wikiMap;
+  final int sectionNo;
+  const _LocationList(
+      {Key? key, required this.wikiMap, required this.sectionNo})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final String wikiID = wikiMap['id'];
     DBHandler dbHandler = DBHandler();
     const String disclaimerText =
         "Don't see the location you're looking for? Hit the edit button to add them!";
@@ -147,8 +156,8 @@ class _LocationList extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) => WikiDetailsPage(
-                                wikiID: wikiID,
-                                wikiSettingID: 3,
+                                wikiMap: wikiMap,
+                                sectionNo: sectionNo,
                                 wikiDetailID: wikiLocations[index]['id'],
                                 detailName: wikiLocations[index]['name'],
                                 detailType: 'Location',
@@ -164,8 +173,8 @@ class _LocationList extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) => WikiDetailsPage(
-                                wikiID: wikiID,
-                                wikiSettingID: 3,
+                                wikiMap: wikiMap,
+                                sectionNo: sectionNo,
                                 wikiDetailID: wikiLocations[index]['id'],
                                 detailName: wikiLocations[index]['name'],
                                 detailType: 'Location',

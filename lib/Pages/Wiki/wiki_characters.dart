@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
 //import 'package:capstone/Pages/Account/login.dart';
-//import 'package:capstone/Pages/Account/wiki_settings.dart';
+import 'package:capstone/Pages/Account/wiki_settings.dart';
 import 'package:capstone/Pages/Wiki/wiki_details.dart';
 import 'package:capstone/Utilities/db_util.dart';
 
 class WikiCharactersPage extends StatelessWidget {
-  final String wikiID;
-  const WikiCharactersPage({Key? key, required this.wikiID}) : super(key: key);
+  final Map<String, dynamic> wikiMap;
+  final int sectionNo;
+  const WikiCharactersPage(
+      {Key? key, required this.wikiMap, required this.sectionNo})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +28,12 @@ class WikiCharactersPage extends StatelessWidget {
           IconButton(
               icon: const Icon(Icons.settings),
               onPressed: () {
-                /*Navigator.push(
+                Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => WikiSettings(wikiID: wikiID)),
-                );*/
+                      builder: (context) =>
+                          WikiSettings(wikiMap: wikiMap, sectionNo: sectionNo)),
+                );
               }),
           IconButton(
             icon: const Icon(Icons.account_circle),
@@ -52,7 +56,10 @@ class WikiCharactersPage extends StatelessWidget {
                 children: <Widget>[
                   const ListTitle(title: "Characters"),
                   Expanded(
-                    child: _CharacterList(wikiID: wikiID),
+                    child: _CharacterList(
+                      wikiMap: wikiMap,
+                      sectionNo: sectionNo,
+                    ),
                   ),
                 ],
               ),
@@ -72,11 +79,15 @@ class WikiCharactersPage extends StatelessWidget {
 }
 
 class _CharacterList extends StatelessWidget {
-  final String wikiID;
-  const _CharacterList({Key? key, required this.wikiID}) : super(key: key);
+  final Map<String, dynamic> wikiMap;
+  final int sectionNo;
+  const _CharacterList(
+      {Key? key, required this.wikiMap, required this.sectionNo})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final String wikiID = wikiMap['id'];
     DBHandler dbHandler = DBHandler();
     const String disclaimerText =
         "Don't see the character you're looking for? Hit the edit button to add them!";
@@ -147,8 +158,8 @@ class _CharacterList extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) => WikiDetailsPage(
-                                wikiID: wikiID,
-                                wikiSettingID: 3,
+                                wikiMap: wikiMap,
+                                sectionNo: sectionNo,
                                 wikiDetailID: wikiCharacters[index]['id'],
                                 detailName: wikiCharacters[index]['name'],
                                 detailType: 'Character',
@@ -164,8 +175,8 @@ class _CharacterList extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) => WikiDetailsPage(
-                                wikiID: wikiID,
-                                wikiSettingID: 3,
+                                wikiMap: wikiMap,
+                                sectionNo: sectionNo,
                                 wikiDetailID: wikiCharacters[index]['id'],
                                 detailName: wikiCharacters[index]['name'],
                                 detailType: 'Character',
