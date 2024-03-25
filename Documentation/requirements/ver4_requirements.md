@@ -24,6 +24,11 @@
   * User Story: As a wiki editor, I want to have a persistent edit button to edit the list of characters, so that when I notice something is out of place or missing, I can fix it.
   * User Story: As a wiki editor, I want to have a persistent edit button on the character page to edit the part sections of the character, so that when I notice something is out of place or missing, I can fix it.
 
+* Epic: As an Admin, I want a panel to review edit/new requests for wikis parts, characters, and summaries, so that I can approve and deny the proper submissions.
+  * User Story: As an admin, I want to have a general page for reviewing requests for edits, so that I can quickly confirm whether an edit should be approved or denied.
+  * User Story: As an admin, I want to have a general page for reviewing new wiki requests, so that I can review the requests for the new wikis and decide which should be added, and which should not.
+  * User Story: As an admin, I want to have a general page for reviewing new part, character, and summary requests for a certain wiki, so that I can quickyl decide whether to allow the new content to be added.
+
 ## Back End
 
 * Epic: As a wiki user, I want to be able to create data so that I can contribute to the wikis and create my account, so that I can use all the features of the application.
@@ -43,5 +48,7 @@
   * User Story: As a wiki user, I want a database function to retrieve my login details, so that I can log in and use my stored settings for the application.
   *  User Story: As a wiki user, I want a database function to retrieve character details, wiki details, and part summaries, so that I can read the wiki's information and learn more about the current show I am watching.
 
-## General
+
+
+## Misc.
 * Epic: As a user, I want to be able to run this application on IOS, so that I can use my iPhone to access the application.
