@@ -49,22 +49,3 @@ class CacheManager {
     await updateCache(cache);
   }
 }
-/*
-void main() async {
-  // Example usage
-  CacheManager cacheManager = CacheManager();
-
-  await cacheManager.addToCache("exampleWikiID", 5);
-
-  Map<String, dynamic> newData = {
-    "wikiID_3": {"sectionNo": 3},
-    "wikiID_4": {"sectionNo": 4},
-  };
-  await cacheManager.updateCache(newData);
-
-  int? sectionNo = await cacheManager.getSectionNo("exampleWikiID");
-  print("Section Number: $sectionNo");
-
-  await cacheManager.clearCache();
-}
-*/
