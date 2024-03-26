@@ -3,6 +3,7 @@ import 'package:capstone/Pages/Account/login.dart';
 import 'package:capstone/Pages/wiki_list.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Pages/apis.dart';
+import 'package:pocketbase_server_flutter/pocketbase_server_flutter.dart';
 
 class TutorialPage extends StatelessWidget {
   const TutorialPage({Key? key}) : super(key: key);
