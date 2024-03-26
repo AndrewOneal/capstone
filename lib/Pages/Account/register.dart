@@ -27,13 +27,13 @@ class RegisterPage extends StatelessWidget {
           },
         ),
       ),
-      body: Center(
-        child: Padding(
-          padding: sideMargins,
+      body: Padding(
+        padding: sideMargins,
+        child: SingleChildScrollView(
           child: Column(
             children: [
               titleSizedBox,
-              Text('Register', style: TextStyles.whiteHeader),
+              const ListTitle(title: "Register"),
               smallSizedBox,
               const RegisterFields(),
               extraLargeSizedBox,
@@ -48,8 +48,11 @@ class RegisterPage extends StatelessWidget {
                 },
               ),
               mediumSizedBox,
-              Text("Already have an account?",
-                  style: TextStyles.disclaimerText),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text("Already have an account?",
+                    style: TextStyles.disclaimerText),
+              ),
               smallSizedBox,
               DarkButton(
                 buttonText: "Click to Login",

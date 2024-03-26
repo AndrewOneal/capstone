@@ -27,13 +27,13 @@ class LoginPage extends StatelessWidget {
           },
         ),
       ),
-      body: Center(
-        child: Padding(
-          padding: sideMargins,
+      body: Padding(
+        padding: sideMargins,
+        child: SingleChildScrollView(
           child: Column(
             children: [
               titleSizedBox,
-              Text('Login', style: TextStyles.whiteHeader),
+              const ListTitle(title: "Login"),
               smallSizedBox,
               const LoginFields(),
               extraLargeSizedBox,
@@ -48,7 +48,11 @@ class LoginPage extends StatelessWidget {
                 },
               ),
               mediumSizedBox,
-              Text("Don't have an account?", style: TextStyles.disclaimerText),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text("Don't have an account?",
+                    style: TextStyles.disclaimerText),
+              ),
               smallSizedBox,
               DarkButton(
                 buttonText: "Click to Register",

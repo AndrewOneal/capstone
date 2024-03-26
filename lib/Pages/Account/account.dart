@@ -26,13 +26,13 @@ class AccountPage extends StatelessWidget {
           },
         ),
       ),
-      body: Center(
-        child: Padding(
-          padding: sideMargins,
+      body: Padding(
+        padding: sideMargins,
+        child: SingleChildScrollView(
           child: Column(
             children: [
               titleSizedBox,
-              Text('Account', style: TextStyles.whiteHeader),
+              const ListTitle(title: "Account"),
               smallSizedBox,
               const AccountFields(),
               extraLargeSizedBox,

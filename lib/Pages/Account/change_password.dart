@@ -23,19 +23,13 @@ class CPPage extends StatelessWidget {
           },
         ),
       ),
-      body: Center(
-        child: Padding(
-          padding: sideMargins,
+      body: Padding(
+        padding: sideMargins,
+        child: SingleChildScrollView(
           child: Column(
             children: [
               titleSizedBox,
-              FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  'Change Password',
-                  style: TextStyles.whiteHeader,
-                ),
-              ),
+              const ListTitle(title: "Change Password"),
               smallSizedBox,
               const CPFields(),
               extraLargeSizedBox,
