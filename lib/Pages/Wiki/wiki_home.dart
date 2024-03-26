@@ -22,7 +22,7 @@ class WikiHome extends StatefulWidget {
 }
 
 class WikiHomeState extends State<WikiHome> {
-  late int sectionNo;
+  late int sectionNo = 0;
 
   @override
   void initState() {
