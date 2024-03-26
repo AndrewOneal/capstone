@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
-//import 'package:capstone/Pages/Account/login.dart';
+import 'package:capstone/Pages/Account/login.dart';
 import 'package:capstone/Pages/Account/wiki_settings.dart';
 import 'package:capstone/Pages/Wiki/wiki_details.dart';
 import 'package:capstone/Utilities/db_util.dart';
@@ -38,10 +38,10 @@ class WikiLocationsPage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.account_circle),
             onPressed: () {
-              /*Navigator.push(
+              Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const LoginPage()),
-              );*/
+              );
             },
           ),
         ],

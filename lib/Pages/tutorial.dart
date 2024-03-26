@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-//import 'package:capstone/Pages/Account/login.dart';
+import 'package:capstone/Pages/Account/login.dart';
 import 'package:capstone/Pages/wiki_list.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Pages/apis.dart';
@@ -26,11 +26,19 @@ class TutorialPage extends StatelessWidget {
         ),
         actions: [
           IconButton(
+              icon: const Icon(Icons.list_alt),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const APIListPage()),
+                );
+              }),
+          IconButton(
             icon: const Icon(Icons.account_circle),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const APIListPage()),
+                MaterialPageRoute(builder: (context) => const LoginPage()),
               );
             },
           ),

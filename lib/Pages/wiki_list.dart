@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-//import 'package:capstone/Pages/Account/login.dart';
+import 'package:capstone/Pages/Account/login.dart';
 import 'package:capstone/Pages/tutorial.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Pages/Wiki/wiki_home.dart';
@@ -28,10 +28,10 @@ class WikiListPage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.account_circle),
             onPressed: () {
-              /*Navigator.push(
+              Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const LoginPage()),
-              );*/
+              );
             },
           ),
         ],

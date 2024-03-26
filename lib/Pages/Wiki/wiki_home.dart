@@ -1,13 +1,11 @@
-//import 'package:capstone/Pages/apis.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Pages/wiki_list.dart';
-//import 'package:capstone/Pages/Account/login.dart';
+import 'package:capstone/Pages/Account/login.dart';
 import 'package:capstone/Pages/Account/wiki_settings.dart';
 import 'package:capstone/Pages/Wiki/wiki_characters.dart';
 import 'package:capstone/Pages/Wiki/wiki_sections.dart';
 import 'package:capstone/Pages/Wiki/wiki_locations.dart';
-//import 'package:capstone/Utilities/db_util.dart';
 
 class WikiHome extends StatefulWidget {
   final Map<String, dynamic> wikiMap;
@@ -82,10 +80,10 @@ class WikiHomeState extends State<WikiHome> {
           IconButton(
             icon: const Icon(Icons.account_circle),
             onPressed: () {
-              /*Navigator.push(
+              Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const LoginPage()),
-              );*/
+              );
             },
           ),
         ],
