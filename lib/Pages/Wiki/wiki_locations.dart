@@ -103,8 +103,8 @@ class _LocationList extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  SizedBox(
-                    height: 100,
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(minHeight: 100),
                     child: Column(
                       children: <Widget>[
                         Text(

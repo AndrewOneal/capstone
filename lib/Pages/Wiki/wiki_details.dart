@@ -100,6 +100,8 @@ class _DetailList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DBHandler dbHandler = DBHandler();
+    Global global = Global();
+    SizedBox mediumSizedBox = global.mediumSizedBox;
 
     Future<Map<String, Future<List<dynamic>>>> dbHandlerGetDetails() async {
       Map<String, Future<List<dynamic>>> detailsMap = {
@@ -150,8 +152,8 @@ class _DetailList extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        SizedBox(
-                          height: 100,
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(minHeight: 100),
                           child: Column(
                             children: <Widget>[
                               Text(
@@ -169,10 +171,7 @@ class _DetailList extends StatelessWidget {
                 return ListView.separated(
                   itemCount: wikiDetails.length + 1,
                   separatorBuilder: (BuildContext context, int index) =>
-                      const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    child: Divider(),
-                  ),
+                      mediumSizedBox,
                   itemBuilder: (BuildContext context, int index) {
                     if (index == wikiDetails.length) {
                       return Padding(
@@ -180,8 +179,8 @@ class _DetailList extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
-                            SizedBox(
-                              height: 100,
+                            ConstrainedBox(
+                              constraints: const BoxConstraints(minHeight: 100),
                               child: Column(
                                 children: <Widget>[
                                   Text(
@@ -200,12 +199,22 @@ class _DetailList extends StatelessWidget {
                         children: <Widget>[
                           if (detailType != 'Section')
                             Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  wikiDetails[index]['section_name'],
-                                  style: TextStyles.detailsHeaders,
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      bottom: BorderSide(
+                                        color: background['500']!,
+                                        width: 1.0,
+                                      ),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    wikiDetails[index]['section_name'],
+                                    style: TextStyles.detailsHeaders,
+                                  ),
                                 ),
-                                const Divider(),
                               ],
                             ),
                           DefaultQuillRead(
