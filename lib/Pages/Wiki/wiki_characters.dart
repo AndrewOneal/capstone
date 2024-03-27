@@ -4,6 +4,7 @@ import 'package:capstone/Pages/Account/login.dart';
 import 'package:capstone/Pages/Account/wiki_settings.dart';
 import 'package:capstone/Pages/Wiki/wiki_details.dart';
 import 'package:capstone/Utilities/db_util.dart';
+import 'package:capstone/Pages/CRUD/edit_characters.dart';
 
 class WikiCharactersPage extends StatelessWidget {
   final Map<String, dynamic> wikiMap;
@@ -69,7 +70,16 @@ class WikiCharactersPage extends StatelessWidget {
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(20),
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => EditCharacters(
+                  wikiMap: wikiMap,
+                ),
+              ),
+            );
+          },
           child: const Icon(Icons.edit),
         ),
       ),

@@ -2,19 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Utilities/db_util.dart';
 
-class EditCharacters extends StatefulWidget {
+class EditLocationDetails extends StatefulWidget {
   final Map<String, dynamic> wikiMap;
+  final Map<String, dynamic> locationMap;
 
-  const EditCharacters({
+  const EditLocationDetails({
     super.key,
     required this.wikiMap,
+    required this.locationMap,
   });
 
   @override
-  EditCharactersState createState() => EditCharactersState();
+  EditLocationDetailsState createState() => EditLocationDetailsState();
 }
 
-class EditCharactersState extends State<EditCharacters> {
+class EditLocationDetailsState extends State<EditLocationDetails> {
   @override
   Widget build(BuildContext context) {
     final Global global = Global();
@@ -36,9 +38,10 @@ class EditCharactersState extends State<EditCharacters> {
             child: Column(
               children: [
                 titleSizedBox,
-                const ListTitle(title: "Edit Characters"),
+                const ListTitle(title: "Edit Location Details"),
                 SingleChildScrollView(
-                  child: _EditCharsForm(wikiMap: widget.wikiMap),
+                  child: _EditCharDetailsForm(
+                      wikiMap: widget.wikiMap, locationMap: widget.locationMap),
                 ),
               ],
             ),
@@ -49,16 +52,19 @@ class EditCharactersState extends State<EditCharacters> {
   }
 }
 
-class _EditCharsForm extends StatelessWidget {
+class _EditCharDetailsForm extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _characterNameController;
+  final TextEditingController _locationNameController;
   final TextEditingController _reasonForEditController;
   final Map<String, dynamic> wikiMap;
+  final Map<String, dynamic> locationMap;
 
-  _EditCharsForm({
+  _EditCharDetailsForm({
     required this.wikiMap,
-  })  : _reasonForEditController = TextEditingController(),
-        _characterNameController = TextEditingController();
+    required this.locationMap,
+  })  : _locationNameController =
+            TextEditingController(text: locationMap['name']),
+        _reasonForEditController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +72,8 @@ class _EditCharsForm extends StatelessWidget {
     final SizedBox mediumSizedBox = global.mediumSizedBox;
     final SizedBox largeSizedBox = global.largeSizedBox;
     final SizedBox extraLargeSizedBox = global.extraLargeSizedBox;
+    final wikiID = wikiMap['id'];
+    final SectionNoHandler sectionNoHandler = SectionNoHandler();
     final DBHandler dbHandler = DBHandler();
     QuillEditorManager quillEditor = QuillEditorManager();
     return Form(
@@ -73,11 +81,13 @@ class _EditCharsForm extends StatelessWidget {
       child: Column(
         children: [
           TextFormField(
-            controller: _characterNameController,
+            controller: _locationNameController,
             decoration: const InputDecoration(
-              labelText: 'Character',
+              labelText: 'Location Name',
             ),
           ),
+          mediumSizedBox,
+          _SectionDropdown(wikiID: wikiID, sectionNoHandler: sectionNoHandler),
           mediumSizedBox,
           quillEditor.buildEditor(),
           mediumSizedBox,
@@ -131,5 +141,73 @@ class _EditCharsForm extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class _SectionDropdown extends StatefulWidget {
+  final String wikiID;
+  final SectionNoHandler sectionNoHandler;
+
+  const _SectionDropdown(
+      {required this.wikiID, required this.sectionNoHandler});
+
+  @override
+  _SectionDropdownState createState() => _SectionDropdownState();
+}
+
+class _SectionDropdownState extends State<_SectionDropdown> {
+  late List<dynamic> sections;
+  late int sectionNo;
+
+  @override
+  void initState() {
+    super.initState();
+    sections = [];
+    sectionNo = widget.sectionNoHandler.getSectionNo();
+    fetchSections();
+  }
+
+  Future<void> fetchSections() async {
+    DBHandler dbHandler = DBHandler();
+    List fetchedSections = await dbHandler.getSections(wikiID: widget.wikiID);
+    setState(() {
+      sections = fetchedSections;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton<int>(
+      value: sectionNo,
+      isExpanded: true,
+      onChanged: (index) {
+        setState(() {
+          sectionNo = index!;
+          widget.sectionNoHandler.setSectionNo(sectionNo);
+        });
+      },
+      items: sections.map<DropdownMenuItem<int>>((section) {
+        final sectionNo = section['section_no'];
+        final sectionName = section['section_name'];
+        return DropdownMenuItem<int>(
+          value: sectionNo,
+          child: Text(sectionName, style: TextStyles.listText),
+        );
+      }).toList(),
+    );
+  }
+}
+
+class SectionNoHandler {
+  late int sectionNo = 1;
+
+  SectionNoHandler();
+
+  int getSectionNo() {
+    return sectionNo;
+  }
+
+  void setSectionNo(int newSectionNo) {
+    sectionNo = newSectionNo;
   }
 }

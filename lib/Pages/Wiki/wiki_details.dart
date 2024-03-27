@@ -4,6 +4,8 @@ import 'package:capstone/Pages/Account/login.dart';
 import 'package:capstone/Pages/Account/wiki_settings.dart';
 import 'package:capstone/Utilities/db_util.dart';
 import 'package:capstone/Pages/CRUD/edit_character_details.dart';
+import 'package:capstone/Pages/CRUD/edit_section_details.dart';
+import 'package:capstone/Pages/CRUD/edit_location_details.dart';
 
 class WikiDetailsPage extends StatelessWidget {
   final Map<String, dynamic> wikiMap;
@@ -250,7 +252,8 @@ class FloatingEditButton extends StatelessWidget {
     required this.wikiMap,
     required this.detailMap,
   });
-
+// The detailMap needs to be the map generated from this file, not the one from the previous file.
+// Need to find a way to get the wikiDetails map that is in this file here.
   @override
   Widget build(BuildContext context) {
     final routeMap = {
@@ -265,7 +268,28 @@ class FloatingEditButton extends StatelessWidget {
           ),
         );
       },
-      'Location': () {},
+      'Location': () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EditLocationDetails(
+              locationMap: detailMap,
+              wikiMap: wikiMap,
+            ),
+          ),
+        );
+      },
+      'Section': () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EditSectionDetails(
+              sectionMap: detailMap,
+              wikiMap: wikiMap,
+            ),
+          ),
+        );
+      },
     };
 
     return FloatingActionButton(
