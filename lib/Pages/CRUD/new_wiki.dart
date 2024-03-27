@@ -8,10 +8,10 @@ class NewWiki extends StatefulWidget {
   const NewWiki({super.key});
 
   @override
-  _NewWikiState createState() => _NewWikiState();
+  NewWikiState createState() => NewWikiState();
 }
 
-class _NewWikiState extends State<NewWiki> {
+class NewWikiState extends State<NewWiki> {
   @override
   Widget build(BuildContext context) {
     final Global global = Global();

@@ -8,7 +8,7 @@ import 'package:capstone/Utilities/db_util.dart';
 import 'package:pocketbase_server_flutter/pocketbase_server_flutter.dart';
 
 class WikiListPage extends StatelessWidget {
-  const WikiListPage({Key? key}) : super(key: key);
+  const WikiListPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +61,7 @@ class WikiListPage extends StatelessWidget {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => NewWiki()),
+              MaterialPageRoute(builder: (context) => const NewWiki()),
             );
           },
           child: const Icon(Icons.add),
@@ -72,7 +72,7 @@ class WikiListPage extends StatelessWidget {
 }
 
 class _WikiList extends StatelessWidget {
-  const _WikiList({Key? key}) : super(key: key);
+  const _WikiList();
 
   @override
   Widget build(BuildContext context) {

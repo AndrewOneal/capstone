@@ -8,10 +8,10 @@ class WikiSettings extends StatefulWidget {
   final int sectionNo;
 
   const WikiSettings({
-    Key? key,
+    super.key,
     required this.wikiMap,
     required this.sectionNo,
-  }) : super(key: key);
+  });
 
   @override
   WikiSettingsState createState() => WikiSettingsState();
@@ -147,10 +147,9 @@ class _SaveSettingsButton extends StatelessWidget {
   final SectionNoHandler sectionNoHandler;
 
   const _SaveSettingsButton({
-    Key? key,
     required this.wikiMap,
     required this.sectionNoHandler,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -173,7 +172,7 @@ class _SaveSettingsButton extends StatelessWidget {
 }
 
 class SectionNoHandler {
-  late int sectionNo;
+  late int sectionNo = 1;
 
   SectionNoHandler();
 

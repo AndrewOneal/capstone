@@ -11,9 +11,9 @@ class WikiHome extends StatefulWidget {
   final Map<String, dynamic> wikiMap;
 
   const WikiHome({
-    Key? key,
+    super.key,
     required this.wikiMap,
-  }) : super(key: key);
+  });
 
   @override
   WikiHomeState createState() => WikiHomeState();
@@ -170,7 +170,7 @@ class _WikiCard extends StatelessWidget {
             Center(
               child: DefaultQuillRead(input: [
                 {
-                  "insert": "$wikiDescription",
+                  "insert": wikiDescription,
                   "attributes": {"color": "#FF363942"}
                 },
                 {

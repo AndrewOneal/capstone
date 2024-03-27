@@ -6,7 +6,7 @@ import 'package:capstone/Pages/apis.dart';
 import 'package:pocketbase_server_flutter/pocketbase_server_flutter.dart';
 
 class TutorialPage extends StatelessWidget {
-  const TutorialPage({Key? key}) : super(key: key);
+  const TutorialPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +103,7 @@ class _TitleText extends StatelessWidget {
 }
 
 class _CardWidget extends StatelessWidget {
-  const _CardWidget({super.key});
+  const _CardWidget();
 
   final cardPadding = const EdgeInsets.all(10);
   final textSpacing = const SizedBox(height: 20);

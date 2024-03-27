@@ -5,7 +5,7 @@ import 'package:capstone/Pages/Account/register.dart';
 import 'package:capstone/Pages/Account/account.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +73,7 @@ class LoginPage extends StatelessWidget {
 }
 
 class LoginFields extends StatelessWidget {
-  const LoginFields({Key? key}) : super(key: key);
+  const LoginFields({super.key});
 
   @override
   Widget build(BuildContext context) {

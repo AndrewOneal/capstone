@@ -7,11 +7,10 @@ class DarkButton extends StatelessWidget {
   final double buttonWidth;
 
   const DarkButton(
-      {Key? key,
+      {super.key,
       required this.buttonText,
       this.buttonWidth = double.infinity,
-      this.onPressed})
-      : super(key: key);
+      this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -39,11 +38,10 @@ class LightPurpleButton1 extends StatelessWidget {
   final double buttonWidth;
 
   const LightPurpleButton1(
-      {Key? key,
+      {super.key,
       required this.buttonText,
       this.buttonWidth = double.infinity,
-      this.onPressed})
-      : super(key: key);
+      this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -65,11 +63,10 @@ class LightPurpleButton2 extends StatelessWidget {
   final double buttonWidth;
 
   const LightPurpleButton2(
-      {Key? key,
+      {super.key,
       required this.buttonText,
       this.buttonWidth = double.infinity,
-      this.onPressed})
-      : super(key: key);
+      this.onPressed});
 
   @override
   Widget build(BuildContext context) {

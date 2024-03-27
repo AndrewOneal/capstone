@@ -4,7 +4,7 @@ import 'package:capstone/Pages/wiki_list.dart';
 import 'package:capstone/Pages/Account/change_password.dart';
 
 class AccountPage extends StatelessWidget {
-  const AccountPage({Key? key}) : super(key: key);
+  const AccountPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +66,7 @@ class AccountPage extends StatelessWidget {
 }
 
 class AccountFields extends StatelessWidget {
-  const AccountFields({Key? key}) : super(key: key);
+  const AccountFields({super.key});
 
   @override
   Widget build(BuildContext context) {

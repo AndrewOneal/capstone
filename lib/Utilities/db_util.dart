@@ -14,8 +14,6 @@ class DBHandler {
 
   DBHandler._internal();
 
-  List<Map<String, dynamic>> fake_wikiDescription = [];
-
   Future<int> translateSectionToNo({required String sectionID}) async {
     // Finds takes sectionID as input and outputs section_no as an integer
     final record = await pb.collection('sections').getFirstListItem(
@@ -66,7 +64,6 @@ class DBHandler {
   }
 
   Future<List<dynamic>> getUsers() async {
-    // TODO: Implement logic to retrieve wiki information list from db
     var users = await pb.collection('users').getFullList(
           sort: '-created',
         );
@@ -78,7 +75,6 @@ class DBHandler {
   }
 
   Future<List<dynamic>> getUserIDList() async {
-    // TODO: Implement logic to retrieve wiki information list from db
     var users = await pb.collection('users').getFullList(
           sort: '-created',
         );
@@ -90,7 +86,6 @@ class DBHandler {
   }
 
   Future<List<dynamic>> getWikis() async {
-    // TODO: Implement logic to retrieve wiki information list from db
     var wikis = await pb.collection('wikis').getFullList(
           sort: '-created',
         );
@@ -102,7 +97,6 @@ class DBHandler {
   }
 
   Future<Map<String, dynamic>> getWiki({required String wikiID}) async {
-    // TODO: Implement logic to retrieve singular wiki title based on wiki id
     final wiki = await pb.collection('wikis').getFirstListItem(
           'id="${wikiID}"',
           expand: 'relField1,relField2.subRelField',
@@ -111,7 +105,6 @@ class DBHandler {
   }
 
   Future<String> getWikiDescription({required String wikiID}) async {
-    // TODO: retrieves wiki description from the database
     final wiki = await pb.collection('wikis').getFirstListItem(
           'id="${wikiID}"',
           expand: 'relField1,relField2.subRelField',
@@ -120,7 +113,6 @@ class DBHandler {
   }
 
   Future<List<dynamic>> getCharacters({required String wikiID}) async {
-    // TODO: Retrieves all characters associated with a specific wiki
     final records = await pb
         .collection('characters')
         .getFullList(sort: '-created', filter: 'wiki_id.id="${wikiID}"');

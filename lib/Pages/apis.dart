@@ -3,7 +3,7 @@ import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Utilities/db_util.dart';
 
 class APIListPage extends StatelessWidget {
-  const APIListPage({Key? key}) : super(key: key);
+  const APIListPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,13 +38,13 @@ class APIListPage extends StatelessWidget {
 }
 
 class _APIList extends StatelessWidget {
-  const _APIList({Key? key}) : super(key: key);
+  const _APIList();
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        ListTitle(title: "Wikis"),
+        const ListTitle(title: "Wikis"),
         FutureBuilder<List<dynamic>>(
           future: DBHandler().getWikis(),
           builder: (context, snapshot) {
@@ -56,24 +56,21 @@ class _APIList extends StatelessWidget {
               return DefaultQuillRead(
                 input: [
                   {
-                    "insert": snapshot.data?.toString(),
+                    "insert": '${snapshot.data!}\n',
                   },
-                  {
-                    "insert": '\n',
-                  }
                 ],
               );
             }
           },
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
-        Divider(),
-        SizedBox(
+        const Divider(),
+        const SizedBox(
           height: 10,
         ),
-        ListTitle(title: "Sections"),
+        const ListTitle(title: "Sections"),
         FutureBuilder<List<dynamic>>(
           future: DBHandler().getSections(wikiID: "ndlh8nkyr4uyjw4"),
           builder: (context, snapshot) {
@@ -85,24 +82,21 @@ class _APIList extends StatelessWidget {
               return DefaultQuillRead(
                 input: [
                   {
-                    "insert": snapshot.data?.toString(),
+                    "insert": '${snapshot.data!}\n',
                   },
-                  {
-                    "insert": '\n',
-                  }
                 ],
               );
             }
           },
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
-        Divider(),
-        SizedBox(
+        const Divider(),
+        const SizedBox(
           height: 10,
         ),
-        ListTitle(title: "Characters"),
+        const ListTitle(title: "Characters"),
         FutureBuilder<List<dynamic>>(
           future: DBHandler().getCharacters(wikiID: "ndlh8nkyr4uyjw4"),
           builder: (context, snapshot) {
@@ -114,24 +108,21 @@ class _APIList extends StatelessWidget {
               return DefaultQuillRead(
                 input: [
                   {
-                    "insert": snapshot.data?.toString(),
+                    "insert": '${snapshot.data!}\n',
                   },
-                  {
-                    "insert": '\n',
-                  }
                 ],
               );
             }
           },
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
-        Divider(),
-        SizedBox(
+        const Divider(),
+        const SizedBox(
           height: 10,
         ),
-        ListTitle(title: "Locations"),
+        const ListTitle(title: "Locations"),
         FutureBuilder<List<dynamic>>(
           future: DBHandler().getLocations(wikiID: "ndlh8nkyr4uyjw4"),
           builder: (context, snapshot) {
@@ -143,24 +134,21 @@ class _APIList extends StatelessWidget {
               return DefaultQuillRead(
                 input: [
                   {
-                    "insert": snapshot.data?.toString(),
+                    "insert": '${snapshot.data!}\n',
                   },
-                  {
-                    "insert": '\n',
-                  }
                 ],
               );
             }
           },
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
-        Divider(),
-        SizedBox(
+        const Divider(),
+        const SizedBox(
           height: 10,
         ),
-        ListTitle(title: "Character Details"),
+        const ListTitle(title: "Character Details"),
         FutureBuilder<List<dynamic>>(
           future: DBHandler().getCharacterDetails(
               characterID: "nbxynzck218e4qq", section_no: 3),
@@ -173,24 +161,21 @@ class _APIList extends StatelessWidget {
               return DefaultQuillRead(
                 input: [
                   {
-                    "insert": snapshot.data?.toString(),
+                    "insert": '${snapshot.data!}\n',
                   },
-                  {
-                    "insert": '\n',
-                  }
                 ],
               );
             }
           },
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
-        Divider(),
-        SizedBox(
+        const Divider(),
+        const SizedBox(
           height: 10,
         ),
-        ListTitle(title: "Section Details"),
+        const ListTitle(title: "Section Details"),
         FutureBuilder<List<dynamic>>(
           future: DBHandler()
               .getSectionDetails(section_no: 3, wiki_id: "ndlh8nkyr4uyjw4"),
@@ -203,24 +188,21 @@ class _APIList extends StatelessWidget {
               return DefaultQuillRead(
                 input: [
                   {
-                    "insert": snapshot.data?.toString(),
+                    "insert": '${snapshot.data!}\n',
                   },
-                  {
-                    "insert": '\n',
-                  }
                 ],
               );
             }
           },
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
-        Divider(),
-        SizedBox(
+        const Divider(),
+        const SizedBox(
           height: 10,
         ),
-        ListTitle(title: "Location Details"),
+        const ListTitle(title: "Location Details"),
         FutureBuilder<List<dynamic>>(
           future: DBHandler()
               .getLocationDetails(section_no: 3, locationID: "9cu0atfmbsvi1di"),
@@ -233,24 +215,21 @@ class _APIList extends StatelessWidget {
               return DefaultQuillRead(
                 input: [
                   {
-                    "insert": snapshot.data?.toString(),
+                    "insert": '${snapshot.data!}\n',
                   },
-                  {
-                    "insert": '\n',
-                  }
                 ],
               );
             }
           },
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
-        Divider(),
-        SizedBox(
+        const Divider(),
+        const SizedBox(
           height: 10,
         ),
-        ListTitle(title: "Cache"),
+        const ListTitle(title: "Cache"),
         FutureBuilder<Map<String, dynamic>>(
           future: CacheManager().getCache(),
           builder: (context, snapshot) {
@@ -262,11 +241,8 @@ class _APIList extends StatelessWidget {
               return DefaultQuillRead(
                 input: [
                   {
-                    "insert": snapshot.data?.toString(),
+                    "insert": '${snapshot.data!}\n',
                   },
-                  {
-                    "insert": '\n',
-                  }
                 ],
               );
             }

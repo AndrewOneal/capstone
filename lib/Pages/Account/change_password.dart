@@ -3,7 +3,7 @@ import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Pages/Account/account.dart';
 
 class CPPage extends StatelessWidget {
-  const CPPage({Key? key}) : super(key: key);
+  const CPPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +52,7 @@ class CPPage extends StatelessWidget {
 }
 
 class CPFields extends StatelessWidget {
-  const CPFields({Key? key}) : super(key: key);
+  const CPFields({super.key});
 
   @override
   Widget build(BuildContext context) {

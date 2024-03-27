@@ -29,8 +29,7 @@ class ListTitle extends StatelessWidget {
   final String title;
   final double fontSize;
 
-  const ListTitle({Key? key, required this.title, this.fontSize = 50})
-      : super(key: key);
+  const ListTitle({super.key, required this.title, this.fontSize = 50});
 
   @override
   Widget build(BuildContext context) {

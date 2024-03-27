@@ -9,8 +9,7 @@ class WikiLocationsPage extends StatelessWidget {
   final Map<String, dynamic> wikiMap;
   final int sectionNo;
   const WikiLocationsPage(
-      {Key? key, required this.wikiMap, required this.sectionNo})
-      : super(key: key);
+      {super.key, required this.wikiMap, required this.sectionNo});
 
   @override
   Widget build(BuildContext context) {
@@ -79,9 +78,7 @@ class WikiLocationsPage extends StatelessWidget {
 class _LocationList extends StatelessWidget {
   final Map<String, dynamic> wikiMap;
   final int sectionNo;
-  const _LocationList(
-      {Key? key, required this.wikiMap, required this.sectionNo})
-      : super(key: key);
+  const _LocationList({required this.wikiMap, required this.sectionNo});
 
   @override
   Widget build(BuildContext context) {
@@ -158,9 +155,9 @@ class _LocationList extends StatelessWidget {
                               builder: (context) => WikiDetailsPage(
                                 wikiMap: wikiMap,
                                 sectionNo: sectionNo,
-                                wikiDetailID: wikiLocations[index]['id'],
                                 detailName: wikiLocations[index]['name'],
                                 detailType: 'Location',
+                                detailMap: wikiLocations[index],
                               ),
                             ),
                           );
@@ -175,9 +172,9 @@ class _LocationList extends StatelessWidget {
                               builder: (context) => WikiDetailsPage(
                                 wikiMap: wikiMap,
                                 sectionNo: sectionNo,
-                                wikiDetailID: wikiLocations[index]['id'],
                                 detailName: wikiLocations[index]['name'],
                                 detailType: 'Location',
+                                detailMap: wikiLocations[index],
                               ),
                             ),
                           );

@@ -3,25 +3,27 @@ import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Pages/Account/login.dart';
 import 'package:capstone/Pages/Account/wiki_settings.dart';
 import 'package:capstone/Utilities/db_util.dart';
+import 'package:capstone/Pages/CRUD/edit_character_details.dart';
 
 class WikiDetailsPage extends StatelessWidget {
   final Map<String, dynamic> wikiMap;
+  final Map<String, dynamic> detailMap;
   final int sectionNo;
-  final String wikiDetailID;
   final String detailName;
   final String detailType;
   const WikiDetailsPage({
     super.key,
     required this.wikiMap,
     required this.sectionNo,
-    required this.wikiDetailID,
     required this.detailName,
     required this.detailType,
+    required this.detailMap,
   });
 
   @override
   Widget build(BuildContext context) {
     final String wikiID = wikiMap['id'];
+    final String detailID = detailMap['id'];
     final Global global = Global();
     final EdgeInsets sideMargins = global.sideMargins;
     return Scaffold(
@@ -65,7 +67,7 @@ class WikiDetailsPage extends StatelessWidget {
                   child: _DetailList(
                       wikiID: wikiID,
                       wikiSettingID: sectionNo,
-                      wikiDetailID: wikiDetailID,
+                      wikiDetailID: detailID,
                       detailType: detailType),
                 ),
               ],
@@ -75,10 +77,8 @@ class WikiDetailsPage extends StatelessWidget {
       ),
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(20),
-        child: FloatingActionButton(
-          onPressed: () {},
-          child: const Icon(Icons.edit),
-        ),
+        child: FloatingEditButton(
+            wikiMap: wikiMap, detailMap: detailMap, detailType: detailType),
       ),
     );
   }
@@ -220,12 +220,9 @@ class _DetailList extends StatelessWidget {
                           DefaultQuillRead(
                             input: [
                               {
-                                "insert": wikiDetails[index]
-                                    ['details_description'],
+                                "insert":
+                                    '${wikiDetails[index]["details_description"]}\n',
                               },
-                              {
-                                "insert": '\n',
-                              }
                             ],
                           ),
                         ],
@@ -238,6 +235,42 @@ class _DetailList extends StatelessWidget {
           );
         }
       },
+    );
+  }
+}
+
+class FloatingEditButton extends StatelessWidget {
+  final Map<String, dynamic> wikiMap;
+  final Map<String, dynamic> detailMap;
+  final String detailType;
+
+  const FloatingEditButton({
+    super.key,
+    required this.detailType,
+    required this.wikiMap,
+    required this.detailMap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final routeMap = {
+      'Character': () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EditCharacterDetails(
+              characterMap: detailMap,
+              wikiMap: wikiMap,
+            ),
+          ),
+        );
+      },
+      'Location': () {},
+    };
+
+    return FloatingActionButton(
+      onPressed: routeMap[detailType],
+      child: const Icon(Icons.edit),
     );
   }
 }
