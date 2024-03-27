@@ -16,6 +16,7 @@ Actual Tasks:
   - Create CRUD functions for verification request table
   - Test logic for auto updating page based on a specific verification request
 - Create tests for every back-end function
+- Rename section_name to name inside sections table
 - Adjust functions to sort alphabetically
 
 Questions/Potential things to note:
