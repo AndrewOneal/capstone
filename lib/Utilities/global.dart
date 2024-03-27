@@ -71,3 +71,69 @@ class DefaultQuillRead extends StatelessWidget {
     );
   }
 }
+
+class QuillEditorManager {
+  final QuillController _quillController = QuillController.basic();
+
+  void setInput(List<Map<String, dynamic>> input) {
+    _quillController.document = Document.fromJson(input);
+  }
+
+  List<Map<String, dynamic>> getDocumentJson() {
+    return _quillController.document.toDelta().toJson();
+  }
+
+  Widget buildEditor() {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: background['500']!,
+          width: 1.0,
+        ),
+        borderRadius: BorderRadius.circular(4.0),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          QuillToolbar.simple(
+            configurations: QuillSimpleToolbarConfigurations(
+              controller: _quillController,
+              showFontFamily: false,
+              showInlineCode: false,
+              showAlignmentButtons: true,
+              showJustifyAlignment: false,
+              showCodeBlock: false,
+              showHeaderStyle: false,
+              showSearchButton: false,
+              showListCheck: false,
+              fontSizesValues: const <String, String>{
+                'Small': '18',
+                'Medium': '24',
+                'Large': '32',
+                'Ex Large': '40',
+              },
+              sharedConfigurations: const QuillSharedConfigurations(
+                locale: Locale('en', 'US'),
+              ),
+            ),
+          ),
+          const Divider(),
+          SizedBox(
+            height: 400,
+            child: QuillEditor.basic(
+              configurations: QuillEditorConfigurations(
+                padding: const EdgeInsets.all(10),
+                expands: true,
+                controller: _quillController,
+                readOnly: false,
+                sharedConfigurations: const QuillSharedConfigurations(
+                  locale: Locale('en', 'US'),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

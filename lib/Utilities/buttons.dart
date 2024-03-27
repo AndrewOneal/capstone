@@ -20,13 +20,23 @@ class DarkButton extends StatelessWidget {
       width: buttonWidth,
       child: ElevatedButton(
         onPressed: function,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: buttons['default'],
-          foregroundColor: text['default'],
-          textStyle: TextStyles.whiteButtonText,
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.resolveWith<Color>(
+            (Set<MaterialState> states) {
+              if (states.contains(MaterialState.hovered)) {
+                return buttons['700']!;
+              }
+              return buttons['default']!;
+            },
+          ),
+          foregroundColor: MaterialStateProperty.all(text['default']),
+          textStyle: MaterialStateProperty.all(TextStyles.whiteButtonText),
           alignment: Alignment.center,
         ),
-        child: Text(buttonText),
+        child: Text(
+          buttonText,
+          textAlign: TextAlign.center,
+        ),
       ),
     );
   }
@@ -76,8 +86,15 @@ class LightPurpleButton2 extends StatelessWidget {
       width: buttonWidth,
       child: ElevatedButton(
         onPressed: function,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: buttons['400'],
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.resolveWith<Color>(
+            (Set<MaterialState> states) {
+              if (states.contains(MaterialState.hovered)) {
+                return buttons['300']!;
+              }
+              return buttons['400']!;
+            },
+          ),
         ),
         child: Text(buttonText, style: TextStyles.blackButtonText),
       ),

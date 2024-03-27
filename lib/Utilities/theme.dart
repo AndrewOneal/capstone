@@ -117,7 +117,7 @@ final ThemeData defaultTheme = ThemeData(
       backgroundColor:
           MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
         if (states.contains(MaterialState.hovered)) {
-          return buttons['400']!;
+          return buttons['300']!;
         }
         return buttons['200']!;
       }),

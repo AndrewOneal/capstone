@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
-import 'package:flutter_quill/flutter_quill.dart';
 import 'package:capstone/Utilities/db_util.dart';
 import 'package:capstone/Pages/wiki_list.dart';
 
@@ -64,7 +63,7 @@ class _NewWikiForm extends StatelessWidget {
     final SizedBox mediumSizedBox = global.mediumSizedBox;
     final SizedBox largeSizedBox = global.largeSizedBox;
     DBHandler dbHandler = DBHandler();
-    _QuillEditor quillEditor = _QuillEditor();
+    QuillEditorManager quillEditor = QuillEditorManager();
     return Form(
       key: _formKey,
       child: Column(
@@ -108,7 +107,7 @@ class _NewWikiForm extends StatelessWidget {
             },
           ),
           mediumSizedBox,
-          quillEditor,
+          quillEditor.buildEditor(),
           mediumSizedBox,
           DarkButton(
             buttonText: "Submit Wiki",
@@ -142,66 +141,6 @@ class _NewWikiForm extends StatelessWidget {
           largeSizedBox,
         ],
       ),
-    );
-  }
-}
-
-class _QuillEditor extends StatelessWidget {
-  final QuillController _quillController = QuillController.basic();
-
-  List<Map<String, dynamic>> getDocumentJson() {
-    return _quillController.document.toDelta().toJson();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: background['500']!,
-          width: 1.0,
-        ),
-        borderRadius: BorderRadius.circular(4.0),
-      ),
-      child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-        QuillToolbar.simple(
-          configurations: QuillSimpleToolbarConfigurations(
-            controller: _quillController,
-            showFontFamily: false,
-            showInlineCode: false,
-            showAlignmentButtons: true,
-            showJustifyAlignment: false,
-            showCodeBlock: false,
-            showHeaderStyle: false,
-            showSearchButton: false,
-            showListCheck: false,
-            fontSizesValues: const <String, String>{
-              'Small': '18',
-              'Medium': '24',
-              'Large': '32',
-              'Ex Large': '40',
-            },
-            sharedConfigurations: const QuillSharedConfigurations(
-              locale: Locale('en', 'US'),
-            ),
-          ),
-        ),
-        const Divider(),
-        SizedBox(
-          height: 400,
-          child: QuillEditor.basic(
-            configurations: QuillEditorConfigurations(
-              padding: const EdgeInsets.all(10),
-              expands: true,
-              controller: _quillController,
-              readOnly: false,
-              sharedConfigurations: const QuillSharedConfigurations(
-                locale: Locale('en', 'US'),
-              ),
-            ),
-          ),
-        ),
-      ]),
     );
   }
 }

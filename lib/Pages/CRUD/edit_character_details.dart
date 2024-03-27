@@ -34,15 +34,18 @@ class EditCharacterDetailsState extends State<EditCharacterDetails> {
       body: Center(
         child: Padding(
           padding: sideMargins,
-          child: Column(
-            children: [
-              titleSizedBox,
-              const ListTitle(title: "Edit Character Details"),
-              SingleChildScrollView(
-                child: _EditCharDetailsForm(
-                    wikiMap: widget.wikiMap, characterMap: widget.characterMap),
-              ),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                titleSizedBox,
+                const ListTitle(title: "Edit Character Details"),
+                SingleChildScrollView(
+                  child: _EditCharDetailsForm(
+                      wikiMap: widget.wikiMap,
+                      characterMap: widget.characterMap),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -53,7 +56,6 @@ class EditCharacterDetailsState extends State<EditCharacterDetails> {
 class _EditCharDetailsForm extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _characterNameController;
-  final TextEditingController _sectionSummaryController;
   final TextEditingController _reasonForEditController;
   final Map<String, dynamic> wikiMap;
   final Map<String, dynamic> characterMap;
@@ -63,7 +65,6 @@ class _EditCharDetailsForm extends StatelessWidget {
     required this.characterMap,
   })  : _characterNameController =
             TextEditingController(text: characterMap['name']),
-        _sectionSummaryController = TextEditingController(),
         _reasonForEditController = TextEditingController();
 
   @override
@@ -71,9 +72,11 @@ class _EditCharDetailsForm extends StatelessWidget {
     final Global global = Global();
     final SizedBox mediumSizedBox = global.mediumSizedBox;
     final SizedBox largeSizedBox = global.largeSizedBox;
+    final SizedBox extraLargeSizedBox = global.extraLargeSizedBox;
     final wikiID = wikiMap['id'];
     final SectionNoHandler sectionNoHandler = SectionNoHandler();
     final DBHandler dbHandler = DBHandler();
+    QuillEditorManager quillEditor = QuillEditorManager();
     return Form(
       key: _formKey,
       child: Column(
@@ -87,73 +90,55 @@ class _EditCharDetailsForm extends StatelessWidget {
           mediumSizedBox,
           _SectionDropdown(wikiID: wikiID, sectionNoHandler: sectionNoHandler),
           mediumSizedBox,
-          TextFormField(
-            controller: _sectionSummaryController,
-            decoration: const InputDecoration(
-              labelText: 'Section Summary',
-            ),
-            maxLines: 5,
-          ),
+          quillEditor.buildEditor(),
           mediumSizedBox,
           TextFormField(
             controller: _reasonForEditController,
             decoration: const InputDecoration(
               labelText: 'Reason for Edit',
             ),
-            maxLines: 5,
           ),
           mediumSizedBox,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              DarkButton(
-                buttonText: "Submit For Approval",
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(
-                          const SnackBar(content: Text('Submitting Edit')),
-                        )
-                        .closed
-                        .then((reason) {
-                      Navigator.pop(
-                        context,
-                      );
-                    });
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('Please fill out all fields')),
-                    );
-                  }
-                },
-              ),
-              DarkButton(
-                buttonText: "Delete Entry",
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(
-                          const SnackBar(
-                              content: Text('Submitting Delete Request')),
-                        )
-                        .closed
-                        .then((reason) {
-                      Navigator.pop(
-                        context,
-                      );
-                    });
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('Please fill out all required fields')),
-                    );
-                  }
-                },
-              ),
-            ],
-          ),
-          largeSizedBox,
+          MediaQuery.of(context).size.width > 514
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    DarkButton(
+                      buttonText: "Submit For Approval",
+                      buttonWidth: MediaQuery.of(context).size.width * 0.4,
+                      onPressed: () {
+                        // Submit for approval logic
+                      },
+                    ),
+                    DarkButton(
+                      buttonText: "Delete Entry",
+                      buttonWidth: MediaQuery.of(context).size.width * 0.4,
+                      onPressed: () {
+                        // Delete entry logic
+                      },
+                    ),
+                  ],
+                )
+              : Column(
+                  children: [
+                    DarkButton(
+                      buttonText: "Submit For Approval",
+                      buttonWidth: MediaQuery.of(context).size.width * 0.8,
+                      onPressed: () {
+                        // Submit for approval logic
+                      },
+                    ),
+                    largeSizedBox,
+                    DarkButton(
+                      buttonText: "Delete Entry",
+                      buttonWidth: MediaQuery.of(context).size.width * 0.8,
+                      onPressed: () {
+                        // Delete entry logic
+                      },
+                    ),
+                  ],
+                ),
+          extraLargeSizedBox,
         ],
       ),
     );
