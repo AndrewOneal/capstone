@@ -224,6 +224,27 @@ class DBHandler {
     return detailsList;
   }
 
+  Future<List<dynamic>> getVerificationRequests({required wiki_id}) async {
+    //Retrieves all verification requests for a specific wiki
+    final records = await pb.collection('verification_requests').getFullList(
+        sort: '-created',
+        filter: 'wiki_id ="${wiki_id}"'
+    );
+    var verificationList = [];
+    //Loop to format and prettify output for easy front-end use
+    for (var record in records) {
+      var newRecord = record.toJson();
+      var newMap = {
+        "id": "${newRecord["id"]}",
+        "submitter_user_id": "${newRecord["submitter_user_id"]}",
+        "wiki_id": "${newRecord["wiki_id"]}",
+        "edited_page": "${newRecord["edited_page"]}"
+      };
+      verificationList.add(newMap);
+    }
+    return verificationList;
+  }
+
   Future<void> createWiki(
       {required String wiki_name,
       required int wiki_section_count,
@@ -368,6 +389,22 @@ class DBHandler {
     }
   }
 
+  Future<void> createVerificationRequest({required String submitterUserID, required String wikiID, required editedPage}) async {
+    //Create new verification request record
+    final body = <String, dynamic>{
+      "submitter_user_id": submitterUserID,
+      "wiki_id": wikiID,
+      "edited_page": "${editedPage}"
+    };
+    try {
+      print("Creating new verification request...");
+      final record = await pb.collection('verification_requests').create(body: body);
+      print("New verification requests created");
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<void> deleteWiki({required String wikiID}) async {
     try {
       await pb.collection('wikis').delete('${wikiID}');
@@ -429,6 +466,15 @@ class DBHandler {
       print("Succesfully deleted section detail");
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<void> deleteVerificationRequests({required String verification_record_id}) async {
+    try {
+      await pb.collection('verification_requests').delete('${verification_record_id}');
+      print("Succesfully deleted verification request");
+    } catch (e) {
+     print(e);
     }
   }
 
@@ -537,7 +583,44 @@ class DBHandler {
       return {"Error": "${e}"};
     }
   }
+
+  Future<void> authenticate({required String username, required String password})async {
+    final authData = await pb.collection('users').authWithPassword(
+      '${username}',
+      '${password}',
+    );
+  }
+
+  Future<String> getUserIDFromName({required String userName}) async {
+    String userID = "";
+    try {
+      print("Retreiving userID...");
+      final record = await pb.collection('users').getFirstListItem(
+        'username="${userName}"'
+      );
+      userID = record.toJson()["id"];
+    } catch (e) {
+      print(e);
+    }
+    return userID;
+  }
+
+  Future<String> getUserIDFromEmail({required String userEmail}) async {
+    String userID = "";
+    try {
+      print("Retreiving userID...");
+      final record = await pb.collection('users').getFirstListItem(
+          'email="${userEmail}"'
+      );
+      userID = record.toJson()["id"];
+    } catch (e) {
+      print(e);
+    }
+    return userID;
+  }
 }
+
+
 
 Future<void> main() async {
   print("Wiki List: \n");
@@ -576,5 +659,12 @@ Future<void> main() async {
   // await DBHandler().updateCharacterDetail(characterDetailsID: "tjamf8homoiwwpw", new_details_description: '{"String":"Aang discovers his people are dead in book 1 and onwawrd"}');
   // await DBHandler().updateLocationDetail(locationDetailID: "tj0ck5ike5em9k5", new_details_description: '{"String": "New detail about Omashu for book 3 and onward"}');
   // await DBHandler().updateSectionDetail(sectionDetailID: "6ats0591e6qgtbv", new_details_description: '{"String": "This is a new section detail about breaking bad season 6 and onward"}');
-  //
+
+  // await DBHandler().authenticate(username: "yes@gmail.com", password: "yes@gmail.com");
+  // print(await DBHandler().getUserIDFromName(userName: "yes"));
+  // print(await DBHandler().getUserIDFromEmail(userEmail: "yes@gmail.com"));
+
+  // await DBHandler().createVerificationRequest(submitterUserID: "o21699v9hjdlo30", wikiID: "ndlh8nkyr4uyjw4", editedPage: '{"String": "Aang discovers his people are dead in book 1 and onwawrd"}');
+  // print(await DBHandler().getVerificationRequests(wiki_id: await DBHandler().getWikiIDFromName(wikiName: "Avatar")));
+  // await DBHandler().deleteVerificationRequests(verification_record_id: "9pxaqa3dssqx3bs");
 }
