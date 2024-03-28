@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Utilities/db_util.dart';
 
-class EditCharacters extends StatefulWidget {
+class EditSections extends StatefulWidget {
   final Map<String, dynamic> wikiMap;
 
-  const EditCharacters({
+  const EditSections({
     super.key,
     required this.wikiMap,
   });
 
   @override
-  EditCharactersState createState() => EditCharactersState();
+  EditSectionsState createState() => EditSectionsState();
 }
 
-class EditCharactersState extends State<EditCharacters> {
+class EditSectionsState extends State<EditSections> {
   @override
   Widget build(BuildContext context) {
     final Global global = Global();
@@ -36,7 +36,7 @@ class EditCharactersState extends State<EditCharacters> {
             child: Column(
               children: [
                 titleSizedBox,
-                const ListTitle(title: "Edit Characters"),
+                const ListTitle(title: "Edit Sections"),
                 SingleChildScrollView(
                   child: _EditCharsForm(wikiMap: widget.wikiMap),
                 ),
@@ -51,14 +51,14 @@ class EditCharactersState extends State<EditCharacters> {
 
 class _EditCharsForm extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _characterNameController;
+  final TextEditingController _sectionNameController;
   final TextEditingController _reasonForEditController;
   final Map<String, dynamic> wikiMap;
 
   _EditCharsForm({
     required this.wikiMap,
   })  : _reasonForEditController = TextEditingController(),
-        _characterNameController = TextEditingController();
+        _sectionNameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -67,24 +67,21 @@ class _EditCharsForm extends StatelessWidget {
     final SizedBox largeSizedBox = global.largeSizedBox;
     final SizedBox extraLargeSizedBox = global.extraLargeSizedBox;
     final DBHandler dbHandler = DBHandler();
-    final CharacterSelectHandler characterSelectHandler =
-        CharacterSelectHandler();
+    QuillEditorManager quillEditor = QuillEditorManager();
+    SectionNoHandler sectionNoHandler = SectionNoHandler();
     return Form(
       key: _formKey,
       child: Column(
         children: [
-          _CharacterDropdown(
+          _SectionDropdown(
             wikiID: wikiMap['id'],
-            characterSelectHandler: characterSelectHandler,
-            onCharacterChanged: (characterName) {
-              _characterNameController.text = characterName;
-            },
+            sectionNoHandler: sectionNoHandler,
           ),
           mediumSizedBox,
           TextFormField(
-            controller: _characterNameController,
+            controller: _sectionNameController,
             decoration: const InputDecoration(
-              labelText: 'Character',
+              labelText: 'Section',
             ),
           ),
           mediumSizedBox,
@@ -141,78 +138,70 @@ class _EditCharsForm extends StatelessWidget {
   }
 }
 
-class _CharacterDropdown extends StatefulWidget {
+class _SectionDropdown extends StatefulWidget {
   final String wikiID;
-  final CharacterSelectHandler characterSelectHandler;
-  final Function(String characterName) onCharacterChanged;
+  final SectionNoHandler sectionNoHandler;
 
-  const _CharacterDropdown({
-    required this.wikiID,
-    required this.characterSelectHandler,
-    required this.onCharacterChanged,
-  });
+  const _SectionDropdown(
+      {required this.wikiID, required this.sectionNoHandler});
 
   @override
-  _CharacterDropdownState createState() => _CharacterDropdownState();
+  _SectionDropdownState createState() => _SectionDropdownState();
 }
 
-class _CharacterDropdownState extends State<_CharacterDropdown> {
-  late List<dynamic> characters;
-  late String characterID;
+class _SectionDropdownState extends State<_SectionDropdown> {
+  late List<dynamic> sections;
+  late int sectionNo;
 
   @override
   void initState() {
     super.initState();
-    characters = [];
-    fetchCharacters();
-    characterID = '';
+    sections = [];
+    sectionNo = widget.sectionNoHandler.getSectionNo();
+    fetchSections();
   }
 
-  Future<void> fetchCharacters() async {
+  Future<void> fetchSections() async {
     DBHandler dbHandler = DBHandler();
-    List fetchedCharacters =
-        await dbHandler.getCharacters(wikiID: widget.wikiID);
+    List fetchedSections = await dbHandler.getSections(wikiID: widget.wikiID);
     setState(() {
-      characters = fetchedCharacters;
+      sections = fetchedSections;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<String>(
-      value: characterID,
+    return DropdownButton<int>(
+      value: sectionNo,
       isExpanded: true,
       onChanged: (index) {
         setState(() {
-          characterID = index!;
-          widget.characterSelectHandler.setCharacterID(characterID);
-          String characterName = characters
-              .firstWhere((char) => char['id'] == characterID)['name'];
-          widget.onCharacterChanged(characterName);
+          sectionNo = index!;
+          widget.sectionNoHandler.setSectionNo(sectionNo);
         });
       },
-      items: characters.map<DropdownMenuItem<String>>((character) {
-        final characterID = character['id'];
-        final characterName = character['name'];
-        return DropdownMenuItem<String>(
-          value: characterID,
-          child: Text(characterName, style: TextStyles.listText),
+      items: sections.map<DropdownMenuItem<int>>((section) {
+        final sectionNo = section['section_no'];
+        final sectionName = section['section_name'];
+        return DropdownMenuItem<int>(
+          value: sectionNo,
+          child: Text(sectionName, style: TextStyles.listText),
         );
       }).toList(),
     );
   }
 }
 
-class CharacterSelectHandler {
-  late String characterID;
+class SectionNoHandler {
+  late int sectionNo = 1;
 
-  CharacterSelectHandler();
+  SectionNoHandler();
 
-  String getCharacterID() {
-    return characterID;
+  int getSectionNo() {
+    return sectionNo;
   }
 
-  void setCharacterID(String newCharacterID) {
-    characterID = newCharacterID;
+  void setSectionNo(int newSectionNo) {
+    sectionNo = newSectionNo;
   }
 }

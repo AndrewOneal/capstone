@@ -5,6 +5,7 @@ import 'package:capstone/Pages/Account/wiki_settings.dart';
 import 'package:capstone/Pages/Wiki/wiki_details.dart';
 import 'package:capstone/Utilities/db_util.dart';
 import 'package:capstone/Pages/Account/account.dart';
+import 'package:capstone/Pages/CRUD/edit_sections.dart';
 
 class WikiSectionsPage extends StatelessWidget {
   final Map<String, dynamic> wikiMap;
@@ -72,7 +73,16 @@ class WikiSectionsPage extends StatelessWidget {
             ? Padding(
                 padding: const EdgeInsets.all(20),
                 child: FloatingActionButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EditSections(
+                          wikiMap: wikiMap,
+                        ),
+                      ),
+                    );
+                  },
                   child: const Icon(Icons.edit),
                 ),
               )

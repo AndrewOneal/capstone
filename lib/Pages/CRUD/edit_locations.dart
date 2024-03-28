@@ -67,26 +67,19 @@ class _EditCharsForm extends StatelessWidget {
     final SizedBox largeSizedBox = global.largeSizedBox;
     final SizedBox extraLargeSizedBox = global.extraLargeSizedBox;
     final DBHandler dbHandler = DBHandler();
-    final CharacterSelectHandler characterSelectHandler =
-        CharacterSelectHandler();
+    QuillEditorManager quillEditor = QuillEditorManager();
     return Form(
       key: _formKey,
       child: Column(
         children: [
-          _CharacterDropdown(
-            wikiID: wikiMap['id'],
-            characterSelectHandler: characterSelectHandler,
-            onCharacterChanged: (characterName) {
-              _characterNameController.text = characterName;
-            },
-          ),
-          mediumSizedBox,
           TextFormField(
             controller: _characterNameController,
             decoration: const InputDecoration(
               labelText: 'Character',
             ),
           ),
+          mediumSizedBox,
+          quillEditor.buildEditor(),
           mediumSizedBox,
           TextFormField(
             controller: _reasonForEditController,
@@ -138,81 +131,5 @@ class _EditCharsForm extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class _CharacterDropdown extends StatefulWidget {
-  final String wikiID;
-  final CharacterSelectHandler characterSelectHandler;
-  final Function(String characterName) onCharacterChanged;
-
-  const _CharacterDropdown({
-    required this.wikiID,
-    required this.characterSelectHandler,
-    required this.onCharacterChanged,
-  });
-
-  @override
-  _CharacterDropdownState createState() => _CharacterDropdownState();
-}
-
-class _CharacterDropdownState extends State<_CharacterDropdown> {
-  late List<dynamic> characters;
-  late String characterID;
-
-  @override
-  void initState() {
-    super.initState();
-    characters = [];
-    fetchCharacters();
-    characterID = '';
-  }
-
-  Future<void> fetchCharacters() async {
-    DBHandler dbHandler = DBHandler();
-    List fetchedCharacters =
-        await dbHandler.getCharacters(wikiID: widget.wikiID);
-    setState(() {
-      characters = fetchedCharacters;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return DropdownButton<String>(
-      value: characterID,
-      isExpanded: true,
-      onChanged: (index) {
-        setState(() {
-          characterID = index!;
-          widget.characterSelectHandler.setCharacterID(characterID);
-          String characterName = characters
-              .firstWhere((char) => char['id'] == characterID)['name'];
-          widget.onCharacterChanged(characterName);
-        });
-      },
-      items: characters.map<DropdownMenuItem<String>>((character) {
-        final characterID = character['id'];
-        final characterName = character['name'];
-        return DropdownMenuItem<String>(
-          value: characterID,
-          child: Text(characterName, style: TextStyles.listText),
-        );
-      }).toList(),
-    );
-  }
-}
-
-class CharacterSelectHandler {
-  late String characterID;
-
-  CharacterSelectHandler();
-
-  String getCharacterID() {
-    return characterID;
-  }
-
-  void setCharacterID(String newCharacterID) {
-    characterID = newCharacterID;
   }
 }

@@ -8,6 +8,7 @@ import 'package:capstone/Pages/Wiki/wiki_sections.dart';
 import 'package:capstone/Pages/Wiki/wiki_locations.dart';
 import 'package:capstone/Pages/Account/account.dart';
 import 'package:capstone/Utilities/db_util.dart';
+import 'package:capstone/Pages/CRUD/edit_wiki.dart';
 
 class WikiHome extends StatefulWidget {
   final Map<String, dynamic> wikiMap;
@@ -119,7 +120,16 @@ class WikiHomeState extends State<WikiHome> {
           ? Padding(
               padding: const EdgeInsets.all(20),
               child: FloatingActionButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EditWiki(
+                        wikiMap: widget.wikiMap,
+                      ),
+                    ),
+                  );
+                },
                 child: const Icon(Icons.edit),
               ),
             )

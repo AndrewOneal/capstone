@@ -178,7 +178,7 @@ class _APIList extends StatelessWidget {
         const ListTitle(title: "Section Details"),
         FutureBuilder<List<dynamic>>(
           future: DBHandler()
-              .getSectionDetails(section_no: 3, wiki_id: "ndlh8nkyr4uyjw4"),
+              .getSectionDetails(section_no: 1, wiki_id: "013c0gjjdhk8177"),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());

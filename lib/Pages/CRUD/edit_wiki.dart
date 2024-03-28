@@ -2,19 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Utilities/db_util.dart';
 
-class EditCharacters extends StatefulWidget {
+class EditWiki extends StatelessWidget {
   final Map<String, dynamic> wikiMap;
 
-  const EditCharacters({
-    super.key,
-    required this.wikiMap,
-  });
-
-  @override
-  EditCharactersState createState() => EditCharactersState();
-}
-
-class EditCharactersState extends State<EditCharacters> {
+  const EditWiki({super.key, required this.wikiMap});
   @override
   Widget build(BuildContext context) {
     final Global global = Global();
@@ -36,9 +27,9 @@ class EditCharactersState extends State<EditCharacters> {
             child: Column(
               children: [
                 titleSizedBox,
-                const ListTitle(title: "Edit Characters"),
+                const ListTitle(title: "Edit Wiki Details"),
                 SingleChildScrollView(
-                  child: _EditCharsForm(wikiMap: widget.wikiMap),
+                  child: _EditWikiForm(wikiMap: wikiMap),
                 ),
               ],
             ),
@@ -49,44 +40,46 @@ class EditCharactersState extends State<EditCharacters> {
   }
 }
 
-class _EditCharsForm extends StatelessWidget {
+class _EditWikiForm extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _characterNameController;
-  final TextEditingController _reasonForEditController;
+  final TextEditingController _reasonForEditController =
+      TextEditingController();
+  final TextEditingController _wikiNameController;
   final Map<String, dynamic> wikiMap;
+  final QuillEditorManager quillEditor = QuillEditorManager();
 
-  _EditCharsForm({
+  _EditWikiForm({
     required this.wikiMap,
-  })  : _reasonForEditController = TextEditingController(),
-        _characterNameController = TextEditingController();
+  }) : _wikiNameController = TextEditingController(text: wikiMap['wiki_name']);
 
   @override
   Widget build(BuildContext context) {
+    quillEditor.setInput([
+      {
+        "insert": wikiMap['wiki_description'],
+        "attributes": {"color": "#FF363942"}
+      },
+      {
+        "insert": "\n",
+      }
+    ]);
     final Global global = Global();
     final SizedBox mediumSizedBox = global.mediumSizedBox;
     final SizedBox largeSizedBox = global.largeSizedBox;
     final SizedBox extraLargeSizedBox = global.extraLargeSizedBox;
     final DBHandler dbHandler = DBHandler();
-    final CharacterSelectHandler characterSelectHandler =
-        CharacterSelectHandler();
     return Form(
       key: _formKey,
       child: Column(
         children: [
-          _CharacterDropdown(
-            wikiID: wikiMap['id'],
-            characterSelectHandler: characterSelectHandler,
-            onCharacterChanged: (characterName) {
-              _characterNameController.text = characterName;
-            },
-          ),
-          mediumSizedBox,
           TextFormField(
-            controller: _characterNameController,
+            controller: _wikiNameController,
             decoration: const InputDecoration(
-              labelText: 'Character',
+              labelText: 'Wiki Name',
             ),
           ),
+          mediumSizedBox,
+          quillEditor.buildEditor(),
           mediumSizedBox,
           TextFormField(
             controller: _reasonForEditController,
@@ -138,81 +131,5 @@ class _EditCharsForm extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class _CharacterDropdown extends StatefulWidget {
-  final String wikiID;
-  final CharacterSelectHandler characterSelectHandler;
-  final Function(String characterName) onCharacterChanged;
-
-  const _CharacterDropdown({
-    required this.wikiID,
-    required this.characterSelectHandler,
-    required this.onCharacterChanged,
-  });
-
-  @override
-  _CharacterDropdownState createState() => _CharacterDropdownState();
-}
-
-class _CharacterDropdownState extends State<_CharacterDropdown> {
-  late List<dynamic> characters;
-  late String characterID;
-
-  @override
-  void initState() {
-    super.initState();
-    characters = [];
-    fetchCharacters();
-    characterID = '';
-  }
-
-  Future<void> fetchCharacters() async {
-    DBHandler dbHandler = DBHandler();
-    List fetchedCharacters =
-        await dbHandler.getCharacters(wikiID: widget.wikiID);
-    setState(() {
-      characters = fetchedCharacters;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return DropdownButton<String>(
-      value: characterID,
-      isExpanded: true,
-      onChanged: (index) {
-        setState(() {
-          characterID = index!;
-          widget.characterSelectHandler.setCharacterID(characterID);
-          String characterName = characters
-              .firstWhere((char) => char['id'] == characterID)['name'];
-          widget.onCharacterChanged(characterName);
-        });
-      },
-      items: characters.map<DropdownMenuItem<String>>((character) {
-        final characterID = character['id'];
-        final characterName = character['name'];
-        return DropdownMenuItem<String>(
-          value: characterID,
-          child: Text(characterName, style: TextStyles.listText),
-        );
-      }).toList(),
-    );
-  }
-}
-
-class CharacterSelectHandler {
-  late String characterID;
-
-  CharacterSelectHandler();
-
-  String getCharacterID() {
-    return characterID;
-  }
-
-  void setCharacterID(String newCharacterID) {
-    characterID = newCharacterID;
   }
 }

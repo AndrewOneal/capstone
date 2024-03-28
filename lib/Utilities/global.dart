@@ -83,6 +83,20 @@ class QuillEditorManager {
     return _quillController.document.toDelta().toJson();
   }
 
+  Widget buildRead() {
+    return QuillEditor.basic(
+      configurations: QuillEditorConfigurations(
+        padding: const EdgeInsets.all(10),
+        controller: _quillController,
+        readOnly: true,
+        showCursor: false,
+        sharedConfigurations: const QuillSharedConfigurations(
+          locale: Locale('en', 'US'),
+        ),
+      ),
+    );
+  }
+
   Widget buildEditor() {
     return Container(
       decoration: BoxDecoration(

@@ -75,16 +75,7 @@ class WikiCharactersPage extends StatelessWidget {
           ? Padding(
               padding: const EdgeInsets.all(20),
               child: FloatingActionButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => EditCharacters(
-                        wikiMap: wikiMap,
-                      ),
-                    ),
-                  );
-                },
+                onPressed: () {},
                 child: const Icon(Icons.edit),
               ),
             )
