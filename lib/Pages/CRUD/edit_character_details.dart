@@ -87,11 +87,8 @@ class _EditCharDetailsForm extends StatelessWidget {
               labelText: 'Character Name',
             ),
           ),
-          mediumSizedBox,
           _SectionDropdown(wikiID: wikiID, sectionNoHandler: sectionNoHandler),
-          mediumSizedBox,
           quillEditor.buildEditor(),
-          mediumSizedBox,
           TextFormField(
             controller: _reasonForEditController,
             decoration: const InputDecoration(

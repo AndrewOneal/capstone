@@ -6,6 +6,7 @@ import 'package:capstone/Utilities/db_util.dart';
 import 'package:capstone/Pages/CRUD/edit_character_details.dart';
 import 'package:capstone/Pages/CRUD/edit_section_details.dart';
 import 'package:capstone/Pages/CRUD/edit_location_details.dart';
+import 'package:capstone/Pages/Account/account.dart';
 
 class WikiDetailsPage extends StatelessWidget {
   final Map<String, dynamic> wikiMap;
@@ -52,7 +53,10 @@ class WikiDetailsPage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const LoginPage()),
+                MaterialPageRoute(
+                    builder: (context) => pb.authStore.isValid
+                        ? const AccountPage()
+                        : const LoginPage()),
               );
             },
           ),
@@ -77,11 +81,15 @@ class WikiDetailsPage extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.all(20),
-        child: FloatingEditButton(
-            wikiMap: wikiMap, detailMap: detailMap, detailType: detailType),
-      ),
+      floatingActionButton: pb.authStore.isValid
+          ? Padding(
+              padding: const EdgeInsets.all(20),
+              child: FloatingEditButton(
+                  wikiMap: wikiMap,
+                  detailMap: detailMap,
+                  detailType: detailType),
+            )
+          : null,
     );
   }
 }
@@ -127,8 +135,9 @@ class _DetailList extends StatelessWidget {
       return detailsMap;
     }
 
-    const String disclaimerText =
-        "Don't see the details you're looking for? Hit the edit button to add them!";
+    String disclaimerText = pb.authStore.isValid
+        ? "Don't see the details you're looking for? Hit the edit button to add them!"
+        : "Don't see the details you're looking for? Login or create an account to add them!";
 
     return FutureBuilder<Map<String, Future<List<dynamic>>>>(
       future: dbHandlerGetDetails(),

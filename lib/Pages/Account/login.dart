@@ -3,6 +3,7 @@ import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Pages/wiki_list.dart';
 import 'package:capstone/Pages/Account/register.dart';
 import 'package:capstone/Pages/Account/account.dart';
+import 'package:capstone/Utilities/db_util.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -13,7 +14,6 @@ class LoginPage extends StatelessWidget {
     final EdgeInsets sideMargins = global.sideMargins;
     final SizedBox titleSizedBox = global.titleSizedBox;
     final SizedBox smallSizedBox = global.smallSizedBox;
-    final SizedBox extraLargeSizedBox = global.extraLargeSizedBox;
     final SizedBox mediumSizedBox = global.mediumSizedBox;
     return Scaffold(
       appBar: AppBar(
@@ -35,18 +35,7 @@ class LoginPage extends StatelessWidget {
               titleSizedBox,
               const ListTitle(title: "Login"),
               smallSizedBox,
-              const LoginFields(),
-              extraLargeSizedBox,
-              DarkButton(
-                buttonText: "Login",
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const AccountPage()),
-                  );
-                },
-              ),
+              const LoginForm(),
               mediumSizedBox,
               FittedBox(
                 fit: BoxFit.scaleDown,
@@ -72,25 +61,90 @@ class LoginPage extends StatelessWidget {
   }
 }
 
-class LoginFields extends StatelessWidget {
-  const LoginFields({super.key});
+class LoginForm extends StatelessWidget {
+  const LoginForm({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TextFormField(
-          decoration: const InputDecoration(
-            labelText: 'Username',
+    final Global global = Global();
+    final SizedBox extraLargeSizedBox = global.extraLargeSizedBox;
+    final DBHandler dbHandler = DBHandler();
+    final formKey = GlobalKey<FormState>();
+    final TextEditingController usernameController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+
+    return Form(
+      key: formKey,
+      child: Column(
+        children: [
+          TextFormField(
+            decoration: const InputDecoration(
+              labelText: 'Username',
+            ),
+            controller: usernameController,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Please enter username';
+              }
+              return null;
+            },
           ),
-        ),
-        TextFormField(
-          decoration: const InputDecoration(
-            labelText: 'Password',
+          TextFormField(
+            decoration: const InputDecoration(
+              labelText: 'Password',
+            ),
+            controller: passwordController,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Please enter a password';
+              }
+              return null;
+            },
+            obscureText: true,
           ),
-          obscureText: true,
-        ),
-      ],
+          extraLargeSizedBox,
+          DarkButton(
+            buttonText: "Login",
+            onPressed: () {
+              if (formKey.currentState!.validate()) {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(
+                      const SnackBar(content: Text('Logging In')),
+                    )
+                    .closed
+                    .then((reason) {
+                  if (pb.authStore.isValid) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const AccountPage()),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('Invalid username or password')),
+                    );
+                  }
+                });
+                try {
+                  dbHandler.authenticate(
+                      username: usernameController.text,
+                      password: passwordController.text);
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text('Invalid username or password')),
+                  );
+                }
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Please fill out all fields')),
+                );
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 }

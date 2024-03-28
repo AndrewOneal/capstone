@@ -8,7 +8,7 @@ void main() {
   });
 
   test('Login Form Displays', () {
-    const loginForm = LoginFields();
+    const loginForm = LoginForm();
     expect(loginForm, isNotNull);
   });
 }

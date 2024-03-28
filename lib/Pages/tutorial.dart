@@ -3,7 +3,9 @@ import 'package:capstone/Pages/Account/login.dart';
 import 'package:capstone/Pages/wiki_list.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Pages/apis.dart';
-import 'package:pocketbase_server_flutter/pocketbase_server_flutter.dart';
+import 'package:capstone/Pages/Account/account.dart';
+import 'package:capstone/Utilities/db_util.dart';
+//import 'package:pocketbase_server_flutter/pocketbase_server_flutter.dart';
 
 class TutorialPage extends StatelessWidget {
   const TutorialPage({super.key});
@@ -39,7 +41,10 @@ class TutorialPage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const LoginPage()),
+                MaterialPageRoute(
+                    builder: (context) => pb.authStore.isValid
+                        ? const AccountPage()
+                        : const LoginPage()),
               );
             },
           ),

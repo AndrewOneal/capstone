@@ -5,6 +5,7 @@ import 'package:capstone/Pages/Account/wiki_settings.dart';
 import 'package:capstone/Pages/Wiki/wiki_details.dart';
 import 'package:capstone/Utilities/db_util.dart';
 import 'package:capstone/Pages/CRUD/edit_characters.dart';
+import 'package:capstone/Pages/Account/account.dart';
 
 class WikiCharactersPage extends StatelessWidget {
   final Map<String, dynamic> wikiMap;
@@ -40,7 +41,10 @@ class WikiCharactersPage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const LoginPage()),
+                MaterialPageRoute(
+                    builder: (context) => pb.authStore.isValid
+                        ? const AccountPage()
+                        : const LoginPage()),
               );
             },
           ),
@@ -67,22 +71,24 @@ class WikiCharactersPage extends StatelessWidget {
           ),
         ),
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.all(20),
-        child: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => EditCharacters(
-                  wikiMap: wikiMap,
-                ),
+      floatingActionButton: pb.authStore.isValid
+          ? Padding(
+              padding: const EdgeInsets.all(20),
+              child: FloatingActionButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EditCharacters(
+                        wikiMap: wikiMap,
+                      ),
+                    ),
+                  );
+                },
+                child: const Icon(Icons.edit),
               ),
-            );
-          },
-          child: const Icon(Icons.edit),
-        ),
-      ),
+            )
+          : null,
     );
   }
 }
@@ -96,8 +102,9 @@ class _CharacterList extends StatelessWidget {
   Widget build(BuildContext context) {
     final String wikiID = wikiMap['id'];
     DBHandler dbHandler = DBHandler();
-    const String disclaimerText =
-        "Don't see the character you're looking for? Hit the edit button to add them!";
+    String disclaimerText = pb.authStore.isValid
+        ? "Don't see the character you're looking for? Hit the edit button to add them!"
+        : "Don't see the character you're looking for? Login or create an account to add them!";
     return FutureBuilder<List<dynamic>>(
       future: dbHandler.getCharacters(wikiID: wikiID),
       builder: (context, snapshot) {

@@ -5,7 +5,8 @@ import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Pages/Wiki/wiki_home.dart';
 import 'package:capstone/Pages/CRUD/new_wiki.dart';
 import 'package:capstone/Utilities/db_util.dart';
-import 'package:pocketbase_server_flutter/pocketbase_server_flutter.dart';
+import 'package:capstone/Pages/Account/account.dart';
+//import 'package:pocketbase_server_flutter/pocketbase_server_flutter.dart';
 
 class WikiListPage extends StatelessWidget {
   const WikiListPage({super.key});
@@ -31,7 +32,10 @@ class WikiListPage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const LoginPage()),
+                MaterialPageRoute(
+                    builder: (context) => pb.authStore.isValid
+                        ? const AccountPage()
+                        : const LoginPage()),
               );
             },
           ),
@@ -55,18 +59,20 @@ class WikiListPage extends StatelessWidget {
           ),
         ),
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.all(20),
-        child: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const NewWiki()),
-            );
-          },
-          child: const Icon(Icons.add),
-        ),
-      ),
+      floatingActionButton: pb.authStore.isValid
+          ? Padding(
+              padding: const EdgeInsets.all(20),
+              child: FloatingActionButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const NewWiki()),
+                  );
+                },
+                child: const Icon(Icons.add),
+              ),
+            )
+          : null,
     );
   }
 }

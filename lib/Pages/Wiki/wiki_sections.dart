@@ -4,6 +4,7 @@ import 'package:capstone/Pages/Account/login.dart';
 import 'package:capstone/Pages/Account/wiki_settings.dart';
 import 'package:capstone/Pages/Wiki/wiki_details.dart';
 import 'package:capstone/Utilities/db_util.dart';
+import 'package:capstone/Pages/Account/account.dart';
 
 class WikiSectionsPage extends StatelessWidget {
   final Map<String, dynamic> wikiMap;
@@ -16,61 +17,66 @@ class WikiSectionsPage extends StatelessWidget {
     final Global global = Global();
     final EdgeInsets sideMargins = global.sideMargins;
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.close),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        actions: [
-          IconButton(
-              icon: const Icon(Icons.settings),
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          actions: [
+            IconButton(
+                icon: const Icon(Icons.settings),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => WikiSettings(
+                            wikiMap: wikiMap, sectionNo: sectionNo)),
+                  );
+                }),
+            IconButton(
+              icon: const Icon(Icons.account_circle),
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          WikiSettings(wikiMap: wikiMap, sectionNo: sectionNo)),
+                      builder: (context) => pb.authStore.isValid
+                          ? const AccountPage()
+                          : const LoginPage()),
                 );
-              }),
-          IconButton(
-            icon: const Icon(Icons.account_circle),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginPage()),
-              );
-            },
-          ),
-        ],
-      ),
-      body: Center(
-        child: Padding(
-          padding: sideMargins,
-          child: Stack(
-            children: <Widget>[
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  const ListTitle(title: "Sections"),
-                  Expanded(
-                    child: _SectionList(wikiMap: wikiMap, sectionNo: sectionNo),
-                  ),
-                ],
-              ),
-            ],
+              },
+            ),
+          ],
+        ),
+        body: Center(
+          child: Padding(
+            padding: sideMargins,
+            child: Stack(
+              children: <Widget>[
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    const ListTitle(title: "Sections"),
+                    Expanded(
+                      child:
+                          _SectionList(wikiMap: wikiMap, sectionNo: sectionNo),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.all(20),
-        child: FloatingActionButton(
-          onPressed: () {},
-          child: const Icon(Icons.edit),
-        ),
-      ),
-    );
+        floatingActionButton: pb.authStore.isValid
+            ? Padding(
+                padding: const EdgeInsets.all(20),
+                child: FloatingActionButton(
+                  onPressed: () {},
+                  child: const Icon(Icons.edit),
+                ),
+              )
+            : null);
   }
 }
 
@@ -83,8 +89,9 @@ class _SectionList extends StatelessWidget {
   Widget build(BuildContext context) {
     final String wikiID = wikiMap['id'];
     DBHandler dbHandler = DBHandler();
-    const String disclaimerText =
-        "Don't see the section you're looking for? Hit the edit button to add them!";
+    String disclaimerText = pb.authStore.isValid
+        ? "Don't see the section you're looking for? Hit the edit button to add them!"
+        : "Don't see the section you're looking for? Login or create an account to add them!";
     return FutureBuilder<List<dynamic>>(
       future: dbHandler.getSections(wikiID: wikiID),
       builder: (context, snapshot) {

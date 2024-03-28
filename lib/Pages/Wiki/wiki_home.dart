@@ -6,6 +6,8 @@ import 'package:capstone/Pages/Account/wiki_settings.dart';
 import 'package:capstone/Pages/Wiki/wiki_characters.dart';
 import 'package:capstone/Pages/Wiki/wiki_sections.dart';
 import 'package:capstone/Pages/Wiki/wiki_locations.dart';
+import 'package:capstone/Pages/Account/account.dart';
+import 'package:capstone/Utilities/db_util.dart';
 
 class WikiHome extends StatefulWidget {
   final Map<String, dynamic> wikiMap;
@@ -60,7 +62,7 @@ class WikiHomeState extends State<WikiHome> {
         leading: IconButton(
           icon: const Icon(Icons.home),
           onPressed: () {
-            Navigator.push(
+            Navigator.pop(
               context,
               MaterialPageRoute(builder: (context) => const WikiListPage()),
             );
@@ -82,7 +84,10 @@ class WikiHomeState extends State<WikiHome> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const LoginPage()),
+                MaterialPageRoute(
+                    builder: (context) => pb.authStore.isValid
+                        ? const AccountPage()
+                        : const LoginPage()),
               );
             },
           ),
@@ -110,13 +115,15 @@ class WikiHomeState extends State<WikiHome> {
           ),
         ),
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.all(20),
-        child: FloatingActionButton(
-          onPressed: () {},
-          child: const Icon(Icons.edit),
-        ),
-      ),
+      floatingActionButton: pb.authStore.isValid
+          ? Padding(
+              padding: const EdgeInsets.all(20),
+              child: FloatingActionButton(
+                onPressed: () {},
+                child: const Icon(Icons.edit),
+              ),
+            )
+          : null,
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Pages/wiki_list.dart';
-import 'package:capstone/Pages/Account/change_password.dart';
+import 'package:capstone/Utilities/db_util.dart';
 
 class AccountPage extends StatelessWidget {
   const AccountPage({super.key});
@@ -14,6 +14,7 @@ class AccountPage extends StatelessWidget {
     final SizedBox smallSizedBox = global.smallSizedBox;
     final SizedBox extraLargeSizedBox = global.extraLargeSizedBox;
     final SizedBox mediumSizedBox = global.mediumSizedBox;
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -36,14 +37,14 @@ class AccountPage extends StatelessWidget {
               smallSizedBox,
               const AccountFields(),
               extraLargeSizedBox,
-              const DarkButton(buttonText: "Update Account"),
-              mediumSizedBox,
               DarkButton(
-                buttonText: "Change Password",
+                buttonText: "Logout",
                 onPressed: () {
+                  pb.authStore.clear();
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const CPPage()),
+                    MaterialPageRoute(
+                        builder: (context) => const WikiListPage()),
                   );
                 },
               ),
