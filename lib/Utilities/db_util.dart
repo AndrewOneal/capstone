@@ -238,7 +238,7 @@ class DBHandler {
         "id": "${newRecord["id"]}",
         "submitter_user_id": "${newRecord["submitter_user_id"]}",
         "wiki_id": "${newRecord["wiki_id"]}",
-        "edited_page": "${newRecord["edited_page"]}"
+        "request_package": "${newRecord["request_package"]}"
       };
       verificationList.add(newMap);
     }
@@ -389,12 +389,12 @@ class DBHandler {
     }
   }
 
-  Future<void> createVerificationRequest({required String submitterUserID, required String wikiID, required editedPage}) async {
+  Future<void> createVerificationRequest({required String submitterUserID, required String wikiID, required requestPackage}) async {
     //Create new verification request record
     final body = <String, dynamic>{
       "submitter_user_id": submitterUserID,
       "wiki_id": wikiID,
-      "edited_page": "${editedPage}"
+      "request_package": "${requestPackage}"
     };
     try {
       print("Creating new verification request...");
@@ -683,7 +683,7 @@ Future<void> main() async {
   // print(await DBHandler().getUserIDFromName(userName: "yes"));
   // print(await DBHandler().getUserIDFromEmail(userEmail: "yes@gmail.com"));
 
-  // await DBHandler().createVerificationRequest(submitterUserID: "o21699v9hjdlo30", wikiID: "ndlh8nkyr4uyjw4", editedPage: '{"String": "Aang discovers his people are dead in book 1 and onwawrd"}');
+  // await DBHandler().createVerificationRequest(submitterUserID: "o21699v9hjdlo30", wikiID: "ndlh8nkyr4uyjw4", requestPackage: '{"String": "Aang discovers his people are dead in book 1 and onwawrd"}');
   // print(await DBHandler().getVerificationRequests(wiki_id: await DBHandler().getWikiIDFromName(wikiName: "Avatar")));
   // await DBHandler().deleteVerificationRequests(verification_record_id: "9pxaqa3dssqx3bs");
 
