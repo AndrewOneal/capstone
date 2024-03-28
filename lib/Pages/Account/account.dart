@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Pages/wiki_list.dart';
 import 'package:capstone/Utilities/db_util.dart';
+// import convert
+import 'dart:convert';
 
 class AccountPage extends StatelessWidget {
   const AccountPage({super.key});
@@ -10,10 +12,9 @@ class AccountPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final Global global = Global();
     final EdgeInsets sideMargins = global.sideMargins;
-    final SizedBox titleSizedBox = global.titleSizedBox;
-    final SizedBox smallSizedBox = global.smallSizedBox;
-    final SizedBox extraLargeSizedBox = global.extraLargeSizedBox;
     final SizedBox mediumSizedBox = global.mediumSizedBox;
+    final String username =
+        json.decode(pb.authStore.model.toString())['username'];
 
     return Scaffold(
       appBar: AppBar(
@@ -32,11 +33,7 @@ class AccountPage extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              titleSizedBox,
-              const ListTitle(title: "Account"),
-              smallSizedBox,
-              const AccountFields(),
-              extraLargeSizedBox,
+              _WelcomeText(username: username),
               DarkButton(
                 buttonText: "Logout",
                 onPressed: () {
@@ -66,32 +63,37 @@ class AccountPage extends StatelessWidget {
   }
 }
 
-class AccountFields extends StatelessWidget {
-  const AccountFields({super.key});
+class _WelcomeText extends StatelessWidget {
+  final String username;
+
+  const _WelcomeText({required this.username});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TextFormField(
-          decoration: const InputDecoration(
-            labelText: 'Username',
+    return Container(
+      width: double.infinity,
+      height: 300,
+      color: background['default'],
+      alignment: Alignment.center,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              'Welcome Back',
+              style: TextStyles.whiteHeader.copyWith(height: 1.2),
+            ),
           ),
-          initialValue: 'Test User',
-        ),
-        TextFormField(
-          decoration: const InputDecoration(
-            labelText: 'Email',
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              username,
+              style: TextStyles.purpleHeader.copyWith(height: 1.2),
+            ),
           ),
-          initialValue: 'Test User Email',
-        ),
-        TextFormField(
-          decoration: const InputDecoration(
-            labelText: 'Confirm Password',
-          ),
-          obscureText: true,
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

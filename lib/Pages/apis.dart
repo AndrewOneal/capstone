@@ -248,6 +248,21 @@ class _APIList extends StatelessWidget {
             }
           },
         ),
+        const SizedBox(
+          height: 10,
+        ),
+        const Divider(),
+        const SizedBox(
+          height: 10,
+        ),
+        const ListTitle(title: "User Details"),
+        DefaultQuillRead(
+          input: [
+            {
+              "insert": '${pb.authStore.model}\n',
+            },
+          ],
+        ),
       ],
     );
   }

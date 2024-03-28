@@ -145,20 +145,12 @@ class RegisterFields extends StatelessWidget {
             buttonText: "Register",
             onPressed: () {
               if (formKey.currentState!.validate()) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Registering Account')),
-                );
-                try {
-                  dbHandler.registerAccount(
-                      username: usernameController.text,
-                      email: emailController.text,
-                      password: passwordController.text,
-                      passwordConfirm: confirmPasswordController.text);
-
-                  dbHandler.authenticate(
-                      username: usernameController.text,
-                      password: passwordController.text);
-
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(
+                      const SnackBar(content: Text('Registering User')),
+                    )
+                    .closed
+                    .then((reason) {
                   if (pb.authStore.isValid) {
                     Navigator.push(
                       context,
@@ -171,6 +163,21 @@ class RegisterFields extends StatelessWidget {
                           content: Text('Invalid account information')),
                     );
                   }
+                });
+                try {
+                  dbHandler.registerAccount(
+                    username: usernameController.text,
+                    email: emailController.text,
+                    password: passwordController.text,
+                    passwordConfirm: confirmPasswordController.text,
+                  );
+
+                  Future.delayed(const Duration(seconds: 1), () {
+                    dbHandler.authenticate(
+                      username: usernameController.text,
+                      password: passwordController.text,
+                    );
+                  });
                 } catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(

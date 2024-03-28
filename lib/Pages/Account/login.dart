@@ -109,7 +109,9 @@ class LoginForm extends StatelessWidget {
               if (formKey.currentState!.validate()) {
                 ScaffoldMessenger.of(context)
                     .showSnackBar(
-                      const SnackBar(content: Text('Logging In')),
+                      const SnackBar(
+                          content: Text('Logging In'),
+                          duration: Duration(seconds: 1)),
                     )
                     .closed
                     .then((reason) {
