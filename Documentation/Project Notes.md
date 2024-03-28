@@ -7,11 +7,11 @@ Actual Tasks:
   - create dummy data using quill's delta format for details pages
   - Get example data for all tables (Make commands to auto populate/backup the database)
 - Test pocketbase plugin for running server on IOS
-- Create/Find All necessary CRUD operations for authentication
+- (DONE)Create/Find All necessary CRUD operations for authentication
   - Delete account function
   - create account function
   - login function
-- *Create back-end support for verification request system
+- (DONE)Create back-end support for verification request system
   - Create verification requests table (should be tied to wiki/user)
   - Create CRUD functions for verification request table
   - Test logic for auto updating page based on a specific verification request

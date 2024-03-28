@@ -591,6 +591,23 @@ class DBHandler {
     );
   }
 
+  Future<void> registerAccount({required String username, required String email, required String password, required String passwordConfirm}) async {
+    // Register new account
+    final body = <String, dynamic>{
+      "username": "${username}",
+      "email": "${email}",
+      "emailVisibility": true,
+      "password": "${password}",
+      "passwordConfirm": "${passwordConfirm}"
+    };
+    try {
+      final record = await pb.collection('users').create(body: body);
+      print("User ${username} has been registered");
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<String> getUserIDFromName({required String userName}) async {
     String userID = "";
     try {
@@ -660,6 +677,8 @@ Future<void> main() async {
   // await DBHandler().updateLocationDetail(locationDetailID: "tj0ck5ike5em9k5", new_details_description: '{"String": "New detail about Omashu for book 3 and onward"}');
   // await DBHandler().updateSectionDetail(sectionDetailID: "6ats0591e6qgtbv", new_details_description: '{"String": "This is a new section detail about breaking bad season 6 and onward"}');
 
+  //await DBHandler().authenticate(username: "admin@gmail.com", password: "admin@gmail.com");
+  await DBHandler().registerAccount(username: "TestAccount", email: "test@gmail.com", password: "test@gmail.com", passwordConfirm: "test@gmail.com");
   // await DBHandler().authenticate(username: "yes@gmail.com", password: "yes@gmail.com");
   // print(await DBHandler().getUserIDFromName(userName: "yes"));
   // print(await DBHandler().getUserIDFromEmail(userEmail: "yes@gmail.com"));
@@ -667,4 +686,6 @@ Future<void> main() async {
   // await DBHandler().createVerificationRequest(submitterUserID: "o21699v9hjdlo30", wikiID: "ndlh8nkyr4uyjw4", editedPage: '{"String": "Aang discovers his people are dead in book 1 and onwawrd"}');
   // print(await DBHandler().getVerificationRequests(wiki_id: await DBHandler().getWikiIDFromName(wikiName: "Avatar")));
   // await DBHandler().deleteVerificationRequests(verification_record_id: "9pxaqa3dssqx3bs");
+
+
 }
