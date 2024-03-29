@@ -111,14 +111,12 @@ class _EditCharDetailsForm extends StatelessWidget {
         dbHandler.createVerificationRequest(
           submitterUserID: pb.authStore.model.id,
           wikiID: wikiID,
-          requestPackage: [
-            {
-              "edit_type": editType,
-              "id": id,
-              "updatedEntry": quillEditor.getDocumentJson(),
-              "reason": _reasonForEditController.text,
-            },
-          ],
+          requestPackage: {
+            "edit_type": editType,
+            "id": id,
+            "updatedEntry": quillEditor.getDocumentJson(),
+            "reason": _reasonForEditController.text,
+          },
         );
       },
     );
@@ -151,13 +149,11 @@ class _EditCharDetailsForm extends StatelessWidget {
                 dbHandler.createVerificationRequest(
                   submitterUserID: pb.authStore.model.id,
                   wikiID: wikiID,
-                  requestPackage: [
-                    {
-                      "edit_type": "deleteSectionDetail",
-                      "id": id,
-                      "reason": _reasonForEditController.text,
-                    },
-                  ],
+                  requestPackage: {
+                    "edit_type": "deleteSectionDetail",
+                    "id": id,
+                    "reason": _reasonForEditController.text,
+                  },
                 ),
               };
       },
