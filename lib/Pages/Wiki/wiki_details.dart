@@ -277,15 +277,16 @@ class FloatingEditButton extends StatelessWidget {
         );
       },
       'Location': () {
-        /*Navigator.push(
+        Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => EditLocationDetails(
               locationMap: wikiDetails,
               wikiMap: wikiMap,
+              locationName: detailName,
             ),
           ),
-        );*/
+        );
       },
       'Section': () {
         /*Navigator.push(

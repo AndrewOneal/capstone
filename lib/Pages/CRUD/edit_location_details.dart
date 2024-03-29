@@ -4,12 +4,14 @@ import 'package:capstone/Utilities/db_util.dart';
 
 class EditLocationDetails extends StatefulWidget {
   final Map<String, dynamic> wikiMap;
-  final Map<String, dynamic> locationMap;
+  final List<dynamic> locationMap;
+  final String locationName;
 
   const EditLocationDetails({
     super.key,
     required this.wikiMap,
     required this.locationMap,
+    required this.locationName,
   });
 
   @override
@@ -19,9 +21,10 @@ class EditLocationDetails extends StatefulWidget {
 class EditLocationDetailsState extends State<EditLocationDetails> {
   @override
   Widget build(BuildContext context) {
+    final LocationHandler locationHandler =
+        LocationHandler(locationMap: widget.locationMap);
     final Global global = Global();
     final EdgeInsets sideMargins = global.sideMargins;
-    final SizedBox titleSizedBox = global.titleSizedBox;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -37,11 +40,16 @@ class EditLocationDetailsState extends State<EditLocationDetails> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                titleSizedBox,
-                const ListTitle(title: "Edit Location Details"),
+                TwoLineTitle(
+                    firstLineText: "Edit Location Details",
+                    secondLineText: widget.locationName,
+                    height: 200),
                 SingleChildScrollView(
                   child: _EditCharDetailsForm(
-                      wikiMap: widget.wikiMap, locationMap: widget.locationMap),
+                    wikiMap: widget.wikiMap,
+                    locationHandler: locationHandler,
+                    locationName: widget.locationName,
+                  ),
                 ),
               ],
             ),
@@ -54,17 +62,16 @@ class EditLocationDetailsState extends State<EditLocationDetails> {
 
 class _EditCharDetailsForm extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _locationNameController;
   final TextEditingController _reasonForEditController;
   final Map<String, dynamic> wikiMap;
-  final Map<String, dynamic> locationMap;
+  final LocationHandler locationHandler;
+  final String locationName;
 
   _EditCharDetailsForm({
     required this.wikiMap,
-    required this.locationMap,
-  })  : _locationNameController =
-            TextEditingController(text: locationMap['name']),
-        _reasonForEditController = TextEditingController();
+    required this.locationHandler,
+    required this.locationName,
+  }) : _reasonForEditController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -76,21 +83,93 @@ class _EditCharDetailsForm extends StatelessWidget {
     final SectionNoHandler sectionNoHandler = SectionNoHandler();
     final DBHandler dbHandler = DBHandler();
     QuillEditorManager quillEditor = QuillEditorManager();
+    final double buttonWidth = MediaQuery.of(context).size.width > 514
+        ? MediaQuery.of(context).size.width * 0.4
+        : MediaQuery.of(context).size.width * 0.8;
+
+    final Widget submitButton = DarkButton(
+      buttonText: "Submit For Approval",
+      buttonWidth: buttonWidth,
+      onPressed: () {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(
+              const SnackBar(
+                  content: Text('Submitting Request'),
+                  duration: Duration(seconds: 1)),
+            )
+            .closed
+            .then((reason) {
+          Navigator.pop(context);
+        });
+        String id = locationHandler.getEntryID();
+        String editType =
+            id == '' ? "createLocationDetail" : "editLocationDetail";
+        dbHandler.createVerificationRequest(
+          submitterUserID: pb.authStore.model.id,
+          wikiID: wikiID,
+          requestPackage: [
+            {
+              "edit_type": editType,
+              "id": id,
+              "updatedEntry": quillEditor.getDocumentJson(),
+              "reason": _reasonForEditController.text,
+            },
+          ],
+        );
+      },
+    );
+
+    final Widget deleteButton = DarkButton(
+      buttonText: "Delete Entry",
+      buttonWidth: buttonWidth,
+      onPressed: () {
+        String id = locationHandler.getEntryID();
+        id.isEmpty
+            ? {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content:
+                          Text("Can't delete an entry that does not exist"),
+                      duration: Duration(seconds: 1)),
+                )
+              }
+            : {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(
+                      const SnackBar(
+                          content: Text("Submitting Request"),
+                          duration: Duration(seconds: 1)),
+                    )
+                    .closed
+                    .then((reason) {
+                  Navigator.pop(context);
+                }),
+                dbHandler.createVerificationRequest(
+                  submitterUserID: pb.authStore.model.id,
+                  wikiID: wikiID,
+                  requestPackage: [
+                    {
+                      "edit_type": "deleteLocationDetail",
+                      "id": id,
+                      "reason": _reasonForEditController.text,
+                    },
+                  ],
+                ),
+              };
+      },
+    );
+
     return Form(
       key: _formKey,
       child: Column(
         children: [
-          TextFormField(
-            controller: _locationNameController,
-            decoration: const InputDecoration(
-              labelText: 'Location Name',
-            ),
+          _SectionDropdown(
+            wikiID: wikiID,
+            sectionNoHandler: sectionNoHandler,
+            quillEditor: quillEditor,
+            locationHandler: locationHandler,
           ),
-          mediumSizedBox,
-          _SectionDropdown(wikiID: wikiID, sectionNoHandler: sectionNoHandler),
-          mediumSizedBox,
           quillEditor.buildEditor(),
-          mediumSizedBox,
           TextFormField(
             controller: _reasonForEditController,
             decoration: const InputDecoration(
@@ -102,39 +181,15 @@ class _EditCharDetailsForm extends StatelessWidget {
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    DarkButton(
-                      buttonText: "Submit For Approval",
-                      buttonWidth: MediaQuery.of(context).size.width * 0.4,
-                      onPressed: () {
-                        // Submit for approval logic
-                      },
-                    ),
-                    DarkButton(
-                      buttonText: "Delete Entry",
-                      buttonWidth: MediaQuery.of(context).size.width * 0.4,
-                      onPressed: () {
-                        // Delete entry logic
-                      },
-                    ),
+                    submitButton,
+                    deleteButton,
                   ],
                 )
               : Column(
                   children: [
-                    DarkButton(
-                      buttonText: "Submit For Approval",
-                      buttonWidth: MediaQuery.of(context).size.width * 0.8,
-                      onPressed: () {
-                        // Submit for approval logic
-                      },
-                    ),
+                    submitButton,
                     largeSizedBox,
-                    DarkButton(
-                      buttonText: "Delete Entry",
-                      buttonWidth: MediaQuery.of(context).size.width * 0.8,
-                      onPressed: () {
-                        // Delete entry logic
-                      },
-                    ),
+                    deleteButton,
                   ],
                 ),
           extraLargeSizedBox,
@@ -147,9 +202,14 @@ class _EditCharDetailsForm extends StatelessWidget {
 class _SectionDropdown extends StatefulWidget {
   final String wikiID;
   final SectionNoHandler sectionNoHandler;
+  final QuillEditorManager quillEditor;
+  final LocationHandler locationHandler;
 
   const _SectionDropdown(
-      {required this.wikiID, required this.sectionNoHandler});
+      {required this.wikiID,
+      required this.sectionNoHandler,
+      required this.quillEditor,
+      required this.locationHandler});
 
   @override
   _SectionDropdownState createState() => _SectionDropdownState();
@@ -157,13 +217,19 @@ class _SectionDropdown extends StatefulWidget {
 
 class _SectionDropdownState extends State<_SectionDropdown> {
   late List<dynamic> sections;
-  late int sectionNo;
+  late int sectionNo = 1;
+  late String description = '';
 
   @override
   void initState() {
     super.initState();
     sections = [];
-    sectionNo = widget.sectionNoHandler.getSectionNo();
+    description = widget.locationHandler.getDescriptionFromSection(sectionNo);
+    widget.quillEditor.setInput([
+      {
+        "insert": '$description\n',
+      },
+    ]);
     fetchSections();
   }
 
@@ -184,6 +250,15 @@ class _SectionDropdownState extends State<_SectionDropdown> {
         setState(() {
           sectionNo = index!;
           widget.sectionNoHandler.setSectionNo(sectionNo);
+
+          description =
+              widget.locationHandler.getDescriptionFromSection(sectionNo);
+
+          widget.quillEditor.setInput([
+            {
+              "insert": '$description\n',
+            },
+          ]);
         });
       },
       items: sections.map<DropdownMenuItem<int>>((section) {
@@ -209,5 +284,43 @@ class SectionNoHandler {
 
   void setSectionNo(int newSectionNo) {
     sectionNo = newSectionNo;
+  }
+}
+
+class LocationHandler {
+  final List<dynamic> locationMap;
+  Map<String, dynamic> entry = {};
+
+  LocationHandler({required this.locationMap});
+
+  void setEntryFromSection(int sectionNo) {
+    for (Map<String, dynamic> location in locationMap) {
+      final locationSectionNo = int.tryParse(location['section_no'].toString());
+      if (locationSectionNo == sectionNo) {
+        entry = location;
+        return;
+      }
+    }
+    entry = {};
+    return;
+  }
+
+  String getEntryID() {
+    if (entry.isNotEmpty) {
+      return entry['id'];
+    }
+    return '';
+  }
+
+  String getDescriptionFromSection(int sectionNo) {
+    setEntryFromSection(sectionNo);
+    if (entry.isNotEmpty) {
+      return entry['details_description'];
+    }
+    return '';
+  }
+
+  List<dynamic> getLocationMap() {
+    return locationMap;
   }
 }
