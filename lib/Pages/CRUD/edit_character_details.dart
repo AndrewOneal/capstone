@@ -123,7 +123,39 @@ class _EditCharDetailsForm extends StatelessWidget {
       buttonText: "Delete Entry",
       buttonWidth: buttonWidth,
       onPressed: () {
-        // Delete entry logic
+        String id = characterHandler.getEntryID();
+        id.isEmpty
+            ? {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content:
+                          Text("Can't delete an entry that does not exist"),
+                      duration: Duration(seconds: 1)),
+                )
+              }
+            : {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(
+                      const SnackBar(
+                          content: Text("Submitting Request"),
+                          duration: Duration(seconds: 1)),
+                    )
+                    .closed
+                    .then((reason) {
+                  Navigator.pop(context);
+                }),
+                dbHandler.createVerificationRequest(
+                  submitterUserID: pb.authStore.model.id,
+                  wikiID: wikiID,
+                  requestPackage: [
+                    {
+                      "edit_type": "deleteCharacterDetail",
+                      "id": id,
+                      "reason": _reasonForEditController.text,
+                    },
+                  ],
+                ),
+              };
       },
     );
 
