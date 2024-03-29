@@ -136,7 +136,7 @@ class WikiDetailsPageState extends State<WikiDetailsPage> {
               padding: const EdgeInsets.all(20),
               child: FloatingEditButton(
                 wikiMap: widget.wikiMap,
-                detailMap: widget.detailMap,
+                detailName: widget.detailName,
                 detailType: widget.detailType,
                 wikiDetails: wikiDetails,
               ),
@@ -249,7 +249,7 @@ class _DetailList extends StatelessWidget {
 
 class FloatingEditButton extends StatelessWidget {
   final Map<String, dynamic> wikiMap;
-  final Map<String, dynamic> detailMap;
+  final String detailName;
   final String detailType;
   final List<dynamic> wikiDetails;
 
@@ -257,7 +257,7 @@ class FloatingEditButton extends StatelessWidget {
     Key? key,
     required this.detailType,
     required this.wikiMap,
-    required this.detailMap,
+    required this.detailName,
     required this.wikiDetails,
   }) : super(key: key);
 
@@ -269,33 +269,34 @@ class FloatingEditButton extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => EditCharacterDetails(
-              characterMap: detailMap,
+              characterMap: wikiDetails,
               wikiMap: wikiMap,
+              characterName: detailName,
             ),
           ),
         );
       },
       'Location': () {
-        Navigator.push(
+        /*Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => EditLocationDetails(
-              locationMap: detailMap,
+              locationMap: wikiDetails,
               wikiMap: wikiMap,
             ),
           ),
-        );
+        );*/
       },
       'Section': () {
-        Navigator.push(
+        /*Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => EditSectionDetails(
-              sectionMap: detailMap,
+              sectionMap: wikiDetails,
               wikiMap: wikiMap,
             ),
           ),
-        );
+        );*/
       },
     };
 

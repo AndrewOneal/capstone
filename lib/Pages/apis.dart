@@ -263,6 +263,33 @@ class _APIList extends StatelessWidget {
             },
           ],
         ),
+        const SizedBox(
+          height: 10,
+        ),
+        const Divider(),
+        const SizedBox(
+          height: 10,
+        ),
+        const ListTitle(title: "Verification Requests"),
+        FutureBuilder<List<dynamic>>(
+          future:
+              DBHandler().getVerificationRequests(wiki_id: "ndlh8nkyr4uyjw4"),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else {
+              return DefaultQuillRead(
+                input: [
+                  {
+                    "insert": '${snapshot.data!}\n',
+                  },
+                ],
+              );
+            }
+          },
+        ),
       ],
     );
   }

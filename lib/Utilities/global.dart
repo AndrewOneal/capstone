@@ -173,34 +173,43 @@ class QuillEditorManager {
   }
 }
 
-class AsyncSnapshotBuilder<T> extends StatelessWidget {
-  final Future<T> future;
-  final Widget Function(BuildContext context, AsyncSnapshot<T> snapshot)
-      builder;
-  final Widget? loadingWidget;
-  final Widget? errorWidget;
+class TwoLineTitle extends StatelessWidget {
+  final String firstLineText;
+  final String secondLineText;
+  final double height;
 
-  const AsyncSnapshotBuilder({
-    super.key,
-    required this.future,
-    required this.builder,
-    this.loadingWidget,
-    this.errorWidget,
-  });
+  const TwoLineTitle(
+      {super.key,
+      required this.firstLineText,
+      required this.secondLineText,
+      this.height = 300});
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<T>(
-      future: future,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return loadingWidget ?? const CircularProgressIndicator();
-        } else if (snapshot.hasError) {
-          return errorWidget ?? Text('Error: ${snapshot.error}');
-        } else {
-          return builder(context, snapshot);
-        }
-      },
+    return Container(
+      width: double.infinity,
+      height: height,
+      color: background['default'],
+      alignment: Alignment.center,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              firstLineText,
+              style: TextStyles.whiteHeader.copyWith(height: 1.2),
+            ),
+          ),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              secondLineText,
+              style: TextStyles.purpleHeader.copyWith(height: 1.2),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

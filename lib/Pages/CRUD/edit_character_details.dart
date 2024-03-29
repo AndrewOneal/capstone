@@ -4,12 +4,14 @@ import 'package:capstone/Utilities/db_util.dart';
 
 class EditCharacterDetails extends StatefulWidget {
   final Map<String, dynamic> wikiMap;
-  final Map<String, dynamic> characterMap;
+  final List<dynamic> characterMap;
+  final String characterName;
 
   const EditCharacterDetails({
     super.key,
     required this.wikiMap,
     required this.characterMap,
+    required this.characterName,
   });
 
   @override
@@ -19,9 +21,10 @@ class EditCharacterDetails extends StatefulWidget {
 class EditCharacterDetailsState extends State<EditCharacterDetails> {
   @override
   Widget build(BuildContext context) {
+    final CharacterHandler characterHandler =
+        CharacterHandler(characterMap: widget.characterMap);
     final Global global = Global();
     final EdgeInsets sideMargins = global.sideMargins;
-    final SizedBox titleSizedBox = global.titleSizedBox;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -37,12 +40,16 @@ class EditCharacterDetailsState extends State<EditCharacterDetails> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                titleSizedBox,
-                const ListTitle(title: "Edit Character Details"),
+                TwoLineTitle(
+                    firstLineText: "Edit Character Details",
+                    secondLineText: widget.characterName,
+                    height: 200),
                 SingleChildScrollView(
                   child: _EditCharDetailsForm(
-                      wikiMap: widget.wikiMap,
-                      characterMap: widget.characterMap),
+                    wikiMap: widget.wikiMap,
+                    characterHandler: characterHandler,
+                    characterName: widget.characterName,
+                  ),
                 ),
               ],
             ),
@@ -55,17 +62,16 @@ class EditCharacterDetailsState extends State<EditCharacterDetails> {
 
 class _EditCharDetailsForm extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _characterNameController;
   final TextEditingController _reasonForEditController;
   final Map<String, dynamic> wikiMap;
-  final Map<String, dynamic> characterMap;
+  final CharacterHandler characterHandler;
+  final String characterName;
 
   _EditCharDetailsForm({
     required this.wikiMap,
-    required this.characterMap,
-  })  : _characterNameController =
-            TextEditingController(text: characterMap['name']),
-        _reasonForEditController = TextEditingController();
+    required this.characterHandler,
+    required this.characterName,
+  }) : _reasonForEditController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -77,17 +83,60 @@ class _EditCharDetailsForm extends StatelessWidget {
     final SectionNoHandler sectionNoHandler = SectionNoHandler();
     final DBHandler dbHandler = DBHandler();
     QuillEditorManager quillEditor = QuillEditorManager();
+    final double buttonWidth = MediaQuery.of(context).size.width > 514
+        ? MediaQuery.of(context).size.width * 0.4
+        : MediaQuery.of(context).size.width * 0.8;
+
+    final Widget submitButton = DarkButton(
+      buttonText: "Submit For Approval",
+      buttonWidth: buttonWidth,
+      onPressed: () {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(
+              const SnackBar(
+                  content: Text('Submitting Request'),
+                  duration: Duration(seconds: 1)),
+            )
+            .closed
+            .then((reason) {
+          Navigator.pop(context);
+        });
+        String id = characterHandler.getEntryID();
+        String editType =
+            id == '' ? "createCharacterDetail" : "editCharacterDetail";
+        dbHandler.createVerificationRequest(
+          submitterUserID: pb.authStore.model.id,
+          wikiID: wikiID,
+          requestPackage: [
+            {
+              "edit_type": editType,
+              "id": id,
+              "updatedEntry": quillEditor.getDocumentJson(),
+              "reason": _reasonForEditController.text,
+            },
+          ],
+        );
+      },
+    );
+
+    final Widget deleteButton = DarkButton(
+      buttonText: "Delete Entry",
+      buttonWidth: buttonWidth,
+      onPressed: () {
+        // Delete entry logic
+      },
+    );
+
     return Form(
       key: _formKey,
       child: Column(
         children: [
-          TextFormField(
-            controller: _characterNameController,
-            decoration: const InputDecoration(
-              labelText: 'Character Name',
-            ),
+          _SectionDropdown(
+            wikiID: wikiID,
+            sectionNoHandler: sectionNoHandler,
+            quillEditor: quillEditor,
+            characterHandler: characterHandler,
           ),
-          _SectionDropdown(wikiID: wikiID, sectionNoHandler: sectionNoHandler),
           quillEditor.buildEditor(),
           TextFormField(
             controller: _reasonForEditController,
@@ -100,39 +149,15 @@ class _EditCharDetailsForm extends StatelessWidget {
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    DarkButton(
-                      buttonText: "Submit For Approval",
-                      buttonWidth: MediaQuery.of(context).size.width * 0.4,
-                      onPressed: () {
-                        // Submit for approval logic
-                      },
-                    ),
-                    DarkButton(
-                      buttonText: "Delete Entry",
-                      buttonWidth: MediaQuery.of(context).size.width * 0.4,
-                      onPressed: () {
-                        // Delete entry logic
-                      },
-                    ),
+                    submitButton,
+                    deleteButton,
                   ],
                 )
               : Column(
                   children: [
-                    DarkButton(
-                      buttonText: "Submit For Approval",
-                      buttonWidth: MediaQuery.of(context).size.width * 0.8,
-                      onPressed: () {
-                        // Submit for approval logic
-                      },
-                    ),
+                    submitButton,
                     largeSizedBox,
-                    DarkButton(
-                      buttonText: "Delete Entry",
-                      buttonWidth: MediaQuery.of(context).size.width * 0.8,
-                      onPressed: () {
-                        // Delete entry logic
-                      },
-                    ),
+                    deleteButton,
                   ],
                 ),
           extraLargeSizedBox,
@@ -145,9 +170,14 @@ class _EditCharDetailsForm extends StatelessWidget {
 class _SectionDropdown extends StatefulWidget {
   final String wikiID;
   final SectionNoHandler sectionNoHandler;
+  final QuillEditorManager quillEditor;
+  final CharacterHandler characterHandler;
 
   const _SectionDropdown(
-      {required this.wikiID, required this.sectionNoHandler});
+      {required this.wikiID,
+      required this.sectionNoHandler,
+      required this.quillEditor,
+      required this.characterHandler});
 
   @override
   _SectionDropdownState createState() => _SectionDropdownState();
@@ -155,13 +185,19 @@ class _SectionDropdown extends StatefulWidget {
 
 class _SectionDropdownState extends State<_SectionDropdown> {
   late List<dynamic> sections;
-  late int sectionNo;
+  late int sectionNo = 1;
+  late String description = '';
 
   @override
   void initState() {
     super.initState();
     sections = [];
-    sectionNo = widget.sectionNoHandler.getSectionNo();
+    description = widget.characterHandler.getDescriptionFromSection(sectionNo);
+    widget.quillEditor.setInput([
+      {
+        "insert": '$description\n',
+      },
+    ]);
     fetchSections();
   }
 
@@ -182,6 +218,15 @@ class _SectionDropdownState extends State<_SectionDropdown> {
         setState(() {
           sectionNo = index!;
           widget.sectionNoHandler.setSectionNo(sectionNo);
+
+          description =
+              widget.characterHandler.getDescriptionFromSection(sectionNo);
+
+          widget.quillEditor.setInput([
+            {
+              "insert": '$description\n',
+            },
+          ]);
         });
       },
       items: sections.map<DropdownMenuItem<int>>((section) {
@@ -207,5 +252,44 @@ class SectionNoHandler {
 
   void setSectionNo(int newSectionNo) {
     sectionNo = newSectionNo;
+  }
+}
+
+class CharacterHandler {
+  final List<dynamic> characterMap;
+  Map<String, dynamic> entry = {};
+
+  CharacterHandler({required this.characterMap});
+
+  void setEntryFromSection(int sectionNo) {
+    for (Map<String, dynamic> character in characterMap) {
+      final characterSectionNo =
+          int.tryParse(character['section_no'].toString());
+      if (characterSectionNo == sectionNo) {
+        entry = character;
+        return;
+      }
+    }
+    entry = {};
+    return;
+  }
+
+  String getEntryID() {
+    if (entry.isNotEmpty) {
+      return entry['id'];
+    }
+    return '';
+  }
+
+  String getDescriptionFromSection(int sectionNo) {
+    setEntryFromSection(sectionNo);
+    if (entry.isNotEmpty) {
+      return entry['details_description'];
+    }
+    return '';
+  }
+
+  List<dynamic> getCharacterMap() {
+    return characterMap;
   }
 }
