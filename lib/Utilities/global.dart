@@ -74,9 +74,19 @@ class DefaultQuillRead extends StatelessWidget {
 
 class QuillEditorManager {
   final QuillController _quillController = QuillController.basic();
+  Color backgroundColor = background['default']!;
+  Color textColor = text['default']!;
 
   void setInput(List<Map<String, dynamic>> input) {
     _quillController.document = Document.fromJson(input);
+  }
+
+  void setBackgroundColor(Color color) {
+    backgroundColor = color;
+  }
+
+  void setTextColor(Color color) {
+    textColor = color;
   }
 
   List<Map<String, dynamic>> getDocumentJson() {
@@ -134,20 +144,63 @@ class QuillEditorManager {
           const Divider(),
           SizedBox(
             height: 400,
-            child: QuillEditor.basic(
-              configurations: QuillEditorConfigurations(
-                padding: const EdgeInsets.all(10),
-                expands: true,
-                controller: _quillController,
-                readOnly: false,
-                sharedConfigurations: const QuillSharedConfigurations(
-                  locale: Locale('en', 'US'),
+            child: Container(
+              color: backgroundColor,
+              child: QuillEditor.basic(
+                configurations: QuillEditorConfigurations(
+                  padding: const EdgeInsets.all(10),
+                  expands: true,
+                  controller: _quillController,
+                  readOnly: false,
+                  customStyles: DefaultStyles(
+                    paragraph: DefaultTextBlockStyle(
+                      TextStyles.whiteButtonText.copyWith(color: textColor),
+                      const VerticalSpacing(0, 0),
+                      const VerticalSpacing(0, 0),
+                      const BoxDecoration(),
+                    ),
+                  ),
+                  sharedConfigurations: const QuillSharedConfigurations(
+                    locale: Locale('en', 'US'),
+                  ),
                 ),
               ),
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class AsyncSnapshotBuilder<T> extends StatelessWidget {
+  final Future<T> future;
+  final Widget Function(BuildContext context, AsyncSnapshot<T> snapshot)
+      builder;
+  final Widget? loadingWidget;
+  final Widget? errorWidget;
+
+  const AsyncSnapshotBuilder({
+    super.key,
+    required this.future,
+    required this.builder,
+    this.loadingWidget,
+    this.errorWidget,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<T>(
+      future: future,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return loadingWidget ?? const CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return errorWidget ?? Text('Error: ${snapshot.error}');
+        } else {
+          return builder(context, snapshot);
+        }
+      },
     );
   }
 }

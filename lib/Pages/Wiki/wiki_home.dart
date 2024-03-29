@@ -63,7 +63,7 @@ class WikiHomeState extends State<WikiHome> {
         leading: IconButton(
           icon: const Icon(Icons.home),
           onPressed: () {
-            Navigator.pop(
+            Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const WikiListPage()),
             );

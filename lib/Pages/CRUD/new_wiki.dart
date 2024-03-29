@@ -64,6 +64,8 @@ class _NewWikiForm extends StatelessWidget {
     final SizedBox largeSizedBox = global.largeSizedBox;
     DBHandler dbHandler = DBHandler();
     QuillEditorManager quillEditor = QuillEditorManager();
+    quillEditor.setBackgroundColor(lightPurple['200']!);
+    quillEditor.setTextColor(text['900']!);
     return Form(
       key: _formKey,
       child: Column(

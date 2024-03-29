@@ -63,6 +63,8 @@ class _EditWikiForm extends StatelessWidget {
         "insert": "\n",
       }
     ]);
+    quillEditor.setBackgroundColor(lightPurple['200']!);
+    quillEditor.setTextColor(text['900']!);
     final Global global = Global();
     final SizedBox mediumSizedBox = global.mediumSizedBox;
     final SizedBox largeSizedBox = global.largeSizedBox;
