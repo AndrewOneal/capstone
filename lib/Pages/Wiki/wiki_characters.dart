@@ -4,7 +4,6 @@ import 'package:capstone/Pages/Account/login.dart';
 import 'package:capstone/Pages/Account/wiki_settings.dart';
 import 'package:capstone/Pages/Wiki/wiki_details.dart';
 import 'package:capstone/Utilities/db_util.dart';
-import 'package:capstone/Pages/CRUD/edit_characters.dart';
 import 'package:capstone/Pages/Account/account.dart';
 
 class WikiCharactersPage extends StatelessWidget {
