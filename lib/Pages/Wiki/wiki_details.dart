@@ -8,12 +8,13 @@ import 'package:capstone/Pages/CRUD/edit_section_details.dart';
 import 'package:capstone/Pages/CRUD/edit_location_details.dart';
 import 'package:capstone/Pages/Account/account.dart';
 
-class WikiDetailsPage extends StatelessWidget {
+class WikiDetailsPage extends StatefulWidget {
   final Map<String, dynamic> wikiMap;
-  final Map<String, dynamic> detailMap;
   final int sectionNo;
   final String detailName;
   final String detailType;
+  final Map<String, dynamic> detailMap;
+
   const WikiDetailsPage({
     super.key,
     required this.wikiMap,
@@ -24,11 +25,53 @@ class WikiDetailsPage extends StatelessWidget {
   });
 
   @override
+  WikiDetailsPageState createState() => WikiDetailsPageState();
+}
+
+class WikiDetailsPageState extends State<WikiDetailsPage> {
+  late List<dynamic> wikiDetails = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchWikiDetails();
+  }
+
+  Future<void> _fetchWikiDetails() async {
+    final details = await dbHandlerGetDetails();
+    setState(() {
+      wikiDetails = details;
+    });
+  }
+
+  Future<List<dynamic>> dbHandlerGetDetails() async {
+    final dbHandler = DBHandler();
+    final Map<String, Future<List<dynamic>>> detailsMap = {
+      'Character': dbHandler.getCharacterDetails(
+        section_no: widget.sectionNo,
+        characterID: widget.detailMap['id'],
+      ),
+      'Location': dbHandler.getLocationDetails(
+        section_no: widget.sectionNo,
+        locationID: widget.detailMap['id'],
+      ),
+    };
+    if (widget.detailType == 'Section') {
+      final int sectionNo = await dbHandler.translateSectionToNo(
+          sectionID: widget.detailMap['id']);
+      detailsMap['Section'] = dbHandler.getSectionDetails(
+        wiki_id: widget.wikiMap['id'],
+        section_no: sectionNo,
+      );
+    }
+    return detailsMap[widget.detailType]!;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final String wikiID = wikiMap['id'];
-    final String detailID = detailMap['id'];
     final Global global = Global();
     final EdgeInsets sideMargins = global.sideMargins;
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -39,24 +82,29 @@ class WikiDetailsPage extends StatelessWidget {
         ),
         actions: [
           IconButton(
-              icon: const Icon(Icons.settings),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          WikiSettings(wikiMap: wikiMap, sectionNo: sectionNo)),
-                );
-              }),
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => WikiSettings(
+                    wikiMap: widget.wikiMap,
+                    sectionNo: widget.sectionNo,
+                  ),
+                ),
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.account_circle),
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => pb.authStore.isValid
-                        ? const AccountPage()
-                        : const LoginPage()),
+                  builder: (context) => pb.authStore.isValid
+                      ? const AccountPage()
+                      : const LoginPage(),
+                ),
               );
             },
           ),
@@ -68,13 +116,15 @@ class WikiDetailsPage extends StatelessWidget {
           children: <Widget>[
             Column(
               children: <Widget>[
-                ListTitle(title: detailName, fontSize: 40),
+                ListTitle(title: widget.detailName, fontSize: 40),
                 Expanded(
                   child: _DetailList(
-                      wikiID: wikiID,
-                      wikiSettingID: sectionNo,
-                      wikiDetailID: detailID,
-                      detailType: detailType),
+                    wikiID: widget.wikiMap['id'],
+                    wikiSettingID: widget.sectionNo,
+                    wikiDetailID: widget.detailMap['id'],
+                    detailType: widget.detailType,
+                    wikiDetails: wikiDetails,
+                  ),
                 ),
               ],
             ),
@@ -85,9 +135,11 @@ class WikiDetailsPage extends StatelessWidget {
           ? Padding(
               padding: const EdgeInsets.all(20),
               child: FloatingEditButton(
-                  wikiMap: wikiMap,
-                  detailMap: detailMap,
-                  detailType: detailType),
+                wikiMap: widget.wikiMap,
+                detailMap: widget.detailMap,
+                detailType: widget.detailType,
+                wikiDetails: wikiDetails,
+              ),
             )
           : null,
     );
@@ -99,147 +151,92 @@ class _DetailList extends StatelessWidget {
   final int wikiSettingID;
   final String wikiDetailID;
   final String detailType;
+  final List<dynamic> wikiDetails;
 
   const _DetailList({
     required this.wikiID,
     required this.wikiSettingID,
     required this.wikiDetailID,
     required this.detailType,
+    required this.wikiDetails,
   });
 
   @override
   Widget build(BuildContext context) {
-    DBHandler dbHandler = DBHandler();
-    Global global = Global();
-    SizedBox mediumSizedBox = global.mediumSizedBox;
-
-    Future<Map<String, Future<List<dynamic>>>> dbHandlerGetDetails() async {
-      Map<String, Future<List<dynamic>>> detailsMap = {
-        'Character': dbHandler.getCharacterDetails(
-          section_no: wikiSettingID,
-          characterID: wikiDetailID,
-        ),
-        'Location': dbHandler.getLocationDetails(
-          section_no: wikiSettingID,
-          locationID: wikiDetailID,
-        ),
-      };
-      if (detailType == 'Section') {
-        int sectionNo =
-            await dbHandler.translateSectionToNo(sectionID: wikiDetailID);
-        detailsMap['Section'] = dbHandler.getSectionDetails(
-          wiki_id: wikiID,
-          section_no: sectionNo,
-        );
-      }
-      return detailsMap;
-    }
+    final Global global = Global();
+    final SizedBox mediumSizedBox = global.mediumSizedBox;
 
     String disclaimerText = pb.authStore.isValid
         ? "Don't see the details you're looking for? Hit the edit button to add them!"
         : "Don't see the details you're looking for? Login or create an account to add them!";
 
-    return FutureBuilder<Map<String, Future<List<dynamic>>>>(
-      future: dbHandlerGetDetails(),
+    return FutureBuilder<List<dynamic>>(
+      future: Future.value(wikiDetails),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else {
-          Map<String, Future<List<dynamic>>> dbHandlerDetails = snapshot.data!;
-          Future<List<dynamic>> futureDetails = dbHandlerDetails[detailType]!;
-          return FutureBuilder<List<dynamic>>(
-            future: futureDetails,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              } else {
-                if (snapshot.data!.isEmpty) {
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 75),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        ConstrainedBox(
-                          constraints: const BoxConstraints(minHeight: 100),
-                          child: Column(
-                            children: <Widget>[
-                              Text(
-                                disclaimerText,
-                                style: TextStyles.disclaimerText,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-                List<dynamic> wikiDetails = snapshot.data!;
-                return ListView.separated(
-                  itemCount: wikiDetails.length + 1,
-                  separatorBuilder: (BuildContext context, int index) =>
-                      mediumSizedBox,
-                  itemBuilder: (BuildContext context, int index) {
-                    if (index == wikiDetails.length) {
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 75),
+          final List<dynamic> wikiDetails = snapshot.data!;
+          return ListView.separated(
+            itemCount: wikiDetails.length + 1,
+            separatorBuilder: (BuildContext context, int index) =>
+                mediumSizedBox,
+            itemBuilder: (BuildContext context, int index) {
+              if (index == wikiDetails.length) {
+                return Padding(
+                  padding: const EdgeInsets.only(right: 75),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(minHeight: 100),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
-                            ConstrainedBox(
-                              constraints: const BoxConstraints(minHeight: 100),
-                              child: Column(
-                                children: <Widget>[
-                                  Text(
-                                    disclaimerText,
-                                    style: TextStyles.disclaimerText,
-                                  ),
-                                ],
-                              ),
+                            Text(
+                              disclaimerText,
+                              style: TextStyles.disclaimerText,
                             ),
                           ],
                         ),
-                      );
-                    } else {
-                      return Column(
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    if (detailType != 'Section')
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          if (detailType != 'Section')
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                      bottom: BorderSide(
-                                        color: background['500']!,
-                                        width: 1.0,
-                                      ),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    wikiDetails[index]['section_name'],
-                                    style: TextStyles.detailsHeaders,
-                                  ),
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: background['500']!,
+                                  width: 1.0,
                                 ),
-                              ],
+                              ),
                             ),
-                          DefaultQuillRead(
-                            input: [
-                              {
-                                "insert":
-                                    '${wikiDetails[index]["details_description"]}\n',
-                              },
-                            ],
+                            child: Text(
+                              wikiDetails[index]['section_name'],
+                              style: TextStyles.detailsHeaders,
+                            ),
                           ),
                         ],
-                      );
-                    }
-                  },
+                      ),
+                    DefaultQuillRead(
+                      input: [
+                        {
+                          "insert":
+                              '${wikiDetails[index]["details_description"]}\n',
+                        },
+                      ],
+                    ),
+                  ],
                 );
               }
             },
@@ -254,15 +251,16 @@ class FloatingEditButton extends StatelessWidget {
   final Map<String, dynamic> wikiMap;
   final Map<String, dynamic> detailMap;
   final String detailType;
+  final List<dynamic> wikiDetails;
 
   const FloatingEditButton({
-    super.key,
+    Key? key,
     required this.detailType,
     required this.wikiMap,
     required this.detailMap,
-  });
-// The detailMap needs to be the map generated from this file, not the one from the previous file.
-// Need to find a way to get the wikiDetails map that is in this file here.
+    required this.wikiDetails,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final routeMap = {
