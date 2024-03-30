@@ -678,13 +678,13 @@ Future<void> main() async {
   // await DBHandler().updateSectionDetail(sectionDetailID: "6ats0591e6qgtbv", new_details_description: '{"String": "This is a new section detail about breaking bad season 6 and onward"}');
 
   //await DBHandler().authenticate(username: "admin@gmail.com", password: "admin@gmail.com");
-  await DBHandler().registerAccount(username: "TestAccount", email: "test@gmail.com", password: "test@gmail.com", passwordConfirm: "test@gmail.com");
+  //await DBHandler().registerAccount(username: "TestAccount", email: "test@gmail.com", password: "test@gmail.com", passwordConfirm: "test@gmail.com");
   // await DBHandler().authenticate(username: "yes@gmail.com", password: "yes@gmail.com");
   // print(await DBHandler().getUserIDFromName(userName: "yes"));
   // print(await DBHandler().getUserIDFromEmail(userEmail: "yes@gmail.com"));
 
   // await DBHandler().createVerificationRequest(submitterUserID: "o21699v9hjdlo30", wikiID: "ndlh8nkyr4uyjw4", requestPackage: '{"String": "Aang discovers his people are dead in book 1 and onwawrd"}');
-  // print(await DBHandler().getVerificationRequests(wiki_id: await DBHandler().getWikiIDFromName(wikiName: "Avatar")));
+   print(await DBHandler().getVerificationRequests(wiki_id: await DBHandler().getWikiIDFromName(wikiName: "Avatar")));
   // await DBHandler().deleteVerificationRequests(verification_record_id: "9pxaqa3dssqx3bs");
 
 
