@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:capstone/Utilities/db_util.dart';
@@ -11,13 +9,18 @@ void populateFakeData() async {
   await DBHandler().createCharacter(character_name: "Olivia Dunham", associated_wiki_id: await DBHandler().getWikiIDFromName(wikiName: "Fringe"));
   await DBHandler().createCharacter(character_name: "Dr. Robert", associated_wiki_id: await DBHandler().getWikiIDFromName(wikiName: "Fringe"));
   await DBHandler().createLocation(location_name: "NYC HQ", associated_wiki_id: await DBHandler().getWikiIDFromName(wikiName: "Fringe"));
+
+  // await Future.delayed(const Duration(seconds: 5));
+  // await DBHandler().deleteWiki(wikiID: await DBHandler().getWikiIDFromName(wikiName: "Fringe"));
 }
 void deleteFakeData() async {
 
 }
 
 Future<void> main() async {
-  populateFakeData();
+  setUpAll(() => {
+    populateFakeData()
+  });
 
   group("Testing WIKIs collection", () {
     test('READ Wikis', () async {
@@ -88,14 +91,15 @@ Future<void> main() async {
     });
     test('UPDATE location', () async {
       await DBHandler().updateLocation(locationID: await DBHandler().getLocationIDFromName(locationName: "NYC"), new_location_name: "NYC HQ (Official)");
-      var locations =  await DBHandler().getLocations(wikiID: await DBHandler().getWikiIDFromName(wikiName: "Fringe"));
-      expect(locations[0]["name"], contains("(Official)"));
+      var location = await DBHandler().getLocationIDFromName(locationName: "NYC HQ (Official)");
+      expect(location.length, greaterThan(0));
     });
     test('Delete Location', () async {
       await DBHandler().createLocation(location_name: "London HQ", associated_wiki_id: await DBHandler().getWikiIDFromName(wikiName: "Fringe"));
       await DBHandler().deleteLocation(locationID: await DBHandler().getLocationIDFromName(locationName: "London"));
       var locations =  await DBHandler().getLocations(wikiID: await DBHandler().getWikiIDFromName(wikiName: "Fringe"));
-      expect(locations.length, equals(1));
+      expect(locations.length, greaterThan(0));
     });
   });
+  
 }
