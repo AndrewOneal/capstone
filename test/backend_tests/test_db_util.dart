@@ -28,7 +28,7 @@ void main() {
       expect(wiki["wiki_name"], "Wheel of Time");
     });
     test('UPDATE Wiki', () async {
-      await DBHandler().updateWiki(wikiID: await DBHandler().getWikiIDFromName(wikiName: "Fringe"), new_name: "Fringe (Official)", new_description: "The best show of all time");
+      await DBHandler().updateWiki(wikiID: await DBHandler().getWikiIDFromName(wikiName: "Fringe"), new_name: "Fringe", new_description: "The best show of all time");
       var wiki = await DBHandler().getWiki(wikiID: await DBHandler().getWikiIDFromName(wikiName: "Fringe"));
       expect(wiki["wiki_description"], "The best show of all time");
     });
@@ -41,8 +41,23 @@ void main() {
     });
   });
   group("Testing Characters collection", () {
-    test('', () async {
-
+    test('READ Characters', () async {
+      var characters = await DBHandler().getCharacters(wikiID: await DBHandler().getWikiIDFromName(wikiName: "Fringe"));
+      expect(characters.length, greaterThan(0));
+    });
+    test('DELETE Character', () async {
+      await DBHandler().deleteCharacter(characterID: await DBHandler().getCharacterIDFromName(characterName: "Dr.", wikiID: await DBHandler().getWikiIDFromName(wikiName: "Fringe")));
+      var characters = await DBHandler().getCharacters(wikiID: await DBHandler().getWikiIDFromName(wikiName: "Fringe"));
+      expect(characters.length, greaterThan(0));
+    });
+    test('UPDATE Character', () async {
+      await DBHandler().updateCharacter(characterID: await DBHandler().getCharacterIDFromName(characterName: "Olivia", wikiID: await DBHandler().getWikiIDFromName(wikiName: "Fringe")), new_name: "Olivia Dunham The 3rd", new_nickname: "Good person");
+      var name = await DBHandler().getCharacterName(characterID: await DBHandler().getCharacterIDFromName(characterName: "Olivia", wikiID: await DBHandler().getWikiIDFromName(wikiName: "Fringe")));
+      expect(name, equals("Olivia Dunham The 3rd"));
+    });
+    test('CREATE Character', () async {
+      var characters = await DBHandler().getCharacters(wikiID: await DBHandler().getWikiIDFromName(wikiName: "Fringe"));
+      expect(characters.length, greaterThan(0));
     });
   });
   group("Testing Sections collection", () {
