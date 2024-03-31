@@ -101,5 +101,5 @@ Future<void> main() async {
       expect(locations.length, greaterThan(0));
     });
   });
-  
+
 }
