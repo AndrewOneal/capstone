@@ -285,7 +285,7 @@ class DBHandler {
     // Create new character record
     final body = <String, dynamic>{
       "name": "${character_name}",
-      "nickname": nickname,
+      "nickname": "${nickname}",
       "wiki_id": ["${associated_wiki_id}"]
     };
     try {

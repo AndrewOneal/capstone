@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Pages/tutorial.dart';
 import 'package:capstone/Pages/wiki_list.dart';
-//import 'package:pocketbase_server_flutter/pocketbase_server_flutter.dart';
+import 'package:pocketbase_server_flutter/pocketbase_server_flutter.dart';
 
 int? initScreen;
 
