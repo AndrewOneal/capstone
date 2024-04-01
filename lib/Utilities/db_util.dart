@@ -226,10 +226,9 @@ class DBHandler {
 
   Future<List<dynamic>> getVerificationRequests({required wiki_id}) async {
     //Retrieves all verification requests for a specific wiki
-    final records = await pb.collection('verification_requests').getFullList(
-        sort: '-created',
-        filter: 'wiki_id ="${wiki_id}"'
-    );
+    final records = await pb
+        .collection('verification_requests')
+        .getFullList(sort: '-created', filter: 'wiki_id ="${wiki_id}"');
     var verificationList = [];
     //Loop to format and prettify output for easy front-end use
     for (var record in records) {
@@ -389,7 +388,10 @@ class DBHandler {
     }
   }
 
-  Future<void> createVerificationRequest({required String submitterUserID, required String wikiID, required requestPackage}) async {
+  Future<void> createVerificationRequest(
+      {required String submitterUserID,
+      required String wikiID,
+      required requestPackage}) async {
     //Create new verification request record
     final body = <String, dynamic>{
       "submitter_user_id": submitterUserID,
@@ -398,7 +400,8 @@ class DBHandler {
     };
     try {
       print("Creating new verification request...");
-      final record = await pb.collection('verification_requests').create(body: body);
+      final record =
+          await pb.collection('verification_requests').create(body: body);
       print("New verification requests created");
     } catch (e) {
       print(e);
@@ -469,12 +472,15 @@ class DBHandler {
     }
   }
 
-  Future<void> deleteVerificationRequests({required String verification_record_id}) async {
+  Future<void> deleteVerificationRequests(
+      {required String verification_record_id}) async {
     try {
-      await pb.collection('verification_requests').delete('${verification_record_id}');
+      await pb
+          .collection('verification_requests')
+          .delete('${verification_record_id}');
       print("Succesfully deleted verification request");
     } catch (e) {
-     print(e);
+      print(e);
     }
   }
 
@@ -584,14 +590,19 @@ class DBHandler {
     }
   }
 
-  Future<void> authenticate({required String username, required String password})async {
+  Future<void> authenticate(
+      {required String username, required String password}) async {
     final authData = await pb.collection('users').authWithPassword(
-      '${username}',
-      '${password}',
-    );
+          '${username}',
+          '${password}',
+        );
   }
 
-  Future<void> registerAccount({required String username, required String email, required String password, required String passwordConfirm}) async {
+  Future<void> registerAccount(
+      {required String username,
+      required String email,
+      required String password,
+      required String passwordConfirm}) async {
     // Register new account
     final body = <String, dynamic>{
       "username": "${username}",
@@ -612,9 +623,9 @@ class DBHandler {
     String userID = "";
     try {
       print("Retreiving userID...");
-      final record = await pb.collection('users').getFirstListItem(
-        'username="${userName}"'
-      );
+      final record = await pb
+          .collection('users')
+          .getFirstListItem('username="${userName}"');
       userID = record.toJson()["id"];
     } catch (e) {
       print(e);
@@ -626,9 +637,8 @@ class DBHandler {
     String userID = "";
     try {
       print("Retreiving userID...");
-      final record = await pb.collection('users').getFirstListItem(
-          'email="${userEmail}"'
-      );
+      final record =
+          await pb.collection('users').getFirstListItem('email="${userEmail}"');
       userID = record.toJson()["id"];
     } catch (e) {
       print(e);
@@ -636,8 +646,6 @@ class DBHandler {
     return userID;
   }
 }
-
-
 
 Future<void> main() async {
   print("Wiki List: \n");
@@ -684,8 +692,7 @@ Future<void> main() async {
   // print(await DBHandler().getUserIDFromEmail(userEmail: "yes@gmail.com"));
 
   // await DBHandler().createVerificationRequest(submitterUserID: "o21699v9hjdlo30", wikiID: "ndlh8nkyr4uyjw4", requestPackage: '{"String": "Aang discovers his people are dead in book 1 and onwawrd"}');
-   print(await DBHandler().getVerificationRequests(wiki_id: await DBHandler().getWikiIDFromName(wikiName: "Avatar")));
+  print(await DBHandler().getVerificationRequests(
+      wiki_id: await DBHandler().getWikiIDFromName(wikiName: "Avatar")));
   // await DBHandler().deleteVerificationRequests(verification_record_id: "9pxaqa3dssqx3bs");
-
-
 }

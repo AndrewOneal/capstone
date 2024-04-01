@@ -147,7 +147,9 @@ class RegisterFields extends StatelessWidget {
               if (formKey.currentState!.validate()) {
                 ScaffoldMessenger.of(context)
                     .showSnackBar(
-                      const SnackBar(content: Text('Registering User')),
+                      const SnackBar(
+                          content: Text('Registering User'),
+                          duration: Duration(seconds: 1)),
                     )
                     .closed
                     .then((reason) {

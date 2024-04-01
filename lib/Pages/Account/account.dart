@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Pages/wiki_list.dart';
 import 'package:capstone/Utilities/db_util.dart';
-// import convert
 import 'dart:convert';
 
 class AccountPage extends StatelessWidget {
