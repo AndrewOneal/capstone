@@ -28,12 +28,6 @@
   * User Story: As an admin, I want to have a general page for reviewing requests for edits, so that I can quickly confirm whether an edit should be approved or denied.
   * User Story: As an admin, I want to have a general page for reviewing new wiki requests, so that I can review the requests for the new wikis and decide which should be added, and which should not.
   * User Story: As an admin, I want to have a general page for reviewing new part, character, and summary requests for a certain wiki, so that I can quickyl decide whether to allow the new content to be added.
- 
-* Epic: Edit page done
-
-* Epic: Finish auth page
-
-* Epic: Verification request form page approve or deny page
 
 ## Back End
 
@@ -50,14 +44,17 @@
   * User Story: As a wiki user, I want a database function to remove character information, part summaries, and the wiki itself, so that I can remove unnessecary or incorrect information or simply start fresh.
   * User Story: As a wiki user, I want a database function to delete my account, so that I can delete my account when I am done with it and remove my user data.
     
-* Epic: As a wiki user, I want to to be bale to read data in the database, so that I can view the data in the application and read the information in the wiki.
+* Epic: As a wiki user, I want to to be able to read data in the database, so that I can view the data in the application and read the information in the wiki.
   * User Story: As a wiki user, I want a database function to retrieve my login details, so that I can log in and use my stored settings for the application.
   * User Story: As a wiki user, I want a database function to retrieve character details, wiki details, and part summaries, so that I can read the wiki's information and learn more about the current show I am watching. 
 
-* CRUD for verfication request
-  * Create
-  * Read
-  * Delete
+* Epic: As a user, I want to have back-end infrastructure to support verification requests for edits to wikis, so that I can contribute to wikis.
+  * User Story: As a user, I want to be able to edit wikis that I am not the administrator of, so that I can contribute to a wiki without being the admin of it.
+  * User Story: I want to be able to be abke to send my edited data to the administrator of the wiki that can be verified, then added to the wiki, so that I can have my edits available to admins and get approved or denied.
+ 
+ * Epic: As a user, I want to be able to login to the application and keep my login session while the app is running.
+  * User Story: As a user, I want to only have to login once during a session of using this application, so that I can have a steady workflow.
+  * User Story: As a user, I want to have my login and role information cached while I use the application, so that I do not have log back in order to perform actions.  
 
 ## Misc.
 * Epic: As a user, I want to be able to run this application on IOS, so that I can use my iPhone to access the application.
