@@ -164,7 +164,8 @@ class _SaveSettingsButton extends StatelessWidget {
 
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => WikiHome(wikiMap: wikiMap)),
+          MaterialPageRoute(
+              builder: (context) => WikiHomePage(wikiMap: wikiMap)),
         );
       },
     );

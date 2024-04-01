@@ -45,7 +45,7 @@ class EditLocationDetailsState extends State<EditLocationDetails> {
                     secondLineText: widget.locationName,
                     height: 200),
                 SingleChildScrollView(
-                  child: _EditCharDetailsForm(
+                  child: _EditLocationDetailsForm(
                     wikiMap: widget.wikiMap,
                     locationHandler: locationHandler,
                     locationName: widget.locationName,
@@ -60,14 +60,14 @@ class EditLocationDetailsState extends State<EditLocationDetails> {
   }
 }
 
-class _EditCharDetailsForm extends StatelessWidget {
+class _EditLocationDetailsForm extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _reasonForEditController;
   final Map<String, dynamic> wikiMap;
   final LocationHandler locationHandler;
   final String locationName;
 
-  _EditCharDetailsForm({
+  _EditLocationDetailsForm({
     required this.wikiMap,
     required this.locationHandler,
     required this.locationName,

@@ -10,19 +10,19 @@ import 'package:capstone/Pages/Account/account.dart';
 import 'package:capstone/Utilities/db_util.dart';
 import 'package:capstone/Pages/CRUD/edit_wiki.dart';
 
-class WikiHome extends StatefulWidget {
+class WikiHomePage extends StatefulWidget {
   final Map<String, dynamic> wikiMap;
 
-  const WikiHome({
+  const WikiHomePage({
     super.key,
     required this.wikiMap,
   });
 
   @override
-  WikiHomeState createState() => WikiHomeState();
+  WikiHomePageState createState() => WikiHomePageState();
 }
 
-class WikiHomeState extends State<WikiHome> {
+class WikiHomePageState extends State<WikiHomePage> {
   late int sectionNo = 0;
 
   @override

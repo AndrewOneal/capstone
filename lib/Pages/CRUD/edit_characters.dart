@@ -1,13 +1,15 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Utilities/db_util.dart';
 
 class EditCharacters extends StatefulWidget {
   final Map<String, dynamic> wikiMap;
+  final List<dynamic> charactersMap;
 
   const EditCharacters({
     super.key,
     required this.wikiMap,
+    required this.charactersMap,
   });
 
   @override
@@ -17,9 +19,10 @@ class EditCharacters extends StatefulWidget {
 class EditCharactersState extends State<EditCharacters> {
   @override
   Widget build(BuildContext context) {
+    final CharacterHandler characterHandler =
+        CharacterHandler(charactersMap: widget.charactersMap);
     final Global global = Global();
     final EdgeInsets sideMargins = global.sideMargins;
-    final SizedBox titleSizedBox = global.titleSizedBox;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -35,10 +38,12 @@ class EditCharactersState extends State<EditCharacters> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                titleSizedBox,
-                const ListTitle(title: "Edit Characters"),
+                const ListTitle(title: 'Edit Characters'),
                 SingleChildScrollView(
-                  child: _EditCharsForm(wikiMap: widget.wikiMap),
+                  child: _EditCharForm(
+                    wikiMap: widget.wikiMap,
+                    characterHandler: characterHandler,
+                  ),
                 ),
               ],
             ),
@@ -49,16 +54,18 @@ class EditCharactersState extends State<EditCharacters> {
   }
 }
 
-class _EditCharsForm extends StatelessWidget {
+class _EditCharForm extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _characterNameController;
+  final TextEditingController _nameController;
   final TextEditingController _reasonForEditController;
   final Map<String, dynamic> wikiMap;
+  final CharacterHandler characterHandler;
 
-  _EditCharsForm({
+  _EditCharForm({
     required this.wikiMap,
+    required this.characterHandler,
   })  : _reasonForEditController = TextEditingController(),
-        _characterNameController = TextEditingController();
+        _nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -66,28 +73,83 @@ class _EditCharsForm extends StatelessWidget {
     final SizedBox mediumSizedBox = global.mediumSizedBox;
     final SizedBox largeSizedBox = global.largeSizedBox;
     final SizedBox extraLargeSizedBox = global.extraLargeSizedBox;
+    final wikiID = wikiMap['id'];
     final DBHandler dbHandler = DBHandler();
-    final CharacterSelectHandler characterSelectHandler =
-        CharacterSelectHandler();
+    final double buttonWidth = MediaQuery.of(context).size.width > 514
+        ? MediaQuery.of(context).size.width * 0.4
+        : MediaQuery.of(context).size.width * 0.8;
+
+    final Widget submitButton = DarkButton(
+      buttonText: "Submit For Approval",
+      buttonWidth: buttonWidth,
+      onPressed: () {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(
+              const SnackBar(
+                  content: Text('Submitting Request'),
+                  duration: Duration(seconds: 1)),
+            )
+            .closed
+            .then((reason) {
+          Navigator.pop(context);
+        });
+        String id = characterHandler.getEntryID();
+        String editType = id == '' ? "createCharacter" : "editCharacter";
+        dbHandler.createVerificationRequest(
+          submitterUserID: pb.authStore.model.id,
+          wikiID: wikiID,
+          requestPackage: {
+            "edit_type": editType,
+            "id": id,
+            "updatedEntry": '',
+            "reason": _reasonForEditController.text,
+          },
+        );
+      },
+    );
+
+    final Widget deleteButton = DarkButton(
+      buttonText: "Delete Character",
+      buttonWidth: buttonWidth,
+      onPressed: () {
+        String id = characterHandler.getEntryID();
+        id.isEmpty
+            ? {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content:
+                          Text("Can't delete an entry that does not exist"),
+                      duration: Duration(seconds: 1)),
+                )
+              }
+            : {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(
+                      const SnackBar(
+                          content: Text("Submitting Request"),
+                          duration: Duration(seconds: 1)),
+                    )
+                    .closed
+                    .then((reason) {
+                  Navigator.pop(context);
+                }),
+                dbHandler.createVerificationRequest(
+                  submitterUserID: pb.authStore.model.id,
+                  wikiID: wikiID,
+                  requestPackage: {
+                    "edit_type": "deleteCharacter",
+                    "id": id,
+                    "reason": _reasonForEditController.text,
+                  },
+                ),
+              };
+      },
+    );
+
     return Form(
       key: _formKey,
       child: Column(
         children: [
-          _CharacterDropdown(
-            wikiID: wikiMap['id'],
-            characterSelectHandler: characterSelectHandler,
-            onCharacterChanged: (characterName) {
-              _characterNameController.text = characterName;
-            },
-          ),
-          mediumSizedBox,
-          TextFormField(
-            controller: _characterNameController,
-            decoration: const InputDecoration(
-              labelText: 'Character',
-            ),
-          ),
-          mediumSizedBox,
           TextFormField(
             controller: _reasonForEditController,
             decoration: const InputDecoration(
@@ -99,39 +161,15 @@ class _EditCharsForm extends StatelessWidget {
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    DarkButton(
-                      buttonText: "Submit For Approval",
-                      buttonWidth: MediaQuery.of(context).size.width * 0.4,
-                      onPressed: () {
-                        // Submit for approval logic
-                      },
-                    ),
-                    DarkButton(
-                      buttonText: "Delete Entry",
-                      buttonWidth: MediaQuery.of(context).size.width * 0.4,
-                      onPressed: () {
-                        // Delete entry logic
-                      },
-                    ),
+                    submitButton,
+                    deleteButton,
                   ],
                 )
               : Column(
                   children: [
-                    DarkButton(
-                      buttonText: "Submit For Approval",
-                      buttonWidth: MediaQuery.of(context).size.width * 0.8,
-                      onPressed: () {
-                        // Submit for approval logic
-                      },
-                    ),
+                    submitButton,
                     largeSizedBox,
-                    DarkButton(
-                      buttonText: "Delete Entry",
-                      buttonWidth: MediaQuery.of(context).size.width * 0.8,
-                      onPressed: () {
-                        // Delete entry logic
-                      },
-                    ),
+                    deleteButton,
                   ],
                 ),
           extraLargeSizedBox,
@@ -143,76 +181,99 @@ class _EditCharsForm extends StatelessWidget {
 
 class _CharacterDropdown extends StatefulWidget {
   final String wikiID;
-  final CharacterSelectHandler characterSelectHandler;
-  final Function(String characterName) onCharacterChanged;
+  final CharacterHandler characterHandler;
 
-  const _CharacterDropdown({
-    required this.wikiID,
-    required this.characterSelectHandler,
-    required this.onCharacterChanged,
-  });
+  const _CharacterDropdown(
+      {required this.wikiID, required this.characterHandler});
 
   @override
   _CharacterDropdownState createState() => _CharacterDropdownState();
 }
 
 class _CharacterDropdownState extends State<_CharacterDropdown> {
-  late List<dynamic> characters;
-  late String characterID;
+  late List<dynamic> sections;
+  late String id = '';
+  late String name = '';
 
   @override
   void initState() {
     super.initState();
-    characters = [];
-    fetchCharacters();
-    characterID = '';
+    sections = [];
+    id = widget.characterHandler.getEntryID();
+    name = widget.characterHandler.getNameFromID(id);
+    fetchSections();
   }
 
-  Future<void> fetchCharacters() async {
+  Future<void> fetchSections() async {
     DBHandler dbHandler = DBHandler();
-    List fetchedCharacters =
-        await dbHandler.getCharacters(wikiID: widget.wikiID);
+    List fetchedSections = await dbHandler.getSections(wikiID: widget.wikiID);
     setState(() {
-      characters = fetchedCharacters;
+      sections = fetchedSections;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<String>(
-      value: characterID,
+    return DropdownButton<int>(
+      value: sectionNo,
       isExpanded: true,
       onChanged: (index) {
         setState(() {
-          characterID = index!;
-          widget.characterSelectHandler.setCharacterID(characterID);
-          String characterName = characters
-              .firstWhere((char) => char['id'] == characterID)['name'];
-          widget.onCharacterChanged(characterName);
+          sectionNo = index!;
+          widget.sectionNoHandler.setSectionNo(sectionNo);
+
+          name =
+              widget.characterHandler.getNameFromID()
         });
       },
-      items: characters.map<DropdownMenuItem<String>>((character) {
-        final characterID = character['id'];
-        final characterName = character['name'];
-        return DropdownMenuItem<String>(
-          value: characterID,
-          child: Text(characterName, style: TextStyles.listText),
+      items: sections.map<DropdownMenuItem<int>>((section) {
+        final sectionNo = section['section_no'];
+        final sectionName = section['section_name'];
+        return DropdownMenuItem<int>(
+          value: sectionNo,
+          child: Text(sectionName, style: TextStyles.listText),
         );
       }).toList(),
     );
   }
 }
 
-class CharacterSelectHandler {
-  late String characterID;
+class CharacterHandler {
+  final List<dynamic> charactersMap;
+  Map<String, dynamic> entry = {};
 
-  CharacterSelectHandler();
+  CharacterHandler({required this.charactersMap}) : entry = charactersMap[0];
 
-  String getCharacterID() {
-    return characterID;
+  void setEntryFromID(String characterID) {
+    for (Map<String, dynamic> character in charactersMap) {
+      final characterSectionNo =
+          int.tryParse(character['section_no'].toString());
+      if (characterSectionNo == characterID) {
+        entry = character;
+        return;
+      }
+    }
+    entry = {};
+    return;
   }
 
-  void setCharacterID(String newCharacterID) {
-    characterID = newCharacterID;
+  String getEntryID() {
+    if (entry.isNotEmpty) {
+      return entry['id'];
+    }
+    return '';
+  }
+
+  String getNameFromID(String id) {
+    setEntryFromID(id);
+    if (entry.isNotEmpty) {
+      return entry['details_description'];
+    }
+    return '';
+  }
+
+  List<dynamic> getCharacterMap() {
+    return charactersMap;
   }
 }
+*/

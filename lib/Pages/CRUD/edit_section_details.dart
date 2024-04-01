@@ -45,7 +45,7 @@ class EditSectionDetailsState extends State<EditSectionDetails> {
                     secondLineText: widget.sectionName,
                     height: 200),
                 SingleChildScrollView(
-                  child: _EditCharDetailsForm(
+                  child: _EditSectionDetailsForm(
                     wikiMap: widget.wikiMap,
                     sectionHandler: sectionHandler,
                     sectionName: widget.sectionName,
@@ -60,14 +60,14 @@ class EditSectionDetailsState extends State<EditSectionDetails> {
   }
 }
 
-class _EditCharDetailsForm extends StatelessWidget {
+class _EditSectionDetailsForm extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _reasonForEditController;
   final Map<String, dynamic> wikiMap;
   final SectionHandler sectionHandler;
   final String sectionName;
 
-  _EditCharDetailsForm({
+  _EditSectionDetailsForm({
     required this.wikiMap,
     required this.sectionHandler,
     required this.sectionName,

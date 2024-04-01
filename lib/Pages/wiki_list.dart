@@ -128,7 +128,7 @@ class _WikiList extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  WikiHome(wikiMap: wikiTitles[index]),
+                                  WikiHomePage(wikiMap: wikiTitles[index]),
                             ),
                           );
                         },
@@ -140,7 +140,7 @@ class _WikiList extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    WikiHome(wikiMap: wikiTitles[index])),
+                                    WikiHomePage(wikiMap: wikiTitles[index])),
                           );
                         },
                       );
