@@ -8,12 +8,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-- To be added
-
-### Environment Variables
-
-|       Variable       | Required |              Default               |                              Description                               |
-| :------------------: | :------: | :--------------------------------: | :--------------------------------------------------------------------: |
+- Flutter SDK (<https://flutter.dev/docs/get-started/install>)
 
 ### Installing
 
