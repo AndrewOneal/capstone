@@ -619,6 +619,23 @@ class DBHandler {
     }
   }
 
+  Future<void> deleteAccount({required String id}) async {
+    try {
+      await pb.collection('users').delete('id');
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> deleteAccountByEmail({required String email}) async {
+    try {
+      var id = await DBHandler().getUserIDFromEmail(userEmail: "${email}");
+      await pb.collection('users').delete('${id}');
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<String> getUserIDFromName({required String userName}) async {
     String userID = "";
     try {
@@ -692,7 +709,9 @@ Future<void> main() async {
   // print(await DBHandler().getUserIDFromEmail(userEmail: "yes@gmail.com"));
 
   // await DBHandler().createVerificationRequest(submitterUserID: "o21699v9hjdlo30", wikiID: "ndlh8nkyr4uyjw4", requestPackage: '{"String": "Aang discovers his people are dead in book 1 and onwawrd"}');
-  print(await DBHandler().getVerificationRequests(
-      wiki_id: await DBHandler().getWikiIDFromName(wikiName: "Avatar")));
+  // print(await DBHandler().getVerificationRequests(
+  //     wiki_id: await DBHandler().getWikiIDFromName(wikiName: "Avatar")));
   // await DBHandler().deleteVerificationRequests(verification_record_id: "9pxaqa3dssqx3bs");
+
+  await DBHandler().deleteAccountByEmail(email: "test@gmail.com");
 }
