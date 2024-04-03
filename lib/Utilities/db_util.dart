@@ -1,6 +1,8 @@
 import 'package:pocketbase/pocketbase.dart';
 
+//final pb = PocketBase('http://127.0.0.1:8090');
 final pb = PocketBase('http://72.49.18.237:8090');
+
 
 String loremIpsum =
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ac odio vel purus molestie posuere. Curabitur non ante felis. Fusce volutpat turpis quis velit commodo, a tristique elit tempor. Etiam pulvinar augue ut est consectetur, in volutpat sem varius. Sed id dapibus odio. Cras ullamcorper leo quis hendrerit facilisis. Vivamus in risus euismod, pharetra elit eu, gravida lorem. Etiam dictum efficitur nulla sit amet egestas. Praesent vel mi rhoncus, gravida neque eu, elementum lorem. Integer vulputate quam nec nunc luctus aliquet. Etiam lacinia fringilla purus, vel interdum ligula aliquet vel. Mauris a lorem tempor, fermentum mauris eu, convallis lorem. Vivamus aliquet erat in laoreet efficitur. Aenean nec suscipit mi, non molestie risus. Nulla in leo at lorem porta tristique.";
@@ -654,8 +656,7 @@ class DBHandler {
     String userID = "";
     try {
       print("Retreiving userID...");
-      final record =
-          await pb.collection('users').getFirstListItem('email="${userEmail}"');
+      final record = await pb.collection('users').getFirstListItem('email="${userEmail}"');
       userID = record.toJson()["id"];
     } catch (e) {
       print(e);
@@ -713,5 +714,7 @@ Future<void> main() async {
   //     wiki_id: await DBHandler().getWikiIDFromName(wikiName: "Avatar")));
   // await DBHandler().deleteVerificationRequests(verification_record_id: "9pxaqa3dssqx3bs");
 
-  await DBHandler().deleteAccountByEmail(email: "test@gmail.com");
+  await DBHandler().authenticate(username: "TestAccount", password: "test@gmail.com");
+  print(await DBHandler().getUserIDFromEmail(userEmail: "admin@gmail.com"));
+  //print(await DBHandler().getWiki(wikiID: "mgdzj2sn74biu9w"));
 }
