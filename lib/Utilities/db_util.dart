@@ -1,7 +1,7 @@
 import 'package:pocketbase/pocketbase.dart';
 
-//final pb = PocketBase('http://127.0.0.1:8090');
-final pb = PocketBase('http://72.49.18.237:8090');
+final pb = PocketBase('http://127.0.0.1:8090');
+//final pb = PocketBase('http://72.49.18.237:8090');
 
 
 String loremIpsum =
@@ -714,7 +714,7 @@ Future<void> main() async {
   //     wiki_id: await DBHandler().getWikiIDFromName(wikiName: "Avatar")));
   // await DBHandler().deleteVerificationRequests(verification_record_id: "9pxaqa3dssqx3bs");
 
-  await DBHandler().authenticate(username: "TestAccount", password: "test@gmail.com");
-  print(await DBHandler().getUserIDFromEmail(userEmail: "admin@gmail.com"));
+  await DBHandler().authenticate(username: "admin", password: "admin@gmail.com");
+  await DBHandler().deleteAccountByEmail(email: "test@gmail.com");
   //print(await DBHandler().getWiki(wikiID: "mgdzj2sn74biu9w"));
 }
