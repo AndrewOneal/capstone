@@ -6,12 +6,14 @@ class EditCharacterDetails extends StatefulWidget {
   final Map<String, dynamic> wikiMap;
   final List<dynamic> characterMap;
   final String characterName;
+  final int maxSectionNo;
 
   const EditCharacterDetails({
     super.key,
     required this.wikiMap,
     required this.characterMap,
     required this.characterName,
+    required this.maxSectionNo,
   });
 
   @override
@@ -49,6 +51,7 @@ class EditCharacterDetailsState extends State<EditCharacterDetails> {
                     wikiMap: widget.wikiMap,
                     characterHandler: characterHandler,
                     characterName: widget.characterName,
+                    maxSectionNo: widget.maxSectionNo,
                   ),
                 ),
               ],
@@ -66,11 +69,13 @@ class _EditCharDetailsForm extends StatelessWidget {
   final Map<String, dynamic> wikiMap;
   final CharacterHandler characterHandler;
   final String characterName;
+  final int maxSectionNo;
 
   _EditCharDetailsForm({
     required this.wikiMap,
     required this.characterHandler,
     required this.characterName,
+    required this.maxSectionNo,
   }) : _reasonForEditController = TextEditingController();
 
   @override
@@ -164,6 +169,7 @@ class _EditCharDetailsForm extends StatelessWidget {
             sectionNoHandler: sectionNoHandler,
             quillEditor: quillEditor,
             characterHandler: characterHandler,
+            maxSectionNo: maxSectionNo,
           ),
           quillEditor.buildEditor(),
           TextFormField(
@@ -200,12 +206,14 @@ class _SectionDropdown extends StatefulWidget {
   final SectionNoHandler sectionNoHandler;
   final QuillEditorManager quillEditor;
   final CharacterHandler characterHandler;
+  final int maxSectionNo;
 
   const _SectionDropdown(
       {required this.wikiID,
       required this.sectionNoHandler,
       required this.quillEditor,
-      required this.characterHandler});
+      required this.characterHandler,
+      required this.maxSectionNo});
 
   @override
   _SectionDropdownState createState() => _SectionDropdownState();
@@ -257,7 +265,9 @@ class _SectionDropdownState extends State<_SectionDropdown> {
           ]);
         });
       },
-      items: sections.map<DropdownMenuItem<int>>((section) {
+      items: sections
+          .where((section) => section['section_no'] <= widget.maxSectionNo)
+          .map<DropdownMenuItem<int>>((section) {
         final sectionNo = section['section_no'];
         final sectionName = section['section_name'];
         return DropdownMenuItem<int>(

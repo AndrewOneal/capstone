@@ -1,4 +1,4 @@
-/*import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Utilities/db_util.dart';
 
@@ -56,7 +56,7 @@ class EditCharactersState extends State<EditCharacters> {
 
 class _EditCharForm extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _nameController;
+  final TextEditingController nameController;
   final TextEditingController _reasonForEditController;
   final Map<String, dynamic> wikiMap;
   final CharacterHandler characterHandler;
@@ -65,7 +65,7 @@ class _EditCharForm extends StatelessWidget {
     required this.wikiMap,
     required this.characterHandler,
   })  : _reasonForEditController = TextEditingController(),
-        _nameController = TextEditingController();
+        nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -150,6 +150,17 @@ class _EditCharForm extends StatelessWidget {
       key: _formKey,
       child: Column(
         children: [
+          _CharacterDropdown(
+            wikiID: wikiID,
+            characterHandler: characterHandler,
+            nameController: nameController,
+          ),
+          TextFormField(
+            controller: nameController,
+            decoration: const InputDecoration(
+              labelText: 'Name',
+            ),
+          ),
           TextFormField(
             controller: _reasonForEditController,
             decoration: const InputDecoration(
@@ -182,58 +193,57 @@ class _EditCharForm extends StatelessWidget {
 class _CharacterDropdown extends StatefulWidget {
   final String wikiID;
   final CharacterHandler characterHandler;
+  final TextEditingController nameController;
 
   const _CharacterDropdown(
-      {required this.wikiID, required this.characterHandler});
+      {required this.wikiID,
+      required this.characterHandler,
+      required this.nameController});
 
   @override
   _CharacterDropdownState createState() => _CharacterDropdownState();
 }
 
 class _CharacterDropdownState extends State<_CharacterDropdown> {
-  late List<dynamic> sections;
+  late List<dynamic> characters;
   late String id = '';
   late String name = '';
 
   @override
   void initState() {
     super.initState();
-    sections = [];
     id = widget.characterHandler.getEntryID();
     name = widget.characterHandler.getNameFromID(id);
-    fetchSections();
-  }
-
-  Future<void> fetchSections() async {
-    DBHandler dbHandler = DBHandler();
-    List fetchedSections = await dbHandler.getSections(wikiID: widget.wikiID);
-    setState(() {
-      sections = fetchedSections;
-    });
+    characters = widget.characterHandler.getCharacterMap();
+    widget.nameController.text = name;
   }
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<int>(
-      value: sectionNo,
+    return DropdownButton<String>(
+      value: id,
       isExpanded: true,
       onChanged: (index) {
         setState(() {
-          sectionNo = index!;
-          widget.sectionNoHandler.setSectionNo(sectionNo);
-
-          name =
-              widget.characterHandler.getNameFromID()
+          id = index!;
+          name = widget.characterHandler.getNameFromID(id);
+          widget.nameController.text = name;
         });
       },
-      items: sections.map<DropdownMenuItem<int>>((section) {
-        final sectionNo = section['section_no'];
-        final sectionName = section['section_name'];
-        return DropdownMenuItem<int>(
-          value: sectionNo,
-          child: Text(sectionName, style: TextStyles.listText),
-        );
-      }).toList(),
+      items: [
+        ...characters.map<DropdownMenuItem<String>>((character) {
+          final characterID = character['id'];
+          final characterName = character['name'];
+          return DropdownMenuItem<String>(
+            value: characterID,
+            child: Text(characterName, style: TextStyles.listText),
+          );
+        }),
+        DropdownMenuItem<String>(
+          value: 'CREATEACHARACTER',
+          child: Text('Create a Character', style: TextStyles.listText),
+        ),
+      ],
     );
   }
 }
@@ -242,13 +252,13 @@ class CharacterHandler {
   final List<dynamic> charactersMap;
   Map<String, dynamic> entry = {};
 
-  CharacterHandler({required this.charactersMap}) : entry = charactersMap[0];
+  CharacterHandler({required this.charactersMap})
+      : entry = charactersMap[0] ?? {};
 
   void setEntryFromID(String characterID) {
     for (Map<String, dynamic> character in charactersMap) {
-      final characterSectionNo =
-          int.tryParse(character['section_no'].toString());
-      if (characterSectionNo == characterID) {
+      final entryID = character['id'].toString();
+      if (entryID.contains(characterID)) {
         entry = character;
         return;
       }
@@ -267,7 +277,7 @@ class CharacterHandler {
   String getNameFromID(String id) {
     setEntryFromID(id);
     if (entry.isNotEmpty) {
-      return entry['details_description'];
+      return entry['name'];
     }
     return '';
   }
@@ -276,4 +286,3 @@ class CharacterHandler {
     return charactersMap;
   }
 }
-*/

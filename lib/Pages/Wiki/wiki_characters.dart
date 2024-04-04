@@ -5,12 +5,38 @@ import 'package:capstone/Pages/Account/wiki_settings.dart';
 import 'package:capstone/Pages/Wiki/wiki_details.dart';
 import 'package:capstone/Utilities/db_util.dart';
 import 'package:capstone/Pages/Account/account.dart';
+import 'package:capstone/Pages/CRUD/edit_characters.dart';
 
-class WikiCharactersPage extends StatelessWidget {
+class WikiCharactersPage extends StatefulWidget {
   final Map<String, dynamic> wikiMap;
   final int sectionNo;
-  const WikiCharactersPage(
-      {super.key, required this.wikiMap, required this.sectionNo});
+
+  const WikiCharactersPage({
+    super.key,
+    required this.wikiMap,
+    required this.sectionNo,
+  });
+
+  @override
+  State<WikiCharactersPage> createState() => _WikiCharactersPageState();
+}
+
+class _WikiCharactersPageState extends State<WikiCharactersPage> {
+  late List<dynamic> charactersMap = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchChars();
+  }
+
+  Future<void> _fetchChars() async {
+    final dbHandler = DBHandler();
+    final details = await dbHandler.getCharacters(wikiID: widget.wikiMap['id']);
+    setState(() {
+      charactersMap = details;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +57,9 @@ class WikiCharactersPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          WikiSettings(wikiMap: wikiMap, sectionNo: sectionNo)),
+                      builder: (context) => WikiSettings(
+                          wikiMap: widget.wikiMap,
+                          sectionNo: widget.sectionNo)),
                 );
               }),
           IconButton(
@@ -60,8 +87,8 @@ class WikiCharactersPage extends StatelessWidget {
                   const ListTitle(title: "Characters"),
                   Expanded(
                     child: _CharacterList(
-                      wikiMap: wikiMap,
-                      sectionNo: sectionNo,
+                      wikiMap: widget.wikiMap,
+                      sectionNo: widget.sectionNo,
                     ),
                   ),
                 ],
@@ -74,7 +101,14 @@ class WikiCharactersPage extends StatelessWidget {
           ? Padding(
               padding: const EdgeInsets.all(20),
               child: FloatingActionButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => EditCharacters(
+                              wikiMap: widget.wikiMap,
+                              charactersMap: charactersMap)));
+                },
                 child: const Icon(Icons.edit),
               ),
             )

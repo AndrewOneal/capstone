@@ -4,10 +4,12 @@ import 'package:capstone/Utilities/db_util.dart';
 
 class EditSections extends StatefulWidget {
   final Map<String, dynamic> wikiMap;
+  final List<dynamic> sectionsMap;
 
   const EditSections({
     super.key,
     required this.wikiMap,
+    required this.sectionsMap,
   });
 
   @override
@@ -17,9 +19,10 @@ class EditSections extends StatefulWidget {
 class EditSectionsState extends State<EditSections> {
   @override
   Widget build(BuildContext context) {
+    final SectionHandler sectionHandler =
+        SectionHandler(sectionsMap: widget.sectionsMap);
     final Global global = Global();
     final EdgeInsets sideMargins = global.sideMargins;
-    final SizedBox titleSizedBox = global.titleSizedBox;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -35,10 +38,12 @@ class EditSectionsState extends State<EditSections> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                titleSizedBox,
-                const ListTitle(title: "Edit Sections"),
+                const ListTitle(title: 'Edit Sections'),
                 SingleChildScrollView(
-                  child: _EditCharsForm(wikiMap: widget.wikiMap),
+                  child: _EditCharForm(
+                    wikiMap: widget.wikiMap,
+                    sectionHandler: sectionHandler,
+                  ),
                 ),
               ],
             ),
@@ -49,16 +54,18 @@ class EditSectionsState extends State<EditSections> {
   }
 }
 
-class _EditCharsForm extends StatelessWidget {
+class _EditCharForm extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _sectionNameController;
+  final TextEditingController nameController;
   final TextEditingController _reasonForEditController;
   final Map<String, dynamic> wikiMap;
+  final SectionHandler sectionHandler;
 
-  _EditCharsForm({
+  _EditCharForm({
     required this.wikiMap,
+    required this.sectionHandler,
   })  : _reasonForEditController = TextEditingController(),
-        _sectionNameController = TextEditingController();
+        nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -66,25 +73,94 @@ class _EditCharsForm extends StatelessWidget {
     final SizedBox mediumSizedBox = global.mediumSizedBox;
     final SizedBox largeSizedBox = global.largeSizedBox;
     final SizedBox extraLargeSizedBox = global.extraLargeSizedBox;
+    final wikiID = wikiMap['id'];
     final DBHandler dbHandler = DBHandler();
-    QuillEditorManager quillEditor = QuillEditorManager();
-    SectionNoHandler sectionNoHandler = SectionNoHandler();
+    final double buttonWidth = MediaQuery.of(context).size.width > 514
+        ? MediaQuery.of(context).size.width * 0.4
+        : MediaQuery.of(context).size.width * 0.8;
+
+    final Widget submitButton = DarkButton(
+      buttonText: "Submit For Approval",
+      buttonWidth: buttonWidth,
+      onPressed: () {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(
+              const SnackBar(
+                  content: Text('Submitting Request'),
+                  duration: Duration(seconds: 1)),
+            )
+            .closed
+            .then((reason) {
+          Navigator.pop(context);
+        });
+        String id = sectionHandler.getEntryID();
+        String editType = id == '' ? "createSection" : "editSection";
+        dbHandler.createVerificationRequest(
+          submitterUserID: pb.authStore.model.id,
+          wikiID: wikiID,
+          requestPackage: {
+            "edit_type": editType,
+            "id": id,
+            "updatedEntry": '',
+            "reason": _reasonForEditController.text,
+          },
+        );
+      },
+    );
+
+    final Widget deleteButton = DarkButton(
+      buttonText: "Delete Section",
+      buttonWidth: buttonWidth,
+      onPressed: () {
+        String id = sectionHandler.getEntryID();
+        id.isEmpty
+            ? {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content:
+                          Text("Can't delete an entry that does not exist"),
+                      duration: Duration(seconds: 1)),
+                )
+              }
+            : {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(
+                      const SnackBar(
+                          content: Text("Submitting Request"),
+                          duration: Duration(seconds: 1)),
+                    )
+                    .closed
+                    .then((reason) {
+                  Navigator.pop(context);
+                }),
+                dbHandler.createVerificationRequest(
+                  submitterUserID: pb.authStore.model.id,
+                  wikiID: wikiID,
+                  requestPackage: {
+                    "edit_type": "deleteSection",
+                    "id": id,
+                    "reason": _reasonForEditController.text,
+                  },
+                ),
+              };
+      },
+    );
+
     return Form(
       key: _formKey,
       child: Column(
         children: [
           _SectionDropdown(
-            wikiID: wikiMap['id'],
-            sectionNoHandler: sectionNoHandler,
+            wikiID: wikiID,
+            sectionHandler: sectionHandler,
+            nameController: nameController,
           ),
-          mediumSizedBox,
           TextFormField(
-            controller: _sectionNameController,
+            controller: nameController,
             decoration: const InputDecoration(
-              labelText: 'Section',
+              labelText: 'Name',
             ),
           ),
-          mediumSizedBox,
           TextFormField(
             controller: _reasonForEditController,
             decoration: const InputDecoration(
@@ -96,39 +172,15 @@ class _EditCharsForm extends StatelessWidget {
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    DarkButton(
-                      buttonText: "Submit For Approval",
-                      buttonWidth: MediaQuery.of(context).size.width * 0.4,
-                      onPressed: () {
-                        // Submit for approval logic
-                      },
-                    ),
-                    DarkButton(
-                      buttonText: "Delete Entry",
-                      buttonWidth: MediaQuery.of(context).size.width * 0.4,
-                      onPressed: () {
-                        // Delete entry logic
-                      },
-                    ),
+                    submitButton,
+                    deleteButton,
                   ],
                 )
               : Column(
                   children: [
-                    DarkButton(
-                      buttonText: "Submit For Approval",
-                      buttonWidth: MediaQuery.of(context).size.width * 0.8,
-                      onPressed: () {
-                        // Submit for approval logic
-                      },
-                    ),
+                    submitButton,
                     largeSizedBox,
-                    DarkButton(
-                      buttonText: "Delete Entry",
-                      buttonWidth: MediaQuery.of(context).size.width * 0.8,
-                      onPressed: () {
-                        // Delete entry logic
-                      },
-                    ),
+                    deleteButton,
                   ],
                 ),
           extraLargeSizedBox,
@@ -140,10 +192,13 @@ class _EditCharsForm extends StatelessWidget {
 
 class _SectionDropdown extends StatefulWidget {
   final String wikiID;
-  final SectionNoHandler sectionNoHandler;
+  final SectionHandler sectionHandler;
+  final TextEditingController nameController;
 
   const _SectionDropdown(
-      {required this.wikiID, required this.sectionNoHandler});
+      {required this.wikiID,
+      required this.sectionHandler,
+      required this.nameController});
 
   @override
   _SectionDropdownState createState() => _SectionDropdownState();
@@ -151,57 +206,82 @@ class _SectionDropdown extends StatefulWidget {
 
 class _SectionDropdownState extends State<_SectionDropdown> {
   late List<dynamic> sections;
-  late int sectionNo;
+  late String id = '';
+  late String name = '';
 
   @override
   void initState() {
     super.initState();
-    sections = [];
-    sectionNo = widget.sectionNoHandler.getSectionNo();
-    fetchSections();
-  }
-
-  Future<void> fetchSections() async {
-    DBHandler dbHandler = DBHandler();
-    List fetchedSections = await dbHandler.getSections(wikiID: widget.wikiID);
-    setState(() {
-      sections = fetchedSections;
-    });
+    id = widget.sectionHandler.getEntryID();
+    name = widget.sectionHandler.getNameFromID(id);
+    sections = widget.sectionHandler.getSectionMap();
+    widget.nameController.text = name;
   }
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<int>(
-      value: sectionNo,
+    return DropdownButton<String>(
+      value: id,
       isExpanded: true,
       onChanged: (index) {
         setState(() {
-          sectionNo = index!;
-          widget.sectionNoHandler.setSectionNo(sectionNo);
+          id = index!;
+          name = widget.sectionHandler.getNameFromID(id);
+          widget.nameController.text = name;
         });
       },
-      items: sections.map<DropdownMenuItem<int>>((section) {
-        final sectionNo = section['section_no'];
-        final sectionName = section['section_name'];
-        return DropdownMenuItem<int>(
-          value: sectionNo,
-          child: Text(sectionName, style: TextStyles.listText),
-        );
-      }).toList(),
+      items: [
+        ...sections.map<DropdownMenuItem<String>>((section) {
+          final sectionID = section['id'];
+          final sectionName = section['section_name'];
+          return DropdownMenuItem<String>(
+            value: sectionID,
+            child: Text(sectionName, style: TextStyles.listText),
+          );
+        }),
+        DropdownMenuItem<String>(
+          value: 'CREATEASECTION',
+          child: Text('Create a Section', style: TextStyles.listText),
+        ),
+      ],
     );
   }
 }
 
-class SectionNoHandler {
-  late int sectionNo = 1;
+class SectionHandler {
+  final List<dynamic> sectionsMap;
+  Map<String, dynamic> entry = {};
 
-  SectionNoHandler();
+  SectionHandler({required this.sectionsMap}) : entry = sectionsMap[0] ?? {};
 
-  int getSectionNo() {
-    return sectionNo;
+  void setEntryFromID(String sectionID) {
+    for (Map<String, dynamic> section in sectionsMap) {
+      final entryID = section['id'].toString();
+      if (entryID.contains(sectionID)) {
+        entry = section;
+        return;
+      }
+    }
+    entry = {};
+    return;
   }
 
-  void setSectionNo(int newSectionNo) {
-    sectionNo = newSectionNo;
+  String getEntryID() {
+    if (entry.isNotEmpty) {
+      return entry['id'];
+    }
+    return '';
+  }
+
+  String getNameFromID(String id) {
+    setEntryFromID(id);
+    if (entry.isNotEmpty) {
+      return entry['section_name'];
+    }
+    return '';
+  }
+
+  List<dynamic> getSectionMap() {
+    return sectionsMap;
   }
 }

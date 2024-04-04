@@ -5,12 +5,38 @@ import 'package:capstone/Pages/Account/wiki_settings.dart';
 import 'package:capstone/Pages/Wiki/wiki_details.dart';
 import 'package:capstone/Utilities/db_util.dart';
 import 'package:capstone/Pages/Account/account.dart';
+import 'package:capstone/Pages/CRUD/edit_locations.dart';
 
-class WikiLocationsPage extends StatelessWidget {
+class WikiLocationsPage extends StatefulWidget {
   final Map<String, dynamic> wikiMap;
   final int sectionNo;
-  const WikiLocationsPage(
-      {super.key, required this.wikiMap, required this.sectionNo});
+
+  const WikiLocationsPage({
+    super.key,
+    required this.wikiMap,
+    required this.sectionNo,
+  });
+
+  @override
+  State<WikiLocationsPage> createState() => _WikiLocationsPageState();
+}
+
+class _WikiLocationsPageState extends State<WikiLocationsPage> {
+  late List<dynamic> locationsMap = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchLocations();
+  }
+
+  Future<void> _fetchLocations() async {
+    final dbHandler = DBHandler();
+    final details = await dbHandler.getLocations(wikiID: widget.wikiMap['id']);
+    setState(() {
+      locationsMap = details;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +57,9 @@ class WikiLocationsPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          WikiSettings(wikiMap: wikiMap, sectionNo: sectionNo)),
+                      builder: (context) => WikiSettings(
+                          wikiMap: widget.wikiMap,
+                          sectionNo: widget.sectionNo)),
                 );
               }),
           IconButton(
@@ -59,8 +86,8 @@ class WikiLocationsPage extends StatelessWidget {
                 children: <Widget>[
                   const ListTitle(title: "Locations"),
                   Expanded(
-                    child:
-                        _LocationList(wikiMap: wikiMap, sectionNo: sectionNo),
+                    child: _LocationList(
+                        wikiMap: widget.wikiMap, sectionNo: widget.sectionNo),
                   ),
                 ],
               ),
@@ -72,7 +99,17 @@ class WikiLocationsPage extends StatelessWidget {
           ? Padding(
               padding: const EdgeInsets.all(20),
               child: FloatingActionButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EditLocations(
+                        wikiMap: widget.wikiMap,
+                        locationsMap: locationsMap,
+                      ),
+                    ),
+                  );
+                },
                 child: const Icon(Icons.edit),
               ),
             )

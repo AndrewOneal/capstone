@@ -7,11 +7,36 @@ import 'package:capstone/Utilities/db_util.dart';
 import 'package:capstone/Pages/Account/account.dart';
 import 'package:capstone/Pages/CRUD/edit_sections.dart';
 
-class WikiSectionsPage extends StatelessWidget {
+class WikiSectionsPage extends StatefulWidget {
   final Map<String, dynamic> wikiMap;
   final int sectionNo;
-  const WikiSectionsPage(
-      {super.key, required this.wikiMap, required this.sectionNo});
+
+  const WikiSectionsPage({
+    super.key,
+    required this.wikiMap,
+    required this.sectionNo,
+  });
+
+  @override
+  State<WikiSectionsPage> createState() => _WikiSectionsPageState();
+}
+
+class _WikiSectionsPageState extends State<WikiSectionsPage> {
+  late List<dynamic> sectionsMap = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchSections();
+  }
+
+  Future<void> _fetchSections() async {
+    final dbHandler = DBHandler();
+    final details = await dbHandler.getSections(wikiID: widget.wikiMap['id']);
+    setState(() {
+      sectionsMap = details;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +58,8 @@ class WikiSectionsPage extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                         builder: (context) => WikiSettings(
-                            wikiMap: wikiMap, sectionNo: sectionNo)),
+                            wikiMap: widget.wikiMap,
+                            sectionNo: widget.sectionNo)),
                   );
                 }),
             IconButton(
@@ -60,8 +86,8 @@ class WikiSectionsPage extends StatelessWidget {
                   children: <Widget>[
                     const ListTitle(title: "Sections"),
                     Expanded(
-                      child:
-                          _SectionList(wikiMap: wikiMap, sectionNo: sectionNo),
+                      child: _SectionList(
+                          wikiMap: widget.wikiMap, sectionNo: widget.sectionNo),
                     ),
                   ],
                 ),
@@ -78,7 +104,8 @@ class WikiSectionsPage extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) => EditSections(
-                          wikiMap: wikiMap,
+                          wikiMap: widget.wikiMap,
+                          sectionsMap: sectionsMap,
                         ),
                       ),
                     );
