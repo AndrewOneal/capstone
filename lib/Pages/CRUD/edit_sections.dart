@@ -94,14 +94,15 @@ class _EditCharForm extends StatelessWidget {
           Navigator.pop(context);
         });
         String id = sectionHandler.getEntryID();
-        String editType = id == '' ? "createSection" : "editSection";
+        String editType =
+            id == 'CREATEASECTION' ? "createSection" : "editSection";
         dbHandler.createVerificationRequest(
           submitterUserID: pb.authStore.model.id,
           wikiID: wikiID,
           requestPackage: {
             "edit_type": editType,
             "id": id,
-            "updatedEntry": '',
+            "name": nameController.text,
             "reason": _reasonForEditController.text,
           },
         );
