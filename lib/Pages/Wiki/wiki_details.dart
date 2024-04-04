@@ -256,13 +256,13 @@ class FloatingEditButton extends StatelessWidget {
   final int sectionNo;
 
   const FloatingEditButton({
-    Key? key,
+    super.key,
     required this.detailType,
     required this.wikiMap,
     required this.detailName,
     required this.wikiDetails,
     required this.sectionNo,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
