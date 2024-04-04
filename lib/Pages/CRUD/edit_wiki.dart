@@ -2,15 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Utilities/db_util.dart';
 
-class EditWiki extends StatelessWidget {
+class EditWiki extends StatefulWidget {
   final Map<String, dynamic> wikiMap;
 
-  const EditWiki({super.key, required this.wikiMap});
+  const EditWiki({
+    super.key,
+    required this.wikiMap,
+  });
+
+  @override
+  EditWikiState createState() => EditWikiState();
+}
+
+class EditWikiState extends State<EditWiki> {
   @override
   Widget build(BuildContext context) {
     final Global global = Global();
     final EdgeInsets sideMargins = global.sideMargins;
-    final SizedBox titleSizedBox = global.titleSizedBox;
+    final String wikiTitle = widget.wikiMap['wiki_name'];
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -26,10 +35,15 @@ class EditWiki extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                titleSizedBox,
-                const ListTitle(title: "Edit Wiki Details"),
+                TwoLineTitle(
+                    firstLineText: "Edit Wiki Details",
+                    secondLineText: wikiTitle,
+                    height: 200),
                 SingleChildScrollView(
-                  child: _EditWikiForm(wikiMap: wikiMap),
+                  child: _EditWikiDetailsForm(
+                    wikiMap: widget.wikiMap,
+                    wikiTitle: wikiTitle,
+                  ),
                 ),
               ],
             ),
@@ -40,49 +54,118 @@ class EditWiki extends StatelessWidget {
   }
 }
 
-class _EditWikiForm extends StatelessWidget {
+class _EditWikiDetailsForm extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _reasonForEditController =
-      TextEditingController();
-  final TextEditingController _wikiNameController;
+  final TextEditingController _wikiTitleController;
+  final TextEditingController _reasonForEditController;
   final Map<String, dynamic> wikiMap;
-  final QuillEditorManager quillEditor = QuillEditorManager();
+  final String wikiTitle;
 
-  _EditWikiForm({
+  _EditWikiDetailsForm({
     required this.wikiMap,
-  }) : _wikiNameController = TextEditingController(text: wikiMap['wiki_name']);
+    required this.wikiTitle,
+  })  : _reasonForEditController = TextEditingController(),
+        _wikiTitleController = TextEditingController(text: wikiTitle);
 
   @override
   Widget build(BuildContext context) {
-    quillEditor.setInput([
-      {
-        "insert": wikiMap['wiki_description'],
-        "attributes": {"color": "#FF363942"}
-      },
-      {
-        "insert": "\n",
-      }
-    ]);
-    quillEditor.setBackgroundColor(lightPurple['200']!);
-    quillEditor.setTextColor(text['900']!);
     final Global global = Global();
     final SizedBox mediumSizedBox = global.mediumSizedBox;
     final SizedBox largeSizedBox = global.largeSizedBox;
     final SizedBox extraLargeSizedBox = global.extraLargeSizedBox;
+    final wikiID = wikiMap['id'];
+    final wikiDescription = wikiMap['wiki_description'];
     final DBHandler dbHandler = DBHandler();
+    QuillEditorManager quillEditor = QuillEditorManager();
+    quillEditor.setBackgroundColor(lightPurple['200']!);
+    quillEditor.setTextColor(text['900']!);
+    quillEditor.setInput([
+      {
+        "insert": '$wikiDescription\n',
+      },
+    ]);
+    final double buttonWidth = MediaQuery.of(context).size.width > 514
+        ? MediaQuery.of(context).size.width * 0.4
+        : MediaQuery.of(context).size.width * 0.8;
+
+    final Widget submitButton = DarkButton(
+      buttonText: "Submit For Approval",
+      buttonWidth: buttonWidth,
+      onPressed: () {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(
+              const SnackBar(
+                  content: Text('Submitting Request'),
+                  duration: Duration(seconds: 1)),
+            )
+            .closed
+            .then((reason) {
+          Navigator.pop(context);
+        });
+        String id = wikiID;
+        dbHandler.createVerificationRequest(
+          submitterUserID: pb.authStore.model.id,
+          wikiID: wikiID,
+          requestPackage: {
+            "edit_type": "editWiki",
+            "id": id,
+            "updatedEntry": quillEditor.getDocumentJson(),
+            "reason": _reasonForEditController.text,
+          },
+        );
+      },
+    );
+
+    final Widget deleteButton = DarkButton(
+      buttonText: "Delete Entry",
+      buttonWidth: buttonWidth,
+      onPressed: () {
+        String id = wikiID;
+        id.isEmpty
+            ? {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content:
+                          Text("Can't delete an entry that does not exist"),
+                      duration: Duration(seconds: 1)),
+                )
+              }
+            : {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(
+                      const SnackBar(
+                          content: Text("Submitting Request"),
+                          duration: Duration(seconds: 1)),
+                    )
+                    .closed
+                    .then((reason) {
+                  Navigator.pop(context);
+                }),
+                dbHandler.createVerificationRequest(
+                  submitterUserID: pb.authStore.model.id,
+                  wikiID: wikiID,
+                  requestPackage: {
+                    "edit_type": "deleteWiki",
+                    "id": id,
+                    "reason": _reasonForEditController.text,
+                  },
+                ),
+              };
+      },
+    );
+
     return Form(
       key: _formKey,
       child: Column(
         children: [
           TextFormField(
-            controller: _wikiNameController,
+            controller: _wikiTitleController,
             decoration: const InputDecoration(
-              labelText: 'Wiki Name',
+              labelText: 'Wiki Title',
             ),
           ),
           mediumSizedBox,
           quillEditor.buildEditor(),
-          mediumSizedBox,
           TextFormField(
             controller: _reasonForEditController,
             decoration: const InputDecoration(
@@ -94,39 +177,15 @@ class _EditWikiForm extends StatelessWidget {
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    DarkButton(
-                      buttonText: "Submit For Approval",
-                      buttonWidth: MediaQuery.of(context).size.width * 0.4,
-                      onPressed: () {
-                        // Submit for approval logic
-                      },
-                    ),
-                    DarkButton(
-                      buttonText: "Delete Entry",
-                      buttonWidth: MediaQuery.of(context).size.width * 0.4,
-                      onPressed: () {
-                        // Delete entry logic
-                      },
-                    ),
+                    submitButton,
+                    deleteButton,
                   ],
                 )
               : Column(
                   children: [
-                    DarkButton(
-                      buttonText: "Submit For Approval",
-                      buttonWidth: MediaQuery.of(context).size.width * 0.8,
-                      onPressed: () {
-                        // Submit for approval logic
-                      },
-                    ),
+                    submitButton,
                     largeSizedBox,
-                    DarkButton(
-                      buttonText: "Delete Entry",
-                      buttonWidth: MediaQuery.of(context).size.width * 0.8,
-                      onPressed: () {
-                        // Delete entry logic
-                      },
-                    ),
+                    deleteButton,
                   ],
                 ),
           extraLargeSizedBox,
