@@ -177,12 +177,14 @@ class TwoLineTitle extends StatelessWidget {
   final String firstLineText;
   final String secondLineText;
   final double height;
+  final int purple;
 
   const TwoLineTitle(
       {super.key,
       required this.firstLineText,
       required this.secondLineText,
-      this.height = 300});
+      this.height = 300,
+      this.purple = 2});
 
   @override
   Widget build(BuildContext context) {
@@ -198,14 +200,18 @@ class TwoLineTitle extends StatelessWidget {
             fit: BoxFit.scaleDown,
             child: Text(
               firstLineText,
-              style: TextStyles.whiteHeader.copyWith(height: 1.2),
+              style: purple == 2
+                  ? TextStyles.whiteHeader.copyWith(height: 1.2)
+                  : TextStyles.purpleHeader.copyWith(height: 1.2),
             ),
           ),
           FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(
               secondLineText,
-              style: TextStyles.purpleHeader.copyWith(height: 1.2),
+              style: purple == 2
+                  ? TextStyles.purpleHeader.copyWith(height: 1.2)
+                  : TextStyles.whiteHeader.copyWith(height: 1.2),
             ),
           ),
         ],
