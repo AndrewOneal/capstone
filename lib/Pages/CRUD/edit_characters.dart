@@ -101,7 +101,7 @@ class _EditCharForm extends StatelessWidget {
           wikiID: wikiID,
           requestPackage: {
             "edit_type": editType,
-            "id": id,
+            "entryID": id,
             "name": nameController.text,
             "reason": _reasonForEditController.text,
           },
@@ -139,7 +139,7 @@ class _EditCharForm extends StatelessWidget {
                   wikiID: wikiID,
                   requestPackage: {
                     "edit_type": "deleteCharacter",
-                    "id": id,
+                    "entryID": id,
                     "reason": _reasonForEditController.text,
                   },
                 ),

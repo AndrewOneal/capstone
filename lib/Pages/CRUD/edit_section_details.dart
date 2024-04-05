@@ -113,7 +113,7 @@ class _EditSectionDetailsForm extends StatelessWidget {
           wikiID: wikiID,
           requestPackage: {
             "edit_type": editType,
-            "id": id,
+            "entryID": id,
             "updatedEntry": quillEditor.getDocumentJson(),
             "reason": _reasonForEditController.text,
           },
@@ -151,7 +151,7 @@ class _EditSectionDetailsForm extends StatelessWidget {
                   wikiID: wikiID,
                   requestPackage: {
                     "edit_type": "deleteSectionDetail",
-                    "id": id,
+                    "entryID": id,
                     "reason": _reasonForEditController.text,
                   },
                 ),

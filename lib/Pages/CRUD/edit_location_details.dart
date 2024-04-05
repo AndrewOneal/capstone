@@ -114,7 +114,7 @@ class _EditLocationDetailsForm extends StatelessWidget {
           wikiID: wikiID,
           requestPackage: {
             "edit_type": editType,
-            "id": id,
+            "entryID": id,
             "updatedEntry": quillEditor.getDocumentJson(),
             "reason": _reasonForEditController.text,
           },
@@ -152,7 +152,7 @@ class _EditLocationDetailsForm extends StatelessWidget {
                   wikiID: wikiID,
                   requestPackage: {
                     "edit_type": "deleteLocationDetail",
-                    "id": id,
+                    "entryID": id,
                     "reason": _reasonForEditController.text,
                   },
                 ),

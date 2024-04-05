@@ -108,7 +108,7 @@ class _EditWikiDetailsForm extends StatelessWidget {
           wikiID: wikiID,
           requestPackage: {
             "edit_type": "editWiki",
-            "id": id,
+            "entryID": id,
             "updatedEntry": quillEditor.getDocumentJson(),
             "reason": _reasonForEditController.text,
           },
@@ -117,7 +117,7 @@ class _EditWikiDetailsForm extends StatelessWidget {
     );
 
     final Widget deleteButton = DarkButton(
-      buttonText: "Delete Entry",
+      buttonText: "Delete Wiki",
       buttonWidth: buttonWidth,
       onPressed: () {
         String id = wikiID;
@@ -146,7 +146,7 @@ class _EditWikiDetailsForm extends StatelessWidget {
                   wikiID: wikiID,
                   requestPackage: {
                     "edit_type": "deleteWiki",
-                    "id": id,
+                    "entryID": id,
                     "reason": _reasonForEditController.text,
                   },
                 ),
