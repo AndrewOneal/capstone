@@ -41,6 +41,7 @@ class _VerificationPageState extends State<VerificationPage> {
     final String wikiTitle = widget.wikiMap['wiki_name'];
     final Global global = Global();
     final EdgeInsets sideMargins = global.sideMargins;
+    final SizedBox smallSizedBox = global.smallSizedBox;
     final SizedBox mediumSizedBox = global.mediumSizedBox;
 
     return Scaffold(
@@ -63,7 +64,12 @@ class _VerificationPageState extends State<VerificationPage> {
                 purple: 1),
             mediumSizedBox,
             const _AcceptRejectButtons(),
+            smallSizedBox,
             _VerificationPane(),
+            smallSizedBox,
+            _NavigationButtons(
+              verificationHandler: verificationHandler,
+            ),
           ],
         ),
       ),
@@ -103,6 +109,45 @@ class _AcceptRejectButtons extends StatelessWidget {
   }
 }
 
+class _NavigationButtons extends StatelessWidget {
+  final VerificationArrayHandler verificationHandler;
+  const _NavigationButtons({required this.verificationHandler});
+
+  @override
+  Widget build(BuildContext context) {
+    final Global global = Global();
+    final EdgeInsets sideMargins = global.sideMargins;
+    const double iconSize = 30;
+
+    return Padding(
+      padding: sideMargins,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back),
+            iconSize: iconSize,
+            onPressed: () {
+              verificationHandler.previousRequest();
+            },
+          ),
+          Text(
+            '${verificationHandler.getCurrentIndex()} / ${verificationHandler.getVerificationRequests().length}',
+            style: const TextStyle(fontSize: 20),
+          ),
+          IconButton(
+            icon: const Icon(Icons.arrow_forward),
+            iconSize: iconSize,
+            onPressed: () {
+              verificationHandler.nextRequest();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _VerificationPane extends StatefulWidget {
   @override
   State<_VerificationPane> createState() => _VerificationPaneState();
@@ -111,12 +156,10 @@ class _VerificationPane extends StatefulWidget {
 class _VerificationPaneState extends State<_VerificationPane> {
   @override
   Widget build(BuildContext context) {
-    final Global global = Global();
     const EdgeInsets columnMargins = EdgeInsets.symmetric(horizontal: 5);
     final TextEditingController submittedUserController =
         TextEditingController();
-    final TextEditingController editTypeController = TextEditingController();
-    editTypeController.text = 'Test';
+
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: background['500']!),
@@ -131,7 +174,7 @@ class _VerificationPaneState extends State<_VerificationPane> {
               padding: columnMargins,
               child: Row(
                 children: [
-                  Text("Submitted by: ", style: TextStyle(color: text['300'])),
+                  /*Text("Submitted by: ", style: TextStyle(color: text['300'])),
                   Expanded(
                     child: TextField(
                       controller: submittedUserController,
@@ -144,30 +187,9 @@ class _VerificationPaneState extends State<_VerificationPane> {
                         hintText: "Username",
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            const Divider(),
-            Padding(
-              padding: columnMargins,
-              child: Row(
-                children: [
-                  Text("Edit Type: ", style: TextStyle(color: text['300'])),
-                  Expanded(
-                    child: TextField(
-                      controller: editTypeController,
-                      readOnly: true,
-                      style: TextStyle(color: text['default']),
-                      textAlignVertical: TextAlignVertical.top,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(vertical: 0),
-                        enabled: false,
-                        hintText: "Edit Type",
-                      ),
-                    ),
-                  ),
+                  ),*/
+                  VerificationPaneBuilder.buildVerificationPane(
+                      RequestPackageHandler().getRequestPackage()),
                 ],
               ),
             ),
@@ -204,18 +226,18 @@ class VerificationArrayHandler {
   void setVerificationRequests(List<dynamic> newVerificationRequests) {
     verificationRequests = newVerificationRequests;
     editTypeHandler
-        .setEditType(verificationRequests[currentRequestIndex]['edit_type']);
+        .setEditType(verificationRequests[currentRequestIndex]['editType']);
   }
 
   void nextRequest() {
     if (currentRequestIndex < verificationRequests.length - 1) {
       currentRequestIndex++;
       editTypeHandler
-          .setEditType(verificationRequests[currentRequestIndex]['edit_type']);
+          .setEditType(verificationRequests[currentRequestIndex]['editType']);
     } else {
       currentRequestIndex = 0;
       editTypeHandler
-          .setEditType(verificationRequests[currentRequestIndex]['edit_type']);
+          .setEditType(verificationRequests[currentRequestIndex]['editType']);
     }
   }
 
@@ -223,11 +245,11 @@ class VerificationArrayHandler {
     if (currentRequestIndex > 0) {
       currentRequestIndex--;
       editTypeHandler
-          .setEditType(verificationRequests[currentRequestIndex]['edit_type']);
+          .setEditType(verificationRequests[currentRequestIndex]['editType']);
     } else {
       currentRequestIndex = verificationRequests.length - 1;
       editTypeHandler
-          .setEditType(verificationRequests[currentRequestIndex]['edit_type']);
+          .setEditType(verificationRequests[currentRequestIndex]['editType']);
     }
   }
 
@@ -293,7 +315,7 @@ class RequestPackageHandler {
 
   void setRequestPackage() {
     requestPackage = verificationHandler.getCurrentRequest()['request_package'];
-    editTypeHandler.setEditType(requestPackage['edit_type']);
+    editTypeHandler.setEditType(requestPackage['editType']);
   }
 
   Map<String, dynamic> getRequestPackage() {
@@ -354,7 +376,82 @@ List<String> editTypes = [
 ];
 
 class VerificationPaneBuilder {
-  final VerificationArrayHandler verificationHandler =
-      VerificationArrayHandler();
-  final UsersHandler usersHandler = UsersHandler();
+  static Widget buildVerificationPane(Map<String, dynamic> requestPackage) {
+    final String editType = requestPackage['editType'].toString();
+    switch (editType) {
+      case 'editSectionDetail':
+        return _buildEditSectionDetailPane(requestPackage);
+      /*case 'editSection':
+        return _buildEditSectionPane(requestPackage);
+      case 'editCharacterDetail':
+        return _buildEditCharacterDetailPane(requestPackage);
+      case 'createCharacterDetail':
+        return _buildCreateCharacterDetailPane(requestPackage);
+      case 'editCharacter':
+        return _buildEditCharacterPane(requestPackage);
+      case 'deleteCharacter':
+        return _buildDeleteCharacterPane(requestPackage);*/
+      default:
+        return const Text('No verification requests available');
+    }
+  }
+
+  static Widget _buildEditSectionDetailPane(
+      Map<String, dynamic> requestPackage) {
+    final List<Map<String, dynamic>> updatedEntry =
+        requestPackage['updatedEntry'];
+    final String reason = requestPackage['reason'];
+
+    QuillEditorManager quillEditor = QuillEditorManager();
+    quillEditor.setInput(updatedEntry);
+
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          const Text('Edit Section Detail'),
+          const Divider(),
+          quillEditor.buildEditor(),
+          const Divider(),
+          Text('Reason: $reason'),
+        ],
+      ),
+    );
+  }
+/*
+  static Widget _buildEditSectionPane(Map<String, dynamic> requestPackage) {
+    final String sectionName = requestPackage['name'];
+    final String reason = requestPackage['reason'];
+
+    // Build UI for edit section, including displaying sectionName and reason
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          // Display sectionName
+          // Display reason for the edit
+        ],
+      ),
+    );
+  }
+
+  // Implement similar methods for other edit types...
+
+  // Example method for creating edit character detail pane
+  static Widget _buildEditCharacterDetailPane(
+      Map<String, dynamic> requestPackage) {
+    final List<Map<String, dynamic>> updatedEntry =
+        requestPackage['updatedEntry'];
+    final String reason = requestPackage['reason'];
+
+    // Build UI for edit character detail, including displaying updatedEntry and reason
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          // Display updatedEntry using Flutter Quill editor or simple text widget
+          // Display reason for the edit
+        ],
+      ),
+    );
+  }
+
+  // Add more builder methods for other edit types...*/
 }

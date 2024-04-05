@@ -101,7 +101,7 @@ class _EditCharForm extends StatelessWidget {
           submitterUserID: pb.authStore.model.id,
           wikiID: wikiID,
           requestPackage: {
-            "edit_type": editType,
+            "editType": editType,
             "characterID": characterID,
             "name": nameController.text,
             "reason": _reasonForEditController.text,

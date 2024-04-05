@@ -120,7 +120,7 @@ class _EditLocationDetailsForm extends StatelessWidget {
           submitterUserID: pb.authStore.model.id,
           wikiID: wikiID,
           requestPackage: {
-            "edit_type": editType,
+            "editType": editType,
             "locationID": locationID,
             "sectionID": sectionID,
             "entryID": entryID,
@@ -161,7 +161,7 @@ class _EditLocationDetailsForm extends StatelessWidget {
                   submitterUserID: pb.authStore.model.id,
                   wikiID: wikiID,
                   requestPackage: {
-                    "edit_type": "deleteLocationDetail",
+                    "editType": "deleteLocationDetail",
                     "locationID": locationID,
                     "sectionID": sectionID,
                     "entryID": entryID,

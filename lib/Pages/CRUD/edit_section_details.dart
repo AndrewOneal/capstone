@@ -119,7 +119,7 @@ class _EditSectionDetailsForm extends StatelessWidget {
           submitterUserID: pb.authStore.model.id,
           wikiID: wikiID,
           requestPackage: {
-            "edit_type": editType,
+            "editType": editType,
             "sectionID": sectionID,
             "entryID": entryID,
             "updatedEntry": quillEditor.getDocumentJson(),
@@ -158,7 +158,7 @@ class _EditSectionDetailsForm extends StatelessWidget {
                   submitterUserID: pb.authStore.model.id,
                   wikiID: wikiID,
                   requestPackage: {
-                    "edit_type": "deleteSectionDetail",
+                    "editType": "deleteSectionDetail",
                     "sectionID": sectionID,
                     "entryID": entryID,
                     "reason": _reasonForEditController.text,

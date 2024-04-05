@@ -120,7 +120,7 @@ class _EditCharDetailsForm extends StatelessWidget {
           submitterUserID: pb.authStore.model.id,
           wikiID: wikiID,
           requestPackage: {
-            "edit_type": editType,
+            "editType": editType,
             "entryID": entryID,
             "characterID": characterID,
             "sectionID": sectionID,
@@ -161,7 +161,7 @@ class _EditCharDetailsForm extends StatelessWidget {
                   submitterUserID: pb.authStore.model.id,
                   wikiID: wikiID,
                   requestPackage: {
-                    "edit_type": "deleteCharacterDetail",
+                    "editType": "deleteCharacterDetail",
                     "characterID": characterID,
                     "sectionID": sectionID,
                     "entryID": id,
