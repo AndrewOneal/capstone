@@ -193,7 +193,6 @@ class _VerificationPaneState extends State<_VerificationPane> {
                 ],
               ),
             ),
-            const Divider(),
           ],
         ),
       ),
@@ -392,7 +391,10 @@ class VerificationPaneBuilder {
       case 'deleteCharacter':
         return _buildDeleteCharacterPane(requestPackage);*/
       default:
-        return const Text('No verification requests available');
+        return Text(
+          'No verification requests available',
+          style: TextStyles.titleSmall,
+        );
     }
   }
 
