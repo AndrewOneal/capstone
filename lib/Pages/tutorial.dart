@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:capstone/Pages/Account/login.dart';
 import 'package:capstone/Pages/wiki_list.dart';
 import 'package:capstone/Utilities/global.dart';
-import 'package:capstone/Pages/apis.dart';
 import 'package:capstone/Pages/Account/account.dart';
 import 'package:capstone/Utilities/db_util.dart';
-//import 'package:pocketbase_server_flutter/pocketbase_server_flutter.dart';
 
 class TutorialPage extends StatelessWidget {
   const TutorialPage({super.key});
@@ -28,6 +26,19 @@ class TutorialPage extends StatelessWidget {
           },
         ),
         actions: [
+          /*IconButton(
+              icon: const Icon(Icons.api),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const EditCharacterDetails(
+                              wikiMap: sampleWiki,
+                              maxSectionNo: 3,
+                              characterMap: sampleCharacter,
+                              characterName: sampleCharacterName,
+                            )));
+              }),
           IconButton(
               icon: const Icon(Icons.list_alt),
               onPressed: () {
@@ -35,7 +46,7 @@ class TutorialPage extends StatelessWidget {
                   context,
                   MaterialPageRoute(builder: (context) => const APIListPage()),
                 );
-              }),
+              }),*/
           IconButton(
             icon: const Icon(Icons.account_circle),
             onPressed: () {

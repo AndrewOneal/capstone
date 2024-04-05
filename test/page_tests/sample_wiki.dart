@@ -4,6 +4,8 @@ const Map<String, dynamic> sampleWiki = {
   'wiki_name': 'Fringe',
 };
 
+const String sampleSectionName = "Season 1";
+
 const List<Map<String, dynamic>> sampleSections = [
   {
     "id": "nida26ase8j2d1r",
@@ -42,6 +44,8 @@ const List<Map<String, dynamic>> sampleSections = [
   }
 ];
 
+const String sampleCharacterName = "Olivia Dunham";
+
 const List<Map<String, dynamic>> sampleCharacters = [
   {
     "id": "4zwlba5hnj840za",
@@ -54,6 +58,8 @@ const List<Map<String, dynamic>> sampleCharacters = [
     "wiki_id": "mgdzj2sn74biu9w"
   }
 ];
+
+const String sampleLocationName = "NYC HQ";
 
 const List<Map<String, dynamic>> sampleLocations = [
   {"id": "2wfh61krquejq8t", "name": "NYC HQ", "wiki_id": "mgdzj2sn74biu9w"},
@@ -71,7 +77,49 @@ const List<Map<String, dynamic>> sampleSection = [
       "String":
           "Book 1 is the first official season of Avatar the Last Airbender. It covers the first third of the story."
     },
-    "section_name": "Book 1: Water",
+    "section_name": "Season 1",
     "section_no": 1,
+  }
+];
+
+const List<Map<String, dynamic>> sampleCharacter = [
+  {
+    "id": "tjamf8homoiwwpw",
+    "details_description":
+        "{String: Olivia discovers his people are dead in book 1 and onwawrd}",
+    "character_id": "4zwlba5hnj840za",
+    "section_name": "Season 1",
+    "section_no": 1,
+    "section_id": "yhipcx37al7pvjc"
+  },
+  {
+    "id": "h1n0t8nf0ilhtyc",
+    "details_description":
+        "{String: Olivia learns energy bending to defeat firelord Ozai in book 3}",
+    "character_id": "4zwlba5hnj840za",
+    "section_name": "Season 3",
+    "section_no": 3,
+    "section_id": "yitfx6ykb5567t3"
+  }
+];
+
+const List<Map<String, dynamic>> sampleLocation = [
+  {
+    "id": "ctd9utnzl1wazs0",
+    "details_description":
+        "{String: By book 3, NYC HQ is officially part of the war since the fire nation took them down and injured Aang.}",
+    "location_id": "2wfh61krquejq8t",
+    "section_name": "Season 3",
+    "section_no": 3,
+    "section_id": "yitfx6ykb5567t3"
+  },
+  {
+    "id": "4r8aakqu0uld7e4",
+    "details_description":
+        "{String: NYC HQ is the earth kingdom capital, not involved in the 100 year war by book 2}",
+    "location_id": "2wfh61krquejq8t",
+    "section_name": "Season 2",
+    "section_no": 2,
+    "section_id": "fot0tt33oqy0mn9"
   }
 ];

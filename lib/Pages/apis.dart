@@ -152,7 +152,7 @@ class _APIList extends StatelessWidget {
         const ListTitle(title: "Character Details"),
         FutureBuilder<List<dynamic>>(
           future: DBHandler().getCharacterDetails(
-              characterID: "ulwqmm7cb46ab7o", section_no: 3),
+              characterID: "nbxynzck218e4qq", section_no: 3),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -205,7 +205,7 @@ class _APIList extends StatelessWidget {
         const ListTitle(title: "Location Details"),
         FutureBuilder<List<dynamic>>(
           future: DBHandler()
-              .getLocationDetails(section_no: 3, locationID: "fb0hesgiqziadte"),
+              .getLocationDetails(section_no: 3, locationID: "9cu0atfmbsvi1di"),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
