@@ -42,21 +42,20 @@ void main() {
     });
   });
 
-  /*group('Account Page Tests', () {
+  group('Account Page Tests', () {
     test('Page Displays', () {
       const accountPage = AccountPage();
-      DBHandler().authenticate(username: 'testuser', password: 'P@ssw0rd');
       expect(accountPage, isNotNull);
     });
 
-    testWidgets('Page UI Test', (WidgetTester tester) async {
+    /*testWidgets('Page UI Test', (WidgetTester tester) async {
       DBHandler().authenticate(username: 'testuser', password: 'P@ssw0rd');
       await tester.pumpWidget(const MaterialApp(home: AccountPage()));
       expect(find.text('Welcome Back'), findsOneWidget);
       expect(find.text('Logout'), findsOneWidget);
       expect(find.text('Admin Panel'), findsOneWidget);
-    });
-  });*/
+    });*/
+  });
 
   group('Login Page Tests', () {
     test('Page Displays', () {

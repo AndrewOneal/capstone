@@ -1,17 +1,22 @@
-import 'package:capstone/Pages/Wiki/wiki_characters.dart';
-import 'package:capstone/Pages/Wiki/wiki_home.dart';
-import 'package:capstone/Pages/Wiki/wiki_details.dart';
-import 'package:capstone/Pages/Wiki/wiki_locations.dart';
-import 'package:capstone/Pages/Wiki/wiki_sections.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:capstone/Pages/CRUD/edit_character_details.dart';
+import 'package:capstone/Pages/CRUD/edit_characters.dart';
+import 'package:capstone/Pages/CRUD/edit_location_details.dart';
+import 'package:capstone/Pages/CRUD/edit_locations.dart';
+import 'package:capstone/Pages/CRUD/edit_section_details.dart';
+import 'package:capstone/Pages/CRUD/edit_sections.dart';
+import 'package:capstone/Pages/CRUD/edit_wiki.dart';
+import 'package:capstone/Pages/CRUD/new_wiki.dart';
 import 'sample_wiki.dart';
 
+const Map<String, dynamic> sampleCharMap = {};
 void main() {
-  group('Wiki Characters Page', () {
-    test('Wiki Characters Page Displays', () {
-      const wikiCharactersPage =
-          WikiCharactersPage(wikiMap: sampleWiki, sectionNo: 1);
-      expect(wikiCharactersPage, isNotNull);
+  group('Edit Character Details Page', () {
+    test('Edit Character Details Displays', () {
+      const editCharacterDetailsPage =
+          EditCharacterDetails(wikiMap: sampleWiki, maxSectionNo: 3);
+      expect(editCharacterDetailsPage, isNotNull);
     });
   });
 

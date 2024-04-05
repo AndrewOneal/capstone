@@ -42,6 +42,7 @@ class _APIList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const String wikiID = "ndlh8nkyr4uyjw4";
     return Column(
       children: <Widget>[
         const ListTitle(title: "Wikis"),
@@ -72,7 +73,7 @@ class _APIList extends StatelessWidget {
         ),
         const ListTitle(title: "Sections"),
         FutureBuilder<List<dynamic>>(
-          future: DBHandler().getSections(wikiID: "ndlh8nkyr4uyjw4"),
+          future: DBHandler().getSections(wikiID: wikiID),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -98,7 +99,7 @@ class _APIList extends StatelessWidget {
         ),
         const ListTitle(title: "Characters"),
         FutureBuilder<List<dynamic>>(
-          future: DBHandler().getCharacters(wikiID: "ndlh8nkyr4uyjw4"),
+          future: DBHandler().getCharacters(wikiID: wikiID),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -124,7 +125,7 @@ class _APIList extends StatelessWidget {
         ),
         const ListTitle(title: "Locations"),
         FutureBuilder<List<dynamic>>(
-          future: DBHandler().getLocations(wikiID: "ndlh8nkyr4uyjw4"),
+          future: DBHandler().getLocations(wikiID: wikiID),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -151,7 +152,7 @@ class _APIList extends StatelessWidget {
         const ListTitle(title: "Character Details"),
         FutureBuilder<List<dynamic>>(
           future: DBHandler().getCharacterDetails(
-              characterID: "nbxynzck218e4qq", section_no: 3),
+              characterID: "ulwqmm7cb46ab7o", section_no: 3),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -177,8 +178,7 @@ class _APIList extends StatelessWidget {
         ),
         const ListTitle(title: "Section Details"),
         FutureBuilder<List<dynamic>>(
-          future: DBHandler()
-              .getSectionDetails(section_no: 1, wiki_id: "ndlh8nkyr4uyjw4"),
+          future: DBHandler().getSectionDetails(section_no: 1, wiki_id: wikiID),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -205,7 +205,7 @@ class _APIList extends StatelessWidget {
         const ListTitle(title: "Location Details"),
         FutureBuilder<List<dynamic>>(
           future: DBHandler()
-              .getLocationDetails(section_no: 3, locationID: "9cu0atfmbsvi1di"),
+              .getLocationDetails(section_no: 3, locationID: "fb0hesgiqziadte"),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -272,8 +272,7 @@ class _APIList extends StatelessWidget {
         ),
         const ListTitle(title: "Verification Requests"),
         FutureBuilder<List<dynamic>>(
-          future:
-              DBHandler().getVerificationRequests(wiki_id: "9tk9j8x06yrcy9f"),
+          future: DBHandler().getVerificationRequests(wiki_id: wikiID),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
