@@ -172,3 +172,9 @@ class _VerificationPaneState extends State<_VerificationPane> {
     );
   }
 }
+
+class EditTypeHandler {
+  late String editType;
+
+  EditTypeHandler({required this.editType});
+}
