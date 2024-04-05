@@ -140,6 +140,7 @@ class WikiDetailsPageState extends State<WikiDetailsPage> {
                 detailType: widget.detailType,
                 wikiDetails: wikiDetails,
                 sectionNo: widget.sectionNo,
+                detailID: widget.detailMap['id'],
               ),
             )
           : null,
@@ -254,6 +255,7 @@ class FloatingEditButton extends StatelessWidget {
   final String detailType;
   final List<dynamic> wikiDetails;
   final int sectionNo;
+  final String detailID;
 
   const FloatingEditButton({
     super.key,
@@ -262,6 +264,7 @@ class FloatingEditButton extends StatelessWidget {
     required this.detailName,
     required this.wikiDetails,
     required this.sectionNo,
+    required this.detailID,
   });
 
   @override
@@ -272,10 +275,11 @@ class FloatingEditButton extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => EditCharacterDetails(
-              characterMap: wikiDetails,
+              characterDetailsMap: wikiDetails,
               wikiMap: wikiMap,
               characterName: detailName,
               maxSectionNo: sectionNo,
+              characterID: detailID,
             ),
           ),
         );
@@ -289,6 +293,7 @@ class FloatingEditButton extends StatelessWidget {
               wikiMap: wikiMap,
               locationName: detailName,
               maxSectionNo: sectionNo,
+              locationID: detailID,
             ),
           ),
         );
@@ -301,6 +306,7 @@ class FloatingEditButton extends StatelessWidget {
               sectionMap: wikiDetails,
               wikiMap: wikiMap,
               sectionName: detailName,
+              sectionID: detailID,
             ),
           ),
         );

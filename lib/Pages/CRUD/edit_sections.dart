@@ -93,15 +93,15 @@ class _EditCharForm extends StatelessWidget {
             .then((reason) {
           Navigator.pop(context);
         });
-        String id = sectionHandler.getEntryID();
+        String sectionID = sectionHandler.getSectionID();
         String editType =
-            id == 'CREATEASECTION' ? "createSection" : "editSection";
+            sectionID == 'CREATEASECTION' ? "createSection" : "editSection";
         dbHandler.createVerificationRequest(
           submitterUserID: pb.authStore.model.id,
           wikiID: wikiID,
           requestPackage: {
             "edit_type": editType,
-            "entryID": id,
+            "sectionID": sectionID,
             "name": nameController.text,
             "reason": _reasonForEditController.text,
           },
@@ -113,8 +113,8 @@ class _EditCharForm extends StatelessWidget {
       buttonText: "Delete Section",
       buttonWidth: buttonWidth,
       onPressed: () {
-        String id = sectionHandler.getEntryID();
-        id.isEmpty
+        String sectionID = sectionHandler.getSectionID();
+        sectionID.isEmpty
             ? {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -139,7 +139,7 @@ class _EditCharForm extends StatelessWidget {
                   wikiID: wikiID,
                   requestPackage: {
                     "edit_type": "deleteSection",
-                    "entryID": id,
+                    "sectionID": sectionID,
                     "reason": _reasonForEditController.text,
                   },
                 ),
@@ -213,7 +213,7 @@ class _SectionDropdownState extends State<_SectionDropdown> {
   @override
   void initState() {
     super.initState();
-    id = widget.sectionHandler.getEntryID();
+    id = widget.sectionHandler.getSectionID();
     name = widget.sectionHandler.getNameFromID(id);
     sections = widget.sectionHandler.getSectionMap();
     widget.nameController.text = name;
@@ -267,7 +267,7 @@ class SectionHandler {
     return;
   }
 
-  String getEntryID() {
+  String getSectionID() {
     if (entry.isNotEmpty) {
       return entry['id'];
     }

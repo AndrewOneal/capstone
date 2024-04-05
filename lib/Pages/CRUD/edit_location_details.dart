@@ -7,6 +7,7 @@ class EditLocationDetails extends StatefulWidget {
   final List<dynamic> locationMap;
   final String locationName;
   final int maxSectionNo;
+  final String locationID;
 
   const EditLocationDetails({
     super.key,
@@ -14,6 +15,7 @@ class EditLocationDetails extends StatefulWidget {
     required this.locationMap,
     required this.locationName,
     required this.maxSectionNo,
+    required this.locationID,
   });
 
   @override
@@ -52,6 +54,7 @@ class EditLocationDetailsState extends State<EditLocationDetails> {
                     locationHandler: locationHandler,
                     locationName: widget.locationName,
                     maxSectionNo: widget.maxSectionNo,
+                    locationID: widget.locationID,
                   ),
                 ),
               ],
@@ -70,12 +73,14 @@ class _EditLocationDetailsForm extends StatelessWidget {
   final LocationHandler locationHandler;
   final String locationName;
   final int maxSectionNo;
+  final String locationID;
 
   _EditLocationDetailsForm({
     required this.wikiMap,
     required this.locationHandler,
     required this.locationName,
     required this.maxSectionNo,
+    required this.locationID,
   }) : _reasonForEditController = TextEditingController();
 
   @override
@@ -86,6 +91,7 @@ class _EditLocationDetailsForm extends StatelessWidget {
     final SizedBox extraLargeSizedBox = global.extraLargeSizedBox;
     final wikiID = wikiMap['id'];
     final SectionNoHandler sectionNoHandler = SectionNoHandler();
+    sectionNoHandler.setWikiID(wikiID);
     final DBHandler dbHandler = DBHandler();
     QuillEditorManager quillEditor = QuillEditorManager();
     final double buttonWidth = MediaQuery.of(context).size.width > 514
@@ -106,15 +112,18 @@ class _EditLocationDetailsForm extends StatelessWidget {
             .then((reason) {
           Navigator.pop(context);
         });
-        String id = locationHandler.getEntryID();
+        String entryID = locationHandler.getEntryID();
+        String sectionID = sectionNoHandler.getSectionID();
         String editType =
-            id == '' ? "createLocationDetail" : "editLocationDetail";
+            entryID == '' ? "createLocationDetail" : "editLocationDetail";
         dbHandler.createVerificationRequest(
           submitterUserID: pb.authStore.model.id,
           wikiID: wikiID,
           requestPackage: {
             "edit_type": editType,
-            "entryID": id,
+            "locationID": locationID,
+            "sectionID": sectionID,
+            "entryID": entryID,
             "updatedEntry": quillEditor.getDocumentJson(),
             "reason": _reasonForEditController.text,
           },
@@ -126,8 +135,9 @@ class _EditLocationDetailsForm extends StatelessWidget {
       buttonText: "Delete Entry",
       buttonWidth: buttonWidth,
       onPressed: () {
-        String id = locationHandler.getEntryID();
-        id.isEmpty
+        String entryID = locationHandler.getEntryID();
+        String sectionID = sectionNoHandler.getSectionID();
+        entryID.isEmpty
             ? {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -152,7 +162,9 @@ class _EditLocationDetailsForm extends StatelessWidget {
                   wikiID: wikiID,
                   requestPackage: {
                     "edit_type": "deleteLocationDetail",
-                    "entryID": id,
+                    "locationID": locationID,
+                    "sectionID": sectionID,
+                    "entryID": entryID,
                     "reason": _reasonForEditController.text,
                   },
                 ),
@@ -235,6 +247,7 @@ class _SectionDropdownState extends State<_SectionDropdown> {
       },
     ]);
     fetchSections();
+    widget.sectionNoHandler.setSectionID();
   }
 
   Future<void> fetchSections() async {
@@ -263,6 +276,8 @@ class _SectionDropdownState extends State<_SectionDropdown> {
               "insert": '$description\n',
             },
           ]);
+
+          widget.sectionNoHandler.setSectionID();
         });
       },
       items: sections
@@ -281,6 +296,9 @@ class _SectionDropdownState extends State<_SectionDropdown> {
 
 class SectionNoHandler {
   late int sectionNo = 1;
+  final DBHandler dbHandler = DBHandler();
+  late String sectionID = '';
+  late String wikiID = '';
 
   SectionNoHandler();
 
@@ -290,6 +308,19 @@ class SectionNoHandler {
 
   void setSectionNo(int newSectionNo) {
     sectionNo = newSectionNo;
+  }
+
+  Future<void> setSectionID() async {
+    sectionID =
+        await dbHandler.getSectionID(sectionNo: sectionNo, wikiID: wikiID);
+  }
+
+  String getSectionID() {
+    return sectionID;
+  }
+
+  void setWikiID(String newWikiID) {
+    wikiID = newWikiID;
   }
 }
 

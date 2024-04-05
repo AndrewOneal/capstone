@@ -4,16 +4,18 @@ import 'package:capstone/Utilities/db_util.dart';
 
 class EditCharacterDetails extends StatefulWidget {
   final Map<String, dynamic> wikiMap;
-  final List<dynamic> characterMap;
+  final List<dynamic> characterDetailsMap;
   final String characterName;
+  final String characterID;
   final int maxSectionNo;
 
   const EditCharacterDetails({
     super.key,
     required this.wikiMap,
-    required this.characterMap,
+    required this.characterDetailsMap,
     required this.characterName,
     required this.maxSectionNo,
+    required this.characterID,
   });
 
   @override
@@ -24,7 +26,7 @@ class EditCharacterDetailsState extends State<EditCharacterDetails> {
   @override
   Widget build(BuildContext context) {
     final CharacterHandler characterHandler =
-        CharacterHandler(characterMap: widget.characterMap);
+        CharacterHandler(characterDetailsMap: widget.characterDetailsMap);
     final Global global = Global();
     final EdgeInsets sideMargins = global.sideMargins;
     return Scaffold(
@@ -52,6 +54,7 @@ class EditCharacterDetailsState extends State<EditCharacterDetails> {
                     characterHandler: characterHandler,
                     characterName: widget.characterName,
                     maxSectionNo: widget.maxSectionNo,
+                    characterID: widget.characterID,
                   ),
                 ),
               ],
@@ -70,12 +73,14 @@ class _EditCharDetailsForm extends StatelessWidget {
   final CharacterHandler characterHandler;
   final String characterName;
   final int maxSectionNo;
+  final String characterID;
 
   _EditCharDetailsForm({
     required this.wikiMap,
     required this.characterHandler,
     required this.characterName,
     required this.maxSectionNo,
+    required this.characterID,
   }) : _reasonForEditController = TextEditingController();
 
   @override
@@ -86,6 +91,7 @@ class _EditCharDetailsForm extends StatelessWidget {
     final SizedBox extraLargeSizedBox = global.extraLargeSizedBox;
     final wikiID = wikiMap['id'];
     final SectionNoHandler sectionNoHandler = SectionNoHandler();
+    sectionNoHandler.setWikiID(wikiID);
     final DBHandler dbHandler = DBHandler();
     QuillEditorManager quillEditor = QuillEditorManager();
     final double buttonWidth = MediaQuery.of(context).size.width > 514
@@ -106,15 +112,18 @@ class _EditCharDetailsForm extends StatelessWidget {
             .then((reason) {
           Navigator.pop(context);
         });
-        String id = characterHandler.getEntryID();
+        String entryID = characterHandler.getEntryID();
+        String sectionID = sectionNoHandler.getSectionID();
         String editType =
-            id == '' ? "createCharacterDetail" : "editCharacterDetail";
+            entryID == '' ? "createCharacterDetail" : "editCharacterDetail";
         dbHandler.createVerificationRequest(
           submitterUserID: pb.authStore.model.id,
           wikiID: wikiID,
           requestPackage: {
             "edit_type": editType,
-            "entryID": id,
+            "entryID": entryID,
+            "characterID": characterID,
+            "sectionID": sectionID,
             "updatedEntry": quillEditor.getDocumentJson(),
             "reason": _reasonForEditController.text,
           },
@@ -127,6 +136,7 @@ class _EditCharDetailsForm extends StatelessWidget {
       buttonWidth: buttonWidth,
       onPressed: () {
         String id = characterHandler.getEntryID();
+        String sectionID = sectionNoHandler.getSectionID();
         id.isEmpty
             ? {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -152,6 +162,8 @@ class _EditCharDetailsForm extends StatelessWidget {
                   wikiID: wikiID,
                   requestPackage: {
                     "edit_type": "deleteCharacterDetail",
+                    "characterID": characterID,
+                    "sectionID": sectionID,
                     "entryID": id,
                     "reason": _reasonForEditController.text,
                   },
@@ -235,6 +247,7 @@ class _SectionDropdownState extends State<_SectionDropdown> {
       },
     ]);
     fetchSections();
+    widget.sectionNoHandler.setSectionID();
   }
 
   Future<void> fetchSections() async {
@@ -263,6 +276,8 @@ class _SectionDropdownState extends State<_SectionDropdown> {
               "insert": '$description\n',
             },
           ]);
+
+          widget.sectionNoHandler.setSectionID();
         });
       },
       items: sections
@@ -281,6 +296,9 @@ class _SectionDropdownState extends State<_SectionDropdown> {
 
 class SectionNoHandler {
   late int sectionNo = 1;
+  final DBHandler dbHandler = DBHandler();
+  late String sectionID = '';
+  late String wikiID = '';
 
   SectionNoHandler();
 
@@ -291,16 +309,29 @@ class SectionNoHandler {
   void setSectionNo(int newSectionNo) {
     sectionNo = newSectionNo;
   }
+
+  Future<void> setSectionID() async {
+    sectionID =
+        await dbHandler.getSectionID(sectionNo: sectionNo, wikiID: wikiID);
+  }
+
+  String getSectionID() {
+    return sectionID;
+  }
+
+  void setWikiID(String newWikiID) {
+    wikiID = newWikiID;
+  }
 }
 
 class CharacterHandler {
-  final List<dynamic> characterMap;
+  final List<dynamic> characterDetailsMap;
   Map<String, dynamic> entry = {};
 
-  CharacterHandler({required this.characterMap});
+  CharacterHandler({required this.characterDetailsMap});
 
   void setEntryFromSection(int sectionNo) {
-    for (Map<String, dynamic> character in characterMap) {
+    for (Map<String, dynamic> character in characterDetailsMap) {
       final characterSectionNo =
           int.tryParse(character['section_no'].toString());
       if (characterSectionNo == sectionNo) {
@@ -327,7 +358,7 @@ class CharacterHandler {
     return '';
   }
 
-  List<dynamic> getCharacterMap() {
-    return characterMap;
+  List<dynamic> getCharacterDetailsMap() {
+    return characterDetailsMap;
   }
 }

@@ -93,15 +93,16 @@ class _EditCharForm extends StatelessWidget {
             .then((reason) {
           Navigator.pop(context);
         });
-        String id = characterHandler.getEntryID();
-        String editType =
-            id == 'CREATEACHARACTER' ? "createCharacter" : "editCharacter";
+        String characterID = characterHandler.getCharacterID();
+        String editType = characterID == 'CREATEACHARACTER'
+            ? "createCharacter"
+            : "editCharacter";
         dbHandler.createVerificationRequest(
           submitterUserID: pb.authStore.model.id,
           wikiID: wikiID,
           requestPackage: {
             "edit_type": editType,
-            "entryID": id,
+            "characterID": characterID,
             "name": nameController.text,
             "reason": _reasonForEditController.text,
           },
@@ -113,8 +114,8 @@ class _EditCharForm extends StatelessWidget {
       buttonText: "Delete Character",
       buttonWidth: buttonWidth,
       onPressed: () {
-        String id = characterHandler.getEntryID();
-        id.isEmpty
+        String characterID = characterHandler.getCharacterID();
+        characterID.isEmpty
             ? {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -139,7 +140,7 @@ class _EditCharForm extends StatelessWidget {
                   wikiID: wikiID,
                   requestPackage: {
                     "edit_type": "deleteCharacter",
-                    "entryID": id,
+                    "characterID": characterID,
                     "reason": _reasonForEditController.text,
                   },
                 ),
@@ -213,7 +214,7 @@ class _CharacterDropdownState extends State<_CharacterDropdown> {
   @override
   void initState() {
     super.initState();
-    id = widget.characterHandler.getEntryID();
+    id = widget.characterHandler.getCharacterID();
     name = widget.characterHandler.getNameFromID(id);
     characters = widget.characterHandler.getCharacterMap();
     widget.nameController.text = name;
@@ -268,7 +269,7 @@ class CharacterHandler {
     return;
   }
 
-  String getEntryID() {
+  String getCharacterID() {
     if (entry.isNotEmpty) {
       return entry['id'];
     }

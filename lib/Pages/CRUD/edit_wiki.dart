@@ -102,13 +102,11 @@ class _EditWikiDetailsForm extends StatelessWidget {
             .then((reason) {
           Navigator.pop(context);
         });
-        String id = wikiID;
         dbHandler.createVerificationRequest(
           submitterUserID: pb.authStore.model.id,
           wikiID: wikiID,
           requestPackage: {
             "edit_type": "editWiki",
-            "entryID": id,
             "updatedEntry": quillEditor.getDocumentJson(),
             "reason": _reasonForEditController.text,
           },
@@ -120,37 +118,26 @@ class _EditWikiDetailsForm extends StatelessWidget {
       buttonText: "Delete Wiki",
       buttonWidth: buttonWidth,
       onPressed: () {
-        String id = wikiID;
-        id.isEmpty
-            ? {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                      content:
-                          Text("Can't delete an entry that does not exist"),
-                      duration: Duration(seconds: 1)),
-                )
-              }
-            : {
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(
-                      const SnackBar(
-                          content: Text("Submitting Request"),
-                          duration: Duration(seconds: 1)),
-                    )
-                    .closed
-                    .then((reason) {
-                  Navigator.pop(context);
-                }),
-                dbHandler.createVerificationRequest(
-                  submitterUserID: pb.authStore.model.id,
-                  wikiID: wikiID,
-                  requestPackage: {
-                    "edit_type": "deleteWiki",
-                    "entryID": id,
-                    "reason": _reasonForEditController.text,
-                  },
-                ),
-              };
+        {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(
+                const SnackBar(
+                    content: Text("Submitting Request"),
+                    duration: Duration(seconds: 1)),
+              )
+              .closed
+              .then((reason) {
+            Navigator.pop(context);
+          });
+          dbHandler.createVerificationRequest(
+            submitterUserID: pb.authStore.model.id,
+            wikiID: wikiID,
+            requestPackage: {
+              "edit_type": "deleteWiki",
+              "reason": _reasonForEditController.text,
+            },
+          );
+        }
       },
     );
 

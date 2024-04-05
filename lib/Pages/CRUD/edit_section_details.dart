@@ -6,12 +6,14 @@ class EditSectionDetails extends StatefulWidget {
   final Map<String, dynamic> wikiMap;
   final List<dynamic> sectionMap;
   final String sectionName;
+  final String sectionID;
 
   const EditSectionDetails({
     super.key,
     required this.wikiMap,
     required this.sectionMap,
     required this.sectionName,
+    required this.sectionID,
   });
 
   @override
@@ -49,6 +51,7 @@ class EditSectionDetailsState extends State<EditSectionDetails> {
                     wikiMap: widget.wikiMap,
                     sectionHandler: sectionHandler,
                     sectionName: widget.sectionName,
+                    sectionID: widget.sectionID,
                   ),
                 ),
               ],
@@ -66,11 +69,13 @@ class _EditSectionDetailsForm extends StatelessWidget {
   final Map<String, dynamic> wikiMap;
   final SectionHandler sectionHandler;
   final String sectionName;
+  final String sectionID;
 
   _EditSectionDetailsForm({
     required this.wikiMap,
     required this.sectionHandler,
     required this.sectionName,
+    required this.sectionID,
   }) : _reasonForEditController = TextEditingController();
 
   @override
@@ -105,15 +110,16 @@ class _EditSectionDetailsForm extends StatelessWidget {
             .then((reason) {
           Navigator.pop(context);
         });
-        String id = sectionHandler.getEntryID();
+        String entryID = sectionHandler.getEntryID();
         String editType =
-            id == '' ? "createSectionDetail" : "editSectionDetail";
+            entryID == '' ? "createSectionDetail" : "editSectionDetail";
         dbHandler.createVerificationRequest(
           submitterUserID: pb.authStore.model.id,
           wikiID: wikiID,
           requestPackage: {
             "edit_type": editType,
-            "entryID": id,
+            "sectionID": sectionID,
+            "entryID": entryID,
             "updatedEntry": quillEditor.getDocumentJson(),
             "reason": _reasonForEditController.text,
           },
@@ -125,8 +131,8 @@ class _EditSectionDetailsForm extends StatelessWidget {
       buttonText: "Delete Entry",
       buttonWidth: buttonWidth,
       onPressed: () {
-        String id = sectionHandler.getEntryID();
-        id.isEmpty
+        String entryID = sectionHandler.getEntryID();
+        entryID.isEmpty
             ? {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -151,7 +157,8 @@ class _EditSectionDetailsForm extends StatelessWidget {
                   wikiID: wikiID,
                   requestPackage: {
                     "edit_type": "deleteSectionDetail",
-                    "entryID": id,
+                    "sectionID": sectionID,
+                    "entryID": entryID,
                     "reason": _reasonForEditController.text,
                   },
                 ),

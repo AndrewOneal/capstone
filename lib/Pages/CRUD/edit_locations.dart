@@ -93,15 +93,15 @@ class _EditCharForm extends StatelessWidget {
             .then((reason) {
           Navigator.pop(context);
         });
-        String id = locationHandler.getEntryID();
+        String locationID = locationHandler.getLocationID();
         String editType =
-            id == 'CREATEALOCATION' ? "createLocation" : "editLocation";
+            locationID == 'CREATEALOCATION' ? "createLocation" : "editLocation";
         dbHandler.createVerificationRequest(
           submitterUserID: pb.authStore.model.id,
           wikiID: wikiID,
           requestPackage: {
             "edit_type": editType,
-            "entryID": id,
+            "locationID": locationID,
             "name": nameController.text,
             "reason": _reasonForEditController.text,
           },
@@ -113,8 +113,8 @@ class _EditCharForm extends StatelessWidget {
       buttonText: "Delete Location",
       buttonWidth: buttonWidth,
       onPressed: () {
-        String id = locationHandler.getEntryID();
-        id.isEmpty
+        String locationID = locationHandler.getLocationID();
+        locationID.isEmpty
             ? {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -139,7 +139,7 @@ class _EditCharForm extends StatelessWidget {
                   wikiID: wikiID,
                   requestPackage: {
                     "edit_type": "deleteLocation",
-                    "entryID": id,
+                    "locationID": locationID,
                     "reason": _reasonForEditController.text,
                   },
                 ),
@@ -213,7 +213,7 @@ class _LocationDropdownState extends State<_LocationDropdown> {
   @override
   void initState() {
     super.initState();
-    id = widget.locationHandler.getEntryID();
+    id = widget.locationHandler.getLocationID();
     name = widget.locationHandler.getNameFromID(id);
     locations = widget.locationHandler.getLocationMap();
     widget.nameController.text = name;
@@ -267,7 +267,7 @@ class LocationHandler {
     return;
   }
 
-  String getEntryID() {
+  String getLocationID() {
     if (entry.isNotEmpty) {
       return entry['id'];
     }

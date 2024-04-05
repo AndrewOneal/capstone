@@ -16,7 +16,7 @@ void main() {
     const editCharacterDetailsPage = EditCharacterDetails(
       wikiMap: sampleWiki,
       maxSectionNo: 3,
-      characterMap: sampleCharacter,
+      characterDetailsMap: sampleCharacter,
       characterName: sampleCharacterName,
     );
     test('Edit Character Details Displays', () {

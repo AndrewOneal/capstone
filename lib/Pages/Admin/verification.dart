@@ -1,8 +1,6 @@
-import 'package:capstone/Pages/CRUD/edit_section_details.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Utilities/db_util.dart';
-import 'dart:convert';
 
 class VerificationPage extends StatefulWidget {
   final Map<String, dynamic> wikiMap;
@@ -286,35 +284,74 @@ class UsersHandler {
   }
 }
 
-class VerificationType {
-  final String editType;
-  DBHandler dbHandler = DBHandler();
-  List<String> editTypes = [
-    "editSectionDetail",
-    "editLocationDetail",
-    "editCharacterDetail",
-    "editCharacter",
-    "editSection",
-    "editLocation",
-    "editWiki",
-    "deleteSectionDetail",
-    "deleteLocationDetail",
-    "deleteCharacterDetail",
-    "deleteSection",
-    "deleteCharacter",
-    "deleteLocation",
-    "deleteWiki",
-    "createCharacter",
-    "createSection",
-    "createLocation",
-    "createCharacterDetail",
-    "createLocationDetail",
-    "createCharacterDetail",
-    "createSectionDetail"
-  ];
+class RequestPackageHandler {
+  final VerificationArrayHandler verificationHandler =
+      VerificationArrayHandler();
+  final UsersHandler usersHandler = UsersHandler();
+  final EditTypeHandler editTypeHandler = EditTypeHandler();
+  Map<String, dynamic> requestPackage = {};
 
-  VerificationType({required this.editType});
+  void setRequestPackage() {
+    requestPackage = verificationHandler.getCurrentRequest()['request_package'];
+    editTypeHandler.setEditType(requestPackage['edit_type']);
+  }
+
+  Map<String, dynamic> getRequestPackage() {
+    return requestPackage;
+  }
+
+  String getEntryID() {
+    return requestPackage['entryID'];
+  }
+
+  String getReason() {
+    return requestPackage['reason'];
+  }
+
+  String getName() {
+    return requestPackage['name'];
+  }
+
+  List<Map<String, dynamic>> getUpdatedEntry() {
+    return requestPackage['updatedEntry'];
+  }
+
+  String getCharacterID() {
+    return requestPackage['characterID'];
+  }
+
+  String getSectionID() {
+    return requestPackage['sectionID'];
+  }
+
+  String getLocationID() {
+    return requestPackage['locationID'];
+  }
 }
+
+List<String> editTypes = [
+  "editSectionDetail",
+  "editLocationDetail",
+  "editCharacterDetail",
+  "editCharacter",
+  "editSection",
+  "editLocation",
+  "editWiki",
+  "deleteSectionDetail",
+  "deleteLocationDetail",
+  "deleteCharacterDetail",
+  "deleteSection",
+  "deleteCharacter",
+  "deleteLocation",
+  "deleteWiki",
+  "createCharacter",
+  "createSection",
+  "createLocation",
+  "createCharacterDetail",
+  "createLocationDetail",
+  "createCharacterDetail",
+  "createSectionDetail"
+];
 
 class VerificationPaneBuilder {
   final VerificationArrayHandler verificationHandler =
