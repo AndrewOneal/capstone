@@ -23,8 +23,10 @@ class EditSectionDetails extends StatefulWidget {
 class EditSectionDetailsState extends State<EditSectionDetails> {
   @override
   Widget build(BuildContext context) {
-    final SectionHandler sectionHandler =
-        SectionHandler(sectionMap: widget.sectionMap);
+    final SectionHandler sectionHandler = SectionHandler();
+    widget.sectionMap.isNotEmpty
+        ? sectionHandler.setEntry(widget.sectionMap[0])
+        : {};
     final Global global = Global();
     final EdgeInsets sideMargins = global.sideMargins;
     return Scaffold(
@@ -201,10 +203,9 @@ class _EditSectionDetailsForm extends StatelessWidget {
 }
 
 class SectionHandler {
-  final List<dynamic> sectionMap;
   Map<String, dynamic> entry = {};
 
-  SectionHandler({required this.sectionMap}) : entry = sectionMap[0];
+  SectionHandler();
 
   String getEntryID() {
     if (entry.isNotEmpty) {
@@ -220,7 +221,7 @@ class SectionHandler {
     return '';
   }
 
-  List<dynamic> getSectionMap() {
-    return sectionMap;
+  void setEntry(Map<String, dynamic> entry) {
+    this.entry = entry;
   }
 }
