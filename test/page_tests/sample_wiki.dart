@@ -4,6 +4,19 @@ const Map<String, dynamic> sampleWiki = {
   'wiki_name': 'Fringe',
 };
 
+const List<Map<String, dynamic>> sampleWikis = [
+  {
+    'id': 'mgdzj2sn74biu9w',
+    'wiki_description': 'The best show of all time',
+    'wiki_name': 'Fringe',
+  },
+  {
+    'id': 'mgdzj2sn74biu9i',
+    'wiki_description': 'The best show of all time',
+    'wiki_name': 'Fringe2',
+  },
+];
+
 const String sampleSectionName = "Season 1";
 
 const List<Map<String, dynamic>> sampleSections = [
