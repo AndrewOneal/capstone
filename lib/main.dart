@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Pages/tutorial.dart';
 import 'package:capstone/Pages/wiki_list.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 int? initScreen;
 
 Future<void> main() async {
+  await dotenv.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   initScreen = prefs.getInt('initScreen');

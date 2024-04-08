@@ -10,6 +10,12 @@ These instructions will get you a copy of the project up and running on your loc
 
 - Flutter SDK (<https://flutter.dev/docs/get-started/install>)
 
+### Environment Variables
+
+|       Variable       | Required |              Default               |                              Description                               |
+| :------------------: | :------: | :--------------------------------: | :--------------------------------------------------------------------: |
+|   `DB_IP`    |    ✓     |          'http://127.0.0.1:8090'          |                 IP of the database for the app to connect with               |
+
 ### Installing
 
 Install the dependencies

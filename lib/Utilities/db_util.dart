@@ -1,7 +1,7 @@
 import 'package:pocketbase/pocketbase.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-final pb = PocketBase('http://127.0.0.1:8090');
-//final pb = PocketBase('http://72.49.18.237:8090');
+final pb = PocketBase(dotenv.env['DB_IP']!);
 
 class DBHandler {
   static final DBHandler _instance = DBHandler._internal();
