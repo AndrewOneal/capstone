@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Utilities/db_util.dart';
+import 'dart:convert';
 
 class VerificationPage extends StatefulWidget {
   final Map<String, dynamic> wikiMap;
@@ -31,8 +32,8 @@ class _VerificationPageState extends State<VerificationPage> {
 
   Future<void> _fetchVerificationRequests() async {
     final dbHandler = DBHandler();
-    final dbVerificationRequests = await dbHandler.getVerificationRequests(
-        wiki_id: widget.wikiMap['wiki_id']);
+    final dbVerificationRequests =
+        await dbHandler.getVerificationRequests(wiki_id: widget.wikiMap['id']);
     verificationHandler.setVerificationRequests(dbVerificationRequests);
   }
 
@@ -131,10 +132,15 @@ class _NavigationButtons extends StatelessWidget {
               verificationHandler.previousRequest();
             },
           ),
-          Text(
-            '${verificationHandler.getCurrentIndex()} / ${verificationHandler.getVerificationRequests().length}',
-            style: const TextStyle(fontSize: 20),
-          ),
+          verificationHandler.getVerificationRequests().isEmpty
+              ? const Text(
+                  '0 / 0',
+                  style: TextStyle(fontSize: 20),
+                )
+              : Text(
+                  '${verificationHandler.getCurrentIndex()} / ${verificationHandler.getVerificationRequests().length}',
+                  style: const TextStyle(fontSize: 20),
+                ),
           IconButton(
             icon: const Icon(Icons.arrow_forward),
             iconSize: iconSize,
@@ -169,6 +175,7 @@ class _VerificationPaneState extends State<_VerificationPane> {
       height: 300,
       child: SingleChildScrollView(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
               padding: columnMargins,
@@ -189,7 +196,7 @@ class _VerificationPaneState extends State<_VerificationPane> {
                     ),
                   ),*/
                   VerificationPaneBuilder.buildVerificationPane(
-                      RequestPackageHandler().getRequestPackage()),
+                      VerificationArrayHandler().getRequestPackage()),
                 ],
               ),
             ),
@@ -212,7 +219,8 @@ class VerificationArrayHandler {
 
   late List<dynamic> verificationRequests = [];
   int currentRequestIndex = 0;
-  EditTypeHandler editTypeHandler = EditTypeHandler();
+  Map<String, dynamic> requestPackage = {};
+  String currentEditType = '';
 
   List<dynamic> getVerificationRequests() {
     return verificationRequests;
@@ -223,57 +231,57 @@ class VerificationArrayHandler {
   }
 
   void setVerificationRequests(List<dynamic> newVerificationRequests) {
-    verificationRequests = newVerificationRequests;
-    editTypeHandler
-        .setEditType(verificationRequests[currentRequestIndex]['editType']);
+    if (newVerificationRequests.isNotEmpty) {
+      verificationRequests = newVerificationRequests;
+      setRequestPackage(verificationRequests[currentRequestIndex]);
+      setCurrentEditType(getRequestPackage()['editType']);
+    } else {
+      verificationRequests = [];
+    }
   }
 
   void nextRequest() {
     if (currentRequestIndex < verificationRequests.length - 1) {
       currentRequestIndex++;
-      editTypeHandler
-          .setEditType(verificationRequests[currentRequestIndex]['editType']);
+      setRequestPackage(verificationRequests[currentRequestIndex]);
+      setCurrentEditType(getRequestPackage()['editType']);
     } else {
       currentRequestIndex = 0;
-      editTypeHandler
-          .setEditType(verificationRequests[currentRequestIndex]['editType']);
+      setRequestPackage(verificationRequests[currentRequestIndex]);
+      setCurrentEditType(getRequestPackage()['editType']);
     }
   }
 
   void previousRequest() {
     if (currentRequestIndex > 0) {
       currentRequestIndex--;
-      editTypeHandler
-          .setEditType(verificationRequests[currentRequestIndex]['editType']);
+      setRequestPackage(verificationRequests[currentRequestIndex]);
+      setCurrentEditType(getRequestPackage()['editType']);
     } else {
       currentRequestIndex = verificationRequests.length - 1;
-      editTypeHandler
-          .setEditType(verificationRequests[currentRequestIndex]['editType']);
+      setRequestPackage(verificationRequests[currentRequestIndex]);
+      setCurrentEditType(getRequestPackage()['editType']);
     }
   }
 
   String getCurrentIndex() {
     return (currentRequestIndex + 1).toString();
   }
-}
 
-class EditTypeHandler {
-  static final EditTypeHandler _instance = EditTypeHandler._internal();
-
-  factory EditTypeHandler() {
-    return _instance;
+  String getCurrentEditType() {
+    return currentEditType;
   }
 
-  EditTypeHandler._internal();
-
-  late String editType = '';
-
-  String getEditType() {
-    return editType;
+  void setCurrentEditType(String newEditType) {
+    currentEditType = newEditType;
   }
 
-  void setEditType(String newEditType) {
-    editType = newEditType;
+  void setRequestPackage(Map<String, dynamic> currentVerificationRequest) {
+    requestPackage = currentVerificationRequest['request_package'];
+  }
+
+  Map<String, dynamic> getRequestPackage() {
+    return requestPackage;
   }
 }
 
@@ -302,51 +310,6 @@ class UsersHandler {
         (element) => element['user_id'] == userId,
         orElse: () => {'username': 'User Not Found'});
     return user['username'];
-  }
-}
-
-class RequestPackageHandler {
-  final VerificationArrayHandler verificationHandler =
-      VerificationArrayHandler();
-  final UsersHandler usersHandler = UsersHandler();
-  final EditTypeHandler editTypeHandler = EditTypeHandler();
-  Map<String, dynamic> requestPackage = {};
-
-  void setRequestPackage() {
-    requestPackage = verificationHandler.getCurrentRequest()['request_package'];
-    editTypeHandler.setEditType(requestPackage['editType']);
-  }
-
-  Map<String, dynamic> getRequestPackage() {
-    return requestPackage;
-  }
-
-  String getEntryID() {
-    return requestPackage['entryID'];
-  }
-
-  String getReason() {
-    return requestPackage['reason'];
-  }
-
-  String getName() {
-    return requestPackage['name'];
-  }
-
-  List<Map<String, dynamic>> getUpdatedEntry() {
-    return requestPackage['updatedEntry'];
-  }
-
-  String getCharacterID() {
-    return requestPackage['characterID'];
-  }
-
-  String getSectionID() {
-    return requestPackage['sectionID'];
-  }
-
-  String getLocationID() {
-    return requestPackage['locationID'];
   }
 }
 
@@ -401,7 +364,7 @@ class VerificationPaneBuilder {
   static Widget _buildEditSectionDetailPane(
       Map<String, dynamic> requestPackage) {
     final List<Map<String, dynamic>> updatedEntry =
-        requestPackage['updatedEntry'];
+        (requestPackage['updatedEntry'] as List).cast<Map<String, dynamic>>();
     final String reason = requestPackage['reason'];
 
     QuillEditorManager quillEditor = QuillEditorManager();
