@@ -367,6 +367,9 @@ class VerificationPaneBuilder {
         (requestPackage['updatedEntry'] as List).cast<Map<String, dynamic>>();
     final String reason = requestPackage['reason'];
 
+    Global global = Global();
+    final SizedBox smallSizedBox = global.smallSizedBox;
+
     QuillEditorManager quillEditor = QuillEditorManager();
     quillEditor.setInput(updatedEntry);
 
@@ -374,9 +377,16 @@ class VerificationPaneBuilder {
       child: Column(
         children: [
           const Text('Edit Section Detail'),
+          smallSizedBox,
           const Divider(),
-          quillEditor.buildEditor(),
+          smallSizedBox,
+          SizedBox(
+            width: 500,
+            child: quillEditor.buildEditor(),
+          ),
+          smallSizedBox,
           const Divider(),
+          smallSizedBox,
           Text('Reason: $reason'),
         ],
       ),
