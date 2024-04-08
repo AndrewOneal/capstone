@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:pocketbase/pocketbase.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -85,7 +87,7 @@ class DBHandler {
 
   Future<List<dynamic>> getWikis() async {
     var wikis = await pb.collection('wikis').getFullList(
-          sort: '-created',
+          sort: '+wiki_name',
         );
     var wikiList = [];
     for (var element in wikis) {
@@ -113,7 +115,7 @@ class DBHandler {
   Future<List<dynamic>> getCharacters({required String wikiID}) async {
     final records = await pb
         .collection('characters')
-        .getFullList(sort: '-created', filter: 'wiki_id.id="${wikiID}"');
+        .getFullList(sort: '+name', filter: 'wiki_id.id="${wikiID}"');
     var recordList = [];
     for (var record in records) {
       recordList.add(record.toJson());
@@ -127,7 +129,7 @@ class DBHandler {
     // TODO: Retrieves all characters associated with a specific wiki
     final records = await pb
         .collection('locations')
-        .getFullList(sort: '-created', filter: 'wiki_id.id="${wikiID}"');
+        .getFullList(sort: '+name', filter: 'wiki_id.id="${wikiID}"');
     var recordList = [];
     for (var record in records) {
       recordList.add(record.toJson());
@@ -140,7 +142,7 @@ class DBHandler {
     // TODO: Retrieves all characters associated with a specific wiki
     final records = await pb
         .collection('sections')
-        .getFullList(sort: '-created', filter: 'wiki_id.id="${wikiID}"');
+        .getFullList(sort: '+section_no', filter: 'wiki_id.id="${wikiID}"');
     var recordList = [];
     for (var record in records) {
       recordList.add(record.toJson());
@@ -235,7 +237,7 @@ class DBHandler {
         "id": "${newRecord["id"]}",
         "submitter_user_id": "${newRecord["submitter_user_id"]}",
         "wiki_id": "${newRecord["wiki_id"]}",
-        "request_package": "${newRecord["request_package"]}"
+        "request_package": newRecord["request_package"]
       };
       verificationList.add(newMap);
     }
@@ -394,7 +396,7 @@ class DBHandler {
     final body = <String, dynamic>{
       "submitter_user_id": submitterUserID,
       "wiki_id": wikiID,
-      "request_package": "${requestPackage}"
+      "request_package": jsonEncode(requestPackage)
     };
     try {
       print("Creating new verification request...");
