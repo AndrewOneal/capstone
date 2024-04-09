@@ -34,6 +34,17 @@ class DBHandler {
     return sectionID;
   }
 
+  Future<dynamic> getSectionNameFromID(
+      {required String sectionID}) async {
+    //retrieves section ID from settings by utilizing wikiID & section number
+    final record = await pb.collection('sections').getFirstListItem(
+      'id="${sectionID}"',
+      expand: 'relField1,relField2.subRelField',
+    );
+    var sectionName = record.toJson()['section_name'];
+    return sectionName;
+  }
+
   Future<String> getCharacterName({required String characterID}) async {
     final record = await pb.collection('characters').getFirstListItem(
           'id="${characterID}"',
@@ -56,11 +67,30 @@ class DBHandler {
     return record.toJson()['id'];
   }
 
+  Future<List> getWikisByAdmin({required String admin}) async {
+    var wikis = await pb.collection('wikis').getFullList(
+      filter: 'wiki_admin="${admin}"',
+      sort: '+wiki_name',
+    );
+    var wikiList = [];
+    for (var element in wikis) {
+      wikiList.add(element.toJson());
+    }
+    return wikiList;
+  }
+
   Future<String> getLocationIDFromName({required String locationName}) async {
     final record = await pb
         .collection('locations')
         .getFirstListItem('name~"$locationName"');
     return record.toJson()['id'];
+  }
+
+  Future<String> getLocationNameFromID({required String locationID}) async {
+    final record = await pb
+        .collection('locations')
+        .getFirstListItem('id="$locationID"');
+    return record.toJson()['name'];
   }
 
   Future<List<dynamic>> getUsers() async {
@@ -713,8 +743,11 @@ Future<void> main() async {
   //     wiki_id: await DBHandler().getWikiIDFromName(wikiName: "Avatar")));
   // await DBHandler().deleteVerificationRequests(verification_record_id: "9pxaqa3dssqx3bs");
 
-  await DBHandler()
-      .authenticate(username: "admin", password: "admin@gmail.com");
-  await DBHandler().deleteAccountByEmail(email: "test@gmail.com");
+  // await DBHandler()
+  //     .authenticate(username: "admin", password: "admin@gmail.com");
+  // await DBHandler().deleteAccountByEmail(email: "test@gmail.com");
+  // print(await DBHandler().getSectionNameFromID(sectionID: "nida26ase8j2d1r"));
+  // print(await DBHandler().getLocationNameFromID(locationID: "2wfh61krquejq8t"));
   //print(await DBHandler().getWiki(wikiID: "mgdzj2sn74biu9w"));
+  //print(await DBHandler().getWikisByAdmin(admin: "ofevsu3bzz414ok"));
 }
