@@ -228,7 +228,7 @@ class DBHandler {
     //Retrieves all verification requests for a specific wiki
     final records = await pb
         .collection('verification_requests')
-        .getFullList(sort: '-created', filter: 'wiki_id ="${wiki_id}"');
+        .getFullList(sort: '+created', filter: 'wiki_id ="${wiki_id}"');
     var verificationList = [];
     //Loop to format and prettify output for easy front-end use
     for (var record in records) {

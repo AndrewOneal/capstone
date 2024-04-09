@@ -287,4 +287,9 @@ class TextStyles {
     color: text['default'],
     height: 1.1,
   );
+  static TextStyle greyHintText = TextStyle(
+    fontFamily: font['default'],
+    fontSize: 18.0,
+    color: text['300'],
+  );
 }
