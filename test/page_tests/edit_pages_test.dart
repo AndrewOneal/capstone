@@ -18,6 +18,7 @@ void main() {
       maxSectionNo: 3,
       characterDetailsMap: sampleCharacter,
       characterName: sampleCharacterName,
+      characterID: '',
     );
     test('Edit Character Details Displays', () {
       expect(editCharacterDetailsPage, isNotNull);
@@ -57,6 +58,7 @@ void main() {
       maxSectionNo: 3,
       locationMap: sampleLocation,
       locationName: sampleLocationName,
+      locationID: '',
     );
     test('Edit Location Details Displays', () {
       expect(editLocationDetailsPage, isNotNull);
@@ -78,6 +80,7 @@ void main() {
       wikiMap: sampleWiki,
       sectionMap: sampleSection,
       sectionName: sampleSectionName,
+      sectionID: '',
     );
     test('Edit Section Details Displays', () {
       expect(editSectionDetailsPage, isNotNull);
