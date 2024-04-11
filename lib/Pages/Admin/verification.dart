@@ -18,7 +18,6 @@ class _VerificationPageState extends State<VerificationPage> {
   final UsersHandler usersHandler = UsersHandler();
   late Future<void> _fetchData = Future<void>.value();
   final DBHandler dbHandler = DBHandler();
-  int sectionsNo = 0;
 
   @override
   void initState() {
@@ -68,14 +67,6 @@ class _VerificationPageState extends State<VerificationPage> {
     });
   }
 
-  void setSectionsLength() async {
-    await dbHandler
-        .getSections(wikiID: verificationHandler.getCurrentRequest()['wikiID'])
-        .then((value) {
-      sectionsNo = value.length + 1;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final String wikiTitle = widget.wikiMap['wiki_name'];
@@ -117,9 +108,9 @@ class _VerificationPageState extends State<VerificationPage> {
                       purple: 1),
                   mediumSizedBox,
                   _AcceptRejectButtons(
-                      verificationHandler: verificationHandler,
-                      updateRequest: _updateRequest,
-                      sectionNo: sectionsNo),
+                    verificationHandler: verificationHandler,
+                    updateRequest: _updateRequest,
+                  ),
                   smallSizedBox,
                   _VerificationPane(
                     verificationHandler: verificationHandler,
@@ -143,11 +134,9 @@ class _VerificationPageState extends State<VerificationPage> {
 class _AcceptRejectButtons extends StatelessWidget {
   final VerificationArrayHandler verificationHandler;
   final VoidCallback updateRequest;
-  final int sectionNo;
   const _AcceptRejectButtons({
     required this.verificationHandler,
     required this.updateRequest,
-    required this.sectionNo,
   });
 
   @override
@@ -157,6 +146,7 @@ class _AcceptRejectButtons extends StatelessWidget {
     const double iconSize = 30;
     DBHandler dbHandler = DBHandler();
     final String editType = verificationHandler.getCurrentEditType();
+    const int sectionNo = 0;
 
     void acceptEditSectionDetail() {
       dbHandler.updateSectionDetail(
