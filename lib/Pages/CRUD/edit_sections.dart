@@ -70,7 +70,6 @@ class _EditCharForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Global global = Global();
-    final SizedBox mediumSizedBox = global.mediumSizedBox;
     final SizedBox largeSizedBox = global.largeSizedBox;
     final SizedBox extraLargeSizedBox = global.extraLargeSizedBox;
     final wikiID = wikiMap['id'];
@@ -94,8 +93,7 @@ class _EditCharForm extends StatelessWidget {
           Navigator.pop(context);
         });
         String sectionID = sectionHandler.getSectionID();
-        String editType =
-            sectionID == 'CREATEASECTION' ? "createSection" : "editSection";
+        String editType = sectionID.isEmpty ? "createSection" : "editSection";
         dbHandler.createVerificationRequest(
           submitterUserID: pb.authStore.model.id,
           wikiID: wikiID,
@@ -168,7 +166,7 @@ class _EditCharForm extends StatelessWidget {
               labelText: 'Reason for Edit',
             ),
           ),
-          mediumSizedBox,
+          largeSizedBox,
           MediaQuery.of(context).size.width > 514
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,

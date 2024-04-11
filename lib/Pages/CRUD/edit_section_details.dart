@@ -83,7 +83,6 @@ class _EditSectionDetailsForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Global global = Global();
-    final SizedBox mediumSizedBox = global.mediumSizedBox;
     final SizedBox largeSizedBox = global.largeSizedBox;
     final SizedBox extraLargeSizedBox = global.extraLargeSizedBox;
     final wikiID = wikiMap['id'];
@@ -114,7 +113,7 @@ class _EditSectionDetailsForm extends StatelessWidget {
         });
         String entryID = sectionHandler.getEntryID();
         String editType =
-            entryID == '' ? "createSectionDetail" : "editSectionDetail";
+            entryID.isEmpty ? "createSectionDetail" : "editSectionDetail";
         dbHandler.createVerificationRequest(
           submitterUserID: pb.authStore.model.id,
           wikiID: wikiID,
@@ -179,7 +178,7 @@ class _EditSectionDetailsForm extends StatelessWidget {
               labelText: 'Reason for Edit',
             ),
           ),
-          mediumSizedBox,
+          largeSizedBox,
           MediaQuery.of(context).size.width > 514
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,

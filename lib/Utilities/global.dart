@@ -75,8 +75,8 @@ class DefaultQuillRead extends StatelessWidget {
 
 class QuillEditorManager {
   final QuillController _quillController = QuillController.basic();
-  Color backgroundColor = background['default']!;
-  Color textColor = text['default']!;
+  Color backgroundColor = Colors.transparent;
+  bool enabledBackground = false;
 
   void setInput(List<Map<String, dynamic>> input) {
     _quillController.document = Document.fromJson(input);
@@ -86,23 +86,22 @@ class QuillEditorManager {
     backgroundColor = color;
   }
 
-  void setTextColor(Color color) {
-    textColor = color;
-  }
-
   List<Map<String, dynamic>> getDocumentJson() {
     return _quillController.document.toDelta().toJson();
   }
 
   Widget buildRead() {
-    return QuillEditor.basic(
-      configurations: QuillEditorConfigurations(
-        padding: const EdgeInsets.all(10),
-        controller: _quillController,
-        readOnly: true,
-        showCursor: false,
-        sharedConfigurations: const QuillSharedConfigurations(
-          locale: Locale('en', 'US'),
+    return Container(
+      color: backgroundColor,
+      child: QuillEditor.basic(
+        configurations: QuillEditorConfigurations(
+          padding: const EdgeInsets.all(10),
+          controller: _quillController,
+          readOnly: true,
+          showCursor: false,
+          sharedConfigurations: const QuillSharedConfigurations(
+            locale: Locale('en', 'US'),
+          ),
         ),
       ),
     );
@@ -153,14 +152,6 @@ class QuillEditorManager {
                   expands: true,
                   controller: _quillController,
                   readOnly: false,
-                  customStyles: DefaultStyles(
-                    paragraph: DefaultTextBlockStyle(
-                      TextStyles.whiteButtonText.copyWith(color: textColor),
-                      const VerticalSpacing(0, 0),
-                      const VerticalSpacing(0, 0),
-                      const BoxDecoration(),
-                    ),
-                  ),
                   sharedConfigurations: const QuillSharedConfigurations(
                     locale: Locale('en', 'US'),
                   ),

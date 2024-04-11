@@ -78,7 +78,6 @@ class _EditWikiDetailsForm extends StatelessWidget {
     final DBHandler dbHandler = DBHandler();
     QuillEditorManager quillEditor = QuillEditorManager();
     quillEditor.setBackgroundColor(lightPurple['200']!);
-    quillEditor.setTextColor(text['900']!);
     quillEditor.setInput([
       {
         "insert": '$wikiDescription\n',
@@ -107,6 +106,7 @@ class _EditWikiDetailsForm extends StatelessWidget {
           wikiID: wikiID,
           requestPackage: {
             "editType": "editWiki",
+            "title": _wikiTitleController.text,
             "updatedEntry": quillEditor.getDocumentJson(),
             "reason": _reasonForEditController.text,
           },

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Utilities/db_util.dart';
 import 'package:capstone/Pages/Admin/verification_pane_builder.dart';
-import 'dart:convert';
 
 class VerificationPage extends StatefulWidget {
   final Map<String, dynamic> wikiMap;
@@ -18,6 +17,8 @@ class _VerificationPageState extends State<VerificationPage> {
       VerificationArrayHandler();
   final UsersHandler usersHandler = UsersHandler();
   late Future<void> _fetchData = Future<void>.value();
+  final DBHandler dbHandler = DBHandler();
+  int sectionsNo = 0;
 
   @override
   void initState() {
@@ -55,9 +56,30 @@ class _VerificationPageState extends State<VerificationPage> {
     });
   }
 
+  void _updateRequest() {
+    dbHandler.deleteVerificationRequests(
+        verification_record_id: verificationHandler.getCurrentRequest()['id']);
+    verificationHandler.removeRequest();
+    setState(() {
+      if (verificationHandler.getVerificationRequests().length ==
+          verificationHandler.getCurrentIndex()) {
+        verificationHandler.nextRequest();
+      }
+    });
+  }
+
+  void setSectionsLength() async {
+    await dbHandler
+        .getSections(wikiID: verificationHandler.getCurrentRequest()['wikiID'])
+        .then((value) {
+      sectionsNo = value.length + 1;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final String wikiTitle = widget.wikiMap['wiki_name'];
+    verificationHandler.setWikiTitle(wikiTitle);
     final Global global = Global();
     final EdgeInsets sideMargins = global.sideMargins;
     final SizedBox smallSizedBox = global.smallSizedBox;
@@ -94,7 +116,10 @@ class _VerificationPageState extends State<VerificationPage> {
                       height: 150,
                       purple: 1),
                   mediumSizedBox,
-                  const _AcceptRejectButtons(),
+                  _AcceptRejectButtons(
+                      verificationHandler: verificationHandler,
+                      updateRequest: _updateRequest,
+                      sectionNo: sectionsNo),
                   smallSizedBox,
                   _VerificationPane(
                     verificationHandler: verificationHandler,
@@ -116,13 +141,221 @@ class _VerificationPageState extends State<VerificationPage> {
 }
 
 class _AcceptRejectButtons extends StatelessWidget {
-  const _AcceptRejectButtons();
+  final VerificationArrayHandler verificationHandler;
+  final VoidCallback updateRequest;
+  final int sectionNo;
+  const _AcceptRejectButtons({
+    required this.verificationHandler,
+    required this.updateRequest,
+    required this.sectionNo,
+  });
 
   @override
   Widget build(BuildContext context) {
     final Global global = Global();
     final EdgeInsets sideMargins = global.sideMargins;
     const double iconSize = 30;
+    DBHandler dbHandler = DBHandler();
+    final String editType = verificationHandler.getCurrentEditType();
+
+    void acceptEditSectionDetail() {
+      dbHandler.updateSectionDetail(
+          sectionDetailID: verificationHandler.getCurrentRequest()['id'],
+          new_details_description:
+              verificationHandler.getRequestPackage()['updatedEntry']);
+    }
+
+    void acceptEditLocationDetail() {
+      dbHandler.updateLocationDetail(
+          locationDetailID: verificationHandler.getCurrentRequest()['id'],
+          new_details_description:
+              verificationHandler.getRequestPackage()['updatedEntry']);
+    }
+
+    void acceptEditCharacterDetail() {
+      dbHandler.updateCharacterDetail(
+          characterDetailsID: verificationHandler.getCurrentRequest()['id'],
+          new_details_description:
+              verificationHandler.getRequestPackage()['updatedEntry']);
+    }
+
+    void acceptEditSection() {
+      dbHandler.updateSection(
+          sectionID: verificationHandler.getRequestPackage()['sectionID'],
+          new_section_name: verificationHandler.getRequestPackage()['name']);
+    }
+
+    void acceptEditLocation() {
+      dbHandler.updateLocation(
+          locationID: verificationHandler.getRequestPackage()['locationID'],
+          new_location_name: verificationHandler.getRequestPackage()['name']);
+    }
+
+    void acceptEditCharacter() {
+      dbHandler.updateCharacter(
+        characterID: verificationHandler.getRequestPackage()['characterID'],
+        new_name: verificationHandler.getRequestPackage()['name'],
+        new_nickname: verificationHandler.getRequestPackage()['name'],
+      );
+    }
+
+    void acceptEditWiki() {
+      dbHandler.updateWiki(
+        wikiID: verificationHandler.getCurrentRequest()['wikiID'],
+        new_name: verificationHandler.getRequestPackage()['title'],
+        new_description:
+            verificationHandler.getRequestPackage()['updatedEntry'],
+      );
+    }
+
+    void acceptDeleteSectionDetail() {
+      dbHandler.deleteSectionDetail(
+          sectionDetailID: verificationHandler.getCurrentRequest()['id']);
+    }
+
+    void acceptDeleteLocationDetail() {
+      dbHandler.deleteLocationDetail(
+          locationDetailID: verificationHandler.getCurrentRequest()['id']);
+    }
+
+    void acceptDeleteCharacterDetail() {
+      dbHandler.deleteCharacterDetail(
+          characterDetailID: verificationHandler.getCurrentRequest()['id']);
+    }
+
+    void acceptDeleteSection() {
+      dbHandler.deleteSection(
+          sectionID: verificationHandler.getRequestPackage()['sectionID']);
+    }
+
+    void acceptDeleteLocation() {
+      dbHandler.deleteLocation(
+          locationID: verificationHandler.getRequestPackage()['locationID']);
+    }
+
+    void acceptDeleteCharacter() {
+      dbHandler.deleteCharacter(
+          characterID: verificationHandler.getRequestPackage()['characterID']);
+    }
+
+    void acceptDeleteWiki() {
+      dbHandler.deleteWiki(
+          wikiID: verificationHandler.getCurrentRequest()['wikiID']);
+    }
+
+    void acceptCreateSection() {
+      dbHandler.createSection(
+          associated_wiki_id: verificationHandler.getCurrentRequest()['wikiID'],
+          section_name: verificationHandler.getRequestPackage()['name'],
+          section_no: sectionNo);
+    }
+
+    void acceptCreateLocation() {
+      dbHandler.createLocation(
+          associated_wiki_id: verificationHandler.getCurrentRequest()['wikiID'],
+          location_name: verificationHandler.getRequestPackage()['name']);
+    }
+
+    void acceptCreateCharacter() {
+      dbHandler.createCharacter(
+          associated_wiki_id: verificationHandler.getCurrentRequest()['wikiID'],
+          character_name: verificationHandler.getRequestPackage()['name']);
+    }
+
+    void acceptCreateSectionDetail() {
+      dbHandler.createSectionDetail(
+          associated_section_id:
+              verificationHandler.getRequestPackage()['sectionID'],
+          details_description:
+              verificationHandler.getRequestPackage()['updatedEntry']);
+    }
+
+    void acceptCreateLocationDetail() {
+      dbHandler.createLocationDetail(
+          associated_location_id:
+              verificationHandler.getRequestPackage()['locationID'],
+          associated_section_id:
+              verificationHandler.getRequestPackage()['sectionID'],
+          details_description:
+              verificationHandler.getRequestPackage()['updatedEntry']);
+    }
+
+    void acceptCreateCharacterDetail() {
+      dbHandler.createCharacterDetail(
+          associated_character_id:
+              verificationHandler.getRequestPackage()['characterID'],
+          associated_section_id:
+              verificationHandler.getRequestPackage()['sectionID'],
+          details_description:
+              verificationHandler.getRequestPackage()['updatedEntry']);
+    }
+
+    void acceptAction() {
+      switch (editType) {
+        case 'editSectionDetail':
+          acceptEditSectionDetail();
+          break;
+        case 'editLocationDetail':
+          acceptEditLocationDetail();
+          break;
+        case 'editCharacterDetail':
+          acceptEditCharacterDetail();
+          break;
+        case 'editSection':
+          acceptEditSection();
+          break;
+        case 'editLocation':
+          acceptEditLocation();
+          break;
+        case 'editCharacter':
+          acceptEditCharacter();
+          break;
+        case 'editWiki':
+          acceptEditWiki();
+          break;
+        case 'deleteSectionDetail':
+          acceptDeleteSectionDetail();
+          break;
+        case 'deleteLocationDetail':
+          acceptDeleteLocationDetail();
+          break;
+        case 'deleteCharacterDetail':
+          acceptDeleteCharacterDetail();
+          break;
+        case 'deleteSection':
+          acceptDeleteSection();
+          break;
+        case 'deleteLocation':
+          acceptDeleteLocation();
+          break;
+        case 'deleteCharacter':
+          acceptDeleteCharacter();
+          break;
+        case 'deleteWiki':
+          acceptDeleteWiki();
+          break;
+        case 'createSection':
+          acceptCreateSection();
+          break;
+        case 'createLocation':
+          acceptCreateLocation();
+          break;
+        case 'createCharacter':
+          acceptCreateCharacter();
+          break;
+        case 'createSectionDetail':
+          acceptCreateSectionDetail();
+          break;
+        case 'createLocationDetail':
+          acceptCreateLocationDetail();
+          break;
+        case 'createCharacterDetail':
+          acceptCreateCharacterDetail();
+          break;
+        default:
+          break;
+      }
+    }
 
     return Padding(
       padding: sideMargins,
@@ -133,13 +366,36 @@ class _AcceptRejectButtons extends StatelessWidget {
             icon: const Icon(Icons.check_circle_outline),
             color: Colors.green,
             iconSize: iconSize,
-            onPressed: () {},
+            onPressed: () {
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(
+                    const SnackBar(
+                        content: Text('Accepting Request'),
+                        duration: Duration(seconds: 1)),
+                  )
+                  .closed
+                  .then((reason) {
+                updateRequest();
+              });
+              acceptAction();
+            },
           ),
           IconButton(
             icon: const Icon(Icons.delete_outline),
             color: Colors.red,
             iconSize: iconSize,
-            onPressed: () {},
+            onPressed: () {
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(
+                    const SnackBar(
+                        content: Text('Deleting Request'),
+                        duration: Duration(seconds: 1)),
+                  )
+                  .closed
+                  .then((reason) {
+                updateRequest();
+              });
+            },
           ),
         ],
       ),
@@ -180,7 +436,7 @@ class _NavigationButtons extends StatelessWidget {
                   style: TextStyle(fontSize: 20),
                 )
               : Text(
-                  '${verificationHandler.getCurrentIndex()} / ${verificationHandler.getVerificationRequests().length}',
+                  '${verificationHandler.getCurrentIndex() + 1} / ${verificationHandler.getVerificationRequests().length}',
                   style: const TextStyle(fontSize: 20),
                 ),
           IconButton(
@@ -213,9 +469,19 @@ class _VerificationPaneState extends State<_VerificationPane> {
       width: double.infinity,
       height: 400,
       child: SingleChildScrollView(
-        child: VerificationPaneBuilder.buildVerificationPane(
+        child: FutureBuilder<Widget>(
+          future: VerificationPaneBuilder.buildVerificationPane(
             widget.verificationHandler.getRequestPackage(),
-            widget.verificationHandler),
+            widget.verificationHandler,
+          ),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return snapshot.data ?? Container();
+            } else {
+              return const CircularProgressIndicator();
+            }
+          },
+        ),
       ),
     );
   }
@@ -228,6 +494,8 @@ class VerificationArrayHandler {
   String currentEditType = '';
   String sectionName = '';
   String charLocName = '';
+  String wikiTitle = '';
+  String entryID = '';
 
   List<dynamic> getVerificationRequests() {
     return verificationRequests;
@@ -275,8 +543,8 @@ class VerificationArrayHandler {
     }
   }
 
-  String getCurrentIndex() {
-    return (currentRequestIndex + 1).toString();
+  int getCurrentIndex() {
+    return currentRequestIndex;
   }
 
   String getCurrentEditType() {
@@ -301,9 +569,47 @@ class VerificationArrayHandler {
         characterID: getRequestPackage()['characterID']);
   }
 
-  String getCharacterName() {
-    awaitCharacterName();
+  Future<String> getCharacterName() async {
+    await awaitCharacterName();
     return charLocName;
+  }
+
+  Future<void> awaitSectionName() async {
+    final dbHandler = DBHandler();
+    sectionName = await dbHandler.getSectionNameFromID(
+        sectionID: getRequestPackage()['sectionID']);
+  }
+
+  Future<String> getSectionName() async {
+    await awaitSectionName();
+    return sectionName;
+  }
+
+  Future<void> awaitLocationName() async {
+    final dbHandler = DBHandler();
+    charLocName = await dbHandler.getLocationNameFromID(
+        locationID: getRequestPackage()['locationID']);
+  }
+
+  Future<String> getLocationName() async {
+    await awaitLocationName();
+    return charLocName;
+  }
+
+  void setWikiTitle(String newWikiTitle) {
+    wikiTitle = newWikiTitle;
+  }
+
+  String getWikiTitle() {
+    return wikiTitle;
+  }
+
+  String getEntryID() {
+    return entryID;
+  }
+
+  void removeRequest() {
+    verificationRequests.removeAt(currentRequestIndex);
   }
 }
 
