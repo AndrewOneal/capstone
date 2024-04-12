@@ -6,7 +6,6 @@ import 'package:capstone/Pages/Wiki/wiki_home.dart';
 import 'package:capstone/Pages/CRUD/new_wiki.dart';
 import 'package:capstone/Utilities/db_util.dart';
 import 'package:capstone/Pages/Account/account.dart';
-//import 'package:pocketbase_server_flutter/pocketbase_server_flutter.dart';
 
 class WikiListPage extends StatelessWidget {
   const WikiListPage({super.key});

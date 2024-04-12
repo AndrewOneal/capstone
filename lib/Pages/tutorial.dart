@@ -4,7 +4,6 @@ import 'package:capstone/Pages/wiki_list.dart';
 import 'package:capstone/Utilities/global.dart';
 import 'package:capstone/Pages/Account/account.dart';
 import 'package:capstone/Utilities/db_util.dart';
-import 'package:capstone/Pages/apis.dart';
 
 class TutorialPage extends StatelessWidget {
   const TutorialPage({super.key});
@@ -27,14 +26,6 @@ class TutorialPage extends StatelessWidget {
           },
         ),
         actions: [
-          IconButton(
-              icon: const Icon(Icons.list_alt),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const APIListPage()),
-                );
-              }),
           IconButton(
             icon: const Icon(Icons.account_circle),
             onPressed: () {
