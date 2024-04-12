@@ -34,13 +34,12 @@ class DBHandler {
     return sectionID;
   }
 
-  Future<dynamic> getSectionNameFromID(
-      {required String sectionID}) async {
+  Future<dynamic> getSectionNameFromID({required String sectionID}) async {
     //retrieves section ID from settings by utilizing wikiID & section number
     final record = await pb.collection('sections').getFirstListItem(
-      'id="${sectionID}"',
-      expand: 'relField1,relField2.subRelField',
-    );
+          'id="${sectionID}"',
+          expand: 'relField1,relField2.subRelField',
+        );
     var sectionName = record.toJson()['section_name'];
     return sectionName;
   }
@@ -69,9 +68,9 @@ class DBHandler {
 
   Future<List> getWikisByAdmin({required String admin}) async {
     var wikis = await pb.collection('wikis').getFullList(
-      filter: 'wiki_admin="${admin}"',
-      sort: '+wiki_name',
-    );
+          filter: 'wiki_admin="${admin}"',
+          sort: '+wiki_name',
+        );
     var wikiList = [];
     for (var element in wikis) {
       wikiList.add(element.toJson());
@@ -87,9 +86,8 @@ class DBHandler {
   }
 
   Future<String> getLocationNameFromID({required String locationID}) async {
-    final record = await pb
-        .collection('locations')
-        .getFirstListItem('id="$locationID"');
+    final record =
+        await pb.collection('locations').getFirstListItem('id="$locationID"');
     return record.toJson()['name'];
   }
 
@@ -153,10 +151,7 @@ class DBHandler {
     return recordList;
   }
 
-  //NOT TESTED YET BUT 99% SURE IT's WORKING
   Future<List<dynamic>> getLocations({required String wikiID}) async {
-    // TODO: Implement logic to retrieve locations list from db
-    // TODO: Retrieves all characters associated with a specific wiki
     final records = await pb
         .collection('locations')
         .getFullList(sort: '+name', filter: 'wiki_id.id="${wikiID}"');
@@ -168,8 +163,6 @@ class DBHandler {
   }
 
   Future<List<dynamic>> getSections({required String wikiID}) async {
-    // TODO: Implement logic to retrieve sections list from db
-    // TODO: Retrieves all characters associated with a specific wiki
     final records = await pb
         .collection('sections')
         .getFullList(sort: '+section_no', filter: 'wiki_id.id="${wikiID}"');

@@ -60,9 +60,13 @@ class _VerificationPageState extends State<VerificationPage> {
         verification_record_id: verificationHandler.getCurrentRequest()['id']);
     verificationHandler.removeRequest();
     setState(() {
-      if (verificationHandler.getVerificationRequests().length ==
+      if (verificationHandler.getVerificationRequests().isEmpty) {
+        verificationHandler.reset();
+      } else if (verificationHandler.getVerificationRequests().length ==
           verificationHandler.getCurrentIndex()) {
         verificationHandler.nextRequest();
+      } else {
+        verificationHandler.updateRequest();
       }
     });
   }
@@ -150,23 +154,30 @@ class _AcceptRejectButtons extends StatelessWidget {
 
     void acceptEditSectionDetail() {
       dbHandler.updateSectionDetail(
-          sectionDetailID: verificationHandler.getCurrentRequest()['id'],
-          new_details_description:
-              verificationHandler.getRequestPackage()['updatedEntry']);
+          sectionDetailID: verificationHandler.getRequestPackage()['entryID'],
+          new_details_description: {
+            "flutter_quill":
+                verificationHandler.getRequestPackage()['updatedEntry']
+          });
     }
 
     void acceptEditLocationDetail() {
       dbHandler.updateLocationDetail(
-          locationDetailID: verificationHandler.getCurrentRequest()['id'],
-          new_details_description:
-              verificationHandler.getRequestPackage()['updatedEntry']);
+          locationDetailID: verificationHandler.getRequestPackage()['entryID'],
+          new_details_description: {
+            "flutter_quill":
+                verificationHandler.getRequestPackage()['updatedEntry']
+          });
     }
 
     void acceptEditCharacterDetail() {
       dbHandler.updateCharacterDetail(
-          characterDetailsID: verificationHandler.getCurrentRequest()['id'],
-          new_details_description:
-              verificationHandler.getRequestPackage()['updatedEntry']);
+          characterDetailsID:
+              verificationHandler.getRequestPackage()['entryID'],
+          new_details_description: {
+            "flutter_quill":
+                verificationHandler.getRequestPackage()['updatedEntry']
+          });
     }
 
     void acceptEditSection() {
@@ -256,8 +267,10 @@ class _AcceptRejectButtons extends StatelessWidget {
       dbHandler.createSectionDetail(
           associated_section_id:
               verificationHandler.getRequestPackage()['sectionID'],
-          details_description:
-              verificationHandler.getRequestPackage()['updatedEntry']);
+          details_description: {
+            "flutter_quill":
+                verificationHandler.getRequestPackage()['updatedEntry']
+          });
     }
 
     void acceptCreateLocationDetail() {
@@ -266,8 +279,10 @@ class _AcceptRejectButtons extends StatelessWidget {
               verificationHandler.getRequestPackage()['locationID'],
           associated_section_id:
               verificationHandler.getRequestPackage()['sectionID'],
-          details_description:
-              verificationHandler.getRequestPackage()['updatedEntry']);
+          details_description: {
+            "flutter_quill":
+                verificationHandler.getRequestPackage()['updatedEntry']
+          });
     }
 
     void acceptCreateCharacterDetail() {
@@ -276,8 +291,10 @@ class _AcceptRejectButtons extends StatelessWidget {
               verificationHandler.getRequestPackage()['characterID'],
           associated_section_id:
               verificationHandler.getRequestPackage()['sectionID'],
-          details_description:
-              verificationHandler.getRequestPackage()['updatedEntry']);
+          details_description: {
+            "flutter_quill":
+                verificationHandler.getRequestPackage()['updatedEntry']
+          });
     }
 
     void acceptAction() {
@@ -357,17 +374,19 @@ class _AcceptRejectButtons extends StatelessWidget {
             color: Colors.green,
             iconSize: iconSize,
             onPressed: () {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(
-                    const SnackBar(
-                        content: Text('Accepting Request'),
-                        duration: Duration(seconds: 1)),
-                  )
-                  .closed
-                  .then((reason) {
-                updateRequest();
-              });
-              acceptAction();
+              if (verificationHandler.getVerificationRequests().isNotEmpty) {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(
+                      const SnackBar(
+                          content: Text('Accepting Request'),
+                          duration: Duration(seconds: 1)),
+                    )
+                    .closed
+                    .then((reason) {
+                  updateRequest();
+                });
+                acceptAction();
+              }
             },
           ),
           IconButton(
@@ -375,16 +394,18 @@ class _AcceptRejectButtons extends StatelessWidget {
             color: Colors.red,
             iconSize: iconSize,
             onPressed: () {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(
-                    const SnackBar(
-                        content: Text('Deleting Request'),
-                        duration: Duration(seconds: 1)),
-                  )
-                  .closed
-                  .then((reason) {
-                updateRequest();
-              });
+              if (verificationHandler.getVerificationRequests().isNotEmpty) {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(
+                      const SnackBar(
+                          content: Text('Deleting Request'),
+                          duration: Duration(seconds: 1)),
+                    )
+                    .closed
+                    .then((reason) {
+                  updateRequest();
+                });
+              }
             },
           ),
         ],
@@ -531,6 +552,22 @@ class VerificationArrayHandler {
       setRequestPackage(verificationRequests[currentRequestIndex]);
       setCurrentEditType(getRequestPackage()['editType']);
     }
+  }
+
+  void updateRequest() {
+    setRequestPackage(verificationRequests[currentRequestIndex]);
+    setCurrentEditType(getRequestPackage()['editType']);
+  }
+
+  void reset() {
+    verificationRequests = [];
+    currentRequestIndex = 0;
+    requestPackage = {};
+    currentEditType = '';
+    sectionName = '';
+    charLocName = '';
+    wikiTitle = '';
+    entryID = '';
   }
 
   int getCurrentIndex() {

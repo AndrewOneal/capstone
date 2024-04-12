@@ -233,7 +233,9 @@ class _SectionDropdown extends StatefulWidget {
 class _SectionDropdownState extends State<_SectionDropdown> {
   late List<dynamic> sections;
   late int sectionNo = 1;
-  late String description = '';
+  late List<Map<String, dynamic>> description = [
+    {"insert": "\n"}
+  ];
 
   @override
   void initState() {
@@ -348,12 +350,15 @@ class LocationHandler {
     return '';
   }
 
-  String getDescriptionFromSection(int sectionNo) {
+  List<Map<String, dynamic>> getDescriptionFromSection(int sectionNo) {
     setEntryFromSection(sectionNo);
     if (entry.isNotEmpty) {
-      return entry['details_description'];
+      return (entry['details_description']['flutter_quill'] as List)
+          .cast<Map<String, dynamic>>();
     }
-    return '';
+    return [
+      {"insert": "\n"}
+    ];
   }
 
   List<dynamic> getLocationMap() {

@@ -88,11 +88,7 @@ class _EditSectionDetailsForm extends StatelessWidget {
     final wikiID = wikiMap['id'];
     final DBHandler dbHandler = DBHandler();
     QuillEditorManager quillEditor = QuillEditorManager();
-    quillEditor.setInput([
-      {
-        "insert": '${sectionHandler.getDescription()}\n',
-      },
-    ]);
+    quillEditor.setInput(sectionHandler.getDescription());
     final double buttonWidth = MediaQuery.of(context).size.width > 514
         ? MediaQuery.of(context).size.width * 0.4
         : MediaQuery.of(context).size.width * 0.8;
@@ -213,11 +209,14 @@ class SectionHandler {
     return '';
   }
 
-  String getDescription() {
+  List<Map<String, dynamic>> getDescription() {
     if (entry.isNotEmpty) {
-      return entry['details_description'];
+      return (entry['details_description']['flutter_quill'] as List)
+          .cast<Map<String, dynamic>>();
     }
-    return '';
+    return [
+      {"insert": "\n"}
+    ];
   }
 
   void setEntry(Map<String, dynamic> entry) {

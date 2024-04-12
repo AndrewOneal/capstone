@@ -231,13 +231,9 @@ class _DetailList extends StatelessWidget {
                         ],
                       ),
                     DefaultQuillRead(
-                      input: [
-                        {
-                          "insert":
-                              '${wikiDetails[index]["details_description"]}\n',
-                        },
-                      ],
-                    ),
+                        input: (wikiDetails[index]['details_description']
+                                ['flutter_quill'] as List)
+                            .cast<Map<String, dynamic>>()),
                   ],
                 );
               }
