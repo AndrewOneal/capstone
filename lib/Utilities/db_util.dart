@@ -194,7 +194,7 @@ class DBHandler {
       var newRecord = record.toJson();
       var newMap = {
         "id": "${newRecord["id"]}",
-        "details_description": "${newRecord["details_description"]}",
+        "details_description": newRecord["details_description"],
         "character_id": "${newRecord["character_id"]}",
         "section_name": "${newRecord["expand"]["section_id"]["section_name"]}",
         "section_no": "${newRecord["expand"]["section_id"]["section_no"]}",
@@ -219,7 +219,7 @@ class DBHandler {
       var newRecord = record.toJson();
       var newMap = {
         "id": "${newRecord["id"]}",
-        "details_description": "${newRecord["details_description"]}",
+        "details_description": newRecord["details_description"],
         "location_id": "${newRecord["location_id"]}",
         "section_name": "${newRecord["expand"]["section_id"]["section_name"]}",
         "section_no": "${newRecord["expand"]["section_id"]["section_no"]}",
@@ -244,7 +244,7 @@ class DBHandler {
       var newRecord = record.toJson();
       var newMap = {
         "id": "${newRecord["id"]}",
-        "details_description": "${newRecord["details_description"]}",
+        "details_description": newRecord["details_description"],
         "section_name": "${newRecord["expand"]["section_id"]["section_name"]}",
         "section_no": "${newRecord["expand"]["section_id"]["section_no"]}",
         "section_id": "${newRecord["section_id"]}"
@@ -327,12 +327,12 @@ class DBHandler {
   }
 
   Future<void> createCharacterDetail(
-      {required String details_description,
+      {required details_description,
       required String associated_character_id,
       required String associated_section_id}) async {
     // Create new character detail record
     final body = <String, dynamic>{
-      "details_description": "${details_description}",
+      "details_description": jsonEncode(details_description),
       "character_id": "${associated_character_id}",
       "section_id": "${associated_section_id}"
     };
@@ -364,12 +364,12 @@ class DBHandler {
   }
 
   Future<void> createLocationDetail(
-      {required String details_description,
+      {required details_description,
       required String associated_location_id,
       required String associated_section_id}) async {
     // Create new location detail record
     final body = <String, dynamic>{
-      "details_description": "${details_description}",
+      "details_description": jsonEncode(details_description),
       "location_id": "${associated_location_id}",
       "section_id": "${associated_section_id}"
     };
@@ -402,11 +402,11 @@ class DBHandler {
   }
 
   Future<void> createSectionDetail(
-      {required String details_description,
+      {required details_description,
       required String associated_section_id}) async {
     // Create new section detail record
     final body = <String, dynamic>{
-      "details_description": "${details_description}",
+      "details_description": jsonEncode(details_description),
       "section_id": "${associated_section_id}"
     };
     try {
@@ -574,9 +574,9 @@ class DBHandler {
 
   Future<Map<String, dynamic>> updateCharacterDetail(
       {required String characterDetailsID,
-      required String new_details_description}) async {
+      required new_details_description}) async {
     final body = <String, dynamic>{
-      "details_description": new_details_description,
+      "details_description": jsonEncode(new_details_description),
     };
     try {
       var record = await pb
@@ -590,9 +590,9 @@ class DBHandler {
 
   Future<Map<String, dynamic>> updateLocationDetail(
       {required String locationDetailID,
-      required String new_details_description}) async {
+      required new_details_description}) async {
     final body = <String, dynamic>{
-      "details_description": new_details_description,
+      "details_description": jsonEncode(new_details_description),
     };
     try {
       var record = await pb
@@ -606,9 +606,9 @@ class DBHandler {
 
   Future<Map<String, dynamic>> updateSectionDetail(
       {required String sectionDetailID,
-      required String new_details_description}) async {
+      required new_details_description}) async {
     final body = <String, dynamic>{
-      "details_description": new_details_description,
+      "details_description": jsonEncode(new_details_description),
     };
     try {
       var record = await pb
