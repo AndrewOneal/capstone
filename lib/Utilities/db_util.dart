@@ -4,6 +4,7 @@ import 'package:pocketbase/pocketbase.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 final pb = PocketBase(dotenv.env['DB_IP']!);
+//final pb = PocketBase("http://127.0.0.1:8090");
 
 class DBHandler {
   static final DBHandler _instance = DBHandler._internal();
@@ -165,7 +166,7 @@ class DBHandler {
   Future<List<dynamic>> getSections({required String wikiID}) async {
     final records = await pb
         .collection('sections')
-        .getFullList(sort: '+section_no', filter: 'wiki_id.id="${wikiID}"');
+        .getFullList(sort: '-section_no', filter: 'wiki_id.id="${wikiID}"');
     var recordList = [];
     for (var record in records) {
       recordList.add(record.toJson());
@@ -270,14 +271,14 @@ class DBHandler {
   Future<void> createWiki(
       {required String wiki_name,
       required int wiki_section_count,
-      required String wiki_description,
+      required wiki_description,
       required String section_name}) async {
     //Create new wiki record
     final body = <String, dynamic>{
       "wiki_name": "${wiki_name}",
       "wiki_admin": null,
       "wiki_section_count": wiki_section_count,
-      "wiki_description": "${wiki_description}"
+      "wiki_description": jsonEncode(wiki_description)
     };
     print("Creating new wiki...");
     try {
@@ -510,10 +511,10 @@ class DBHandler {
   Future<Map<String, dynamic>> updateWiki(
       {required String wikiID,
       required String new_name,
-      required String new_description}) async {
+      required new_description}) async {
     final body = <String, dynamic>{
       "wiki_name": new_name,
-      "wiki_description": new_description
+      "wiki_description": jsonEncode(new_description)
     };
     try {
       var record = await pb.collection('wikis').update(wikiID, body: body);
@@ -685,6 +686,19 @@ class DBHandler {
     }
     return userID;
   }
+
+  Future<dynamic> getLatestSectionNo({required String wiki_id}) async {
+    var sectionsList = await DBHandler().getSections(wikiID: wiki_id);
+    var wiki = await DBHandler().getWiki(wikiID: wiki_id);
+    var latestSection = sectionsList[0];
+    var latestSectionNo = latestSection["section_no"];
+    // for (var section in sectionsList) {
+    //   if(section.toJson()["section_no"] == wiki["wiki_section_count"]){
+    //     latestSectionNo = section.to
+    //   }
+    // }
+    return latestSectionNo;
+  }
 }
 
 Future<void> main() async {
@@ -705,7 +719,7 @@ Future<void> main() async {
 
   //DBHandler().createCharacter(character_name: "Azula", associated_wiki_id: "ndlh8nkyr4uyjw4");
   //DBHandler().createCharacterDetail(details_description: '{"String":"New detail about azula for book 1"}', associated_character_id: "h1u69fa7cq5t9a7", associated_section_id: "g8294277htd9p13");
-  //DBHandler().createWiki(wiki_name: "Star Wars", wiki_section_count: 9, wiki_description: "Covers the star wars movies 1-9", section_name: 'Movie');
+  //DBHandler().createWiki(wiki_name: "Star Wars Old Republic", wiki_section_count: 15, wiki_description: "Covers the star wars movies 1-9", section_name: 'Movie');
 
   //DBHandler().createLocation(location_name: "Southern Water Tribe", associated_wiki_id: await DBHandler().getWikiIDFromName(wikiName: "Breaking"));
   //DBHandler().createLocationDetail(details_description: '{"String":"New detail about Omashu for book 3"}', associated_location_id: "jogmpljl9j6ibfu", associated_section_id: "jz7pr9z31nfadbf");
@@ -743,4 +757,5 @@ Future<void> main() async {
   // print(await DBHandler().getLocationNameFromID(locationID: "2wfh61krquejq8t"));
   //print(await DBHandler().getWiki(wikiID: "mgdzj2sn74biu9w"));
   //print(await DBHandler().getWikisByAdmin(admin: "ofevsu3bzz414ok"));
+  //print(await DBHandler().getLatestSectionNo(wiki_id: "n7vl47uaxfdkeeq"));
 }
