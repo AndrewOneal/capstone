@@ -28,6 +28,7 @@ class _VerificationPageState extends State<VerificationPage> {
   Future<void> _fetchDataFromDB() async {
     await _fetchUsers();
     await _fetchVerificationRequests();
+    await _fetchLatestSectionNo();
   }
 
   Future<void> _fetchUsers() async {
@@ -41,6 +42,17 @@ class _VerificationPageState extends State<VerificationPage> {
     final dbVerificationRequests =
         await dbHandler.getVerificationRequests(wiki_id: widget.wikiMap['id']);
     verificationHandler.setVerificationRequests(dbVerificationRequests);
+  }
+
+  Future<void> _fetchLatestSectionNo() async {
+    final dbHandler = DBHandler();
+    int latestSectionNo;
+    verificationHandler.getVerificationRequests().isNotEmpty
+        ? latestSectionNo =
+            await dbHandler.getLatestSectionNo(wiki_id: widget.wikiMap['id']) +
+                1
+        : latestSectionNo = 0;
+    verificationHandler.setSectionNo(latestSectionNo);
   }
 
   void _nextRequest() {
@@ -64,8 +76,10 @@ class _VerificationPageState extends State<VerificationPage> {
         verificationHandler.reset();
       } else if (verificationHandler.getVerificationRequests().length ==
           verificationHandler.getCurrentIndex()) {
+        _fetchLatestSectionNo();
         verificationHandler.nextRequest();
       } else {
+        _fetchLatestSectionNo();
         verificationHandler.updateRequest();
       }
     });
@@ -150,7 +164,6 @@ class _AcceptRejectButtons extends StatelessWidget {
     const double iconSize = 30;
     DBHandler dbHandler = DBHandler();
     final String editType = verificationHandler.getCurrentEditType();
-    const int sectionNo = 0;
 
     void acceptEditSectionDetail() {
       dbHandler.updateSectionDetail(
@@ -202,10 +215,12 @@ class _AcceptRejectButtons extends StatelessWidget {
 
     void acceptEditWiki() {
       dbHandler.updateWiki(
-        wikiID: verificationHandler.getCurrentRequest()['wikiID'],
+        wikiID: verificationHandler.getCurrentRequest()['wiki_id'],
         new_name: verificationHandler.getRequestPackage()['title'],
-        new_description:
-            verificationHandler.getRequestPackage()['updatedEntry'],
+        new_description: {
+          "flutter_quill":
+              verificationHandler.getRequestPackage()['updatedEntry'],
+        },
       );
     }
 
@@ -241,25 +256,34 @@ class _AcceptRejectButtons extends StatelessWidget {
 
     void acceptDeleteWiki() {
       dbHandler.deleteWiki(
-          wikiID: verificationHandler.getCurrentRequest()['wikiID']);
+          wikiID: verificationHandler.getCurrentRequest()['wiki_id']);
     }
 
     void acceptCreateSection() {
+      print(verificationHandler.getCurrentRequest());
+      print(
+        verificationHandler.getCurrentRequest()['wiki_id'],
+      );
+      print(verificationHandler.getRequestPackage()['name']);
+      print(verificationHandler.getSectionNo());
       dbHandler.createSection(
-          associated_wiki_id: verificationHandler.getCurrentRequest()['wikiID'],
+          associated_wiki_id:
+              verificationHandler.getCurrentRequest()['wiki_id'],
           section_name: verificationHandler.getRequestPackage()['name'],
-          section_no: sectionNo);
+          section_no: verificationHandler.getSectionNo());
     }
 
     void acceptCreateLocation() {
       dbHandler.createLocation(
-          associated_wiki_id: verificationHandler.getCurrentRequest()['wikiID'],
+          associated_wiki_id:
+              verificationHandler.getCurrentRequest()['wiki_id'],
           location_name: verificationHandler.getRequestPackage()['name']);
     }
 
     void acceptCreateCharacter() {
       dbHandler.createCharacter(
-          associated_wiki_id: verificationHandler.getCurrentRequest()['wikiID'],
+          associated_wiki_id:
+              verificationHandler.getCurrentRequest()['wiki_id'],
           character_name: verificationHandler.getRequestPackage()['name']);
     }
 
@@ -507,6 +531,7 @@ class VerificationArrayHandler {
   String charLocName = '';
   String wikiTitle = '';
   String entryID = '';
+  int sectionNo = 0;
 
   List<dynamic> getVerificationRequests() {
     return verificationRequests;
@@ -568,6 +593,7 @@ class VerificationArrayHandler {
     charLocName = '';
     wikiTitle = '';
     entryID = '';
+    sectionNo = 0;
   }
 
   int getCurrentIndex() {
@@ -637,6 +663,14 @@ class VerificationArrayHandler {
 
   void removeRequest() {
     verificationRequests.removeAt(currentRequestIndex);
+  }
+
+  void setSectionNo(int newSectionNo) {
+    sectionNo = newSectionNo;
+  }
+
+  int getSectionNo() {
+    return sectionNo;
   }
 }
 

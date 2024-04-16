@@ -17,10 +17,19 @@ class EditSections extends StatefulWidget {
 }
 
 class EditSectionsState extends State<EditSections> {
+  late SectionHandler sectionHandler;
+
+  @override
+  void initState() {
+    super.initState();
+    sectionHandler = SectionHandler();
+    widget.sectionsMap.isNotEmpty
+        ? sectionHandler.setSectionMap(widget.sectionsMap)
+        : {};
+  }
+
   @override
   Widget build(BuildContext context) {
-    final SectionHandler sectionHandler =
-        SectionHandler(sectionsMap: widget.sectionsMap);
     final Global global = Global();
     final EdgeInsets sideMargins = global.sideMargins;
     return Scaffold(
@@ -211,10 +220,14 @@ class _SectionDropdownState extends State<_SectionDropdown> {
   @override
   void initState() {
     super.initState();
-    id = widget.sectionHandler.getSectionID();
-    name = widget.sectionHandler.getNameFromID(id);
     sections = widget.sectionHandler.getSectionMap();
-    widget.nameController.text = name;
+    if (sections.isEmpty) {
+      id = 'CREATEASECTION';
+    } else {
+      id = sections[0]['id'];
+      name = widget.sectionHandler.getNameFromID(id);
+      widget.nameController.text = name;
+    }
   }
 
   @override
@@ -229,29 +242,47 @@ class _SectionDropdownState extends State<_SectionDropdown> {
           widget.nameController.text = name;
         });
       },
-      items: [
-        ...sections.map<DropdownMenuItem<String>>((section) {
-          final sectionID = section['id'];
-          final sectionName = section['section_name'];
-          return DropdownMenuItem<String>(
-            value: sectionID,
-            child: Text(sectionName, style: TextStyles.listText),
-          );
-        }),
-        DropdownMenuItem<String>(
-          value: 'CREATEASECTION',
-          child: Text('Create a Section', style: TextStyles.listText),
-        ),
-      ],
+      items: sections.isEmpty
+          ? [
+              DropdownMenuItem<String>(
+                value: 'CREATEASECTION',
+                child: Text(
+                  'Create a Section',
+                  style: TextStyles.listText,
+                ),
+              ),
+            ]
+          : [
+              ...sections.map<DropdownMenuItem<String>>((section) {
+                final sectionID = section['id'];
+                final sectionName = section['name'];
+                return DropdownMenuItem<String>(
+                  value: sectionID,
+                  child: Text(
+                    sectionName,
+                    style: TextStyles.listText,
+                  ),
+                );
+              }),
+              DropdownMenuItem<String>(
+                value: 'CREATEASECTION',
+                child: Text(
+                  'Create a Section',
+                  style: TextStyles.listText,
+                ),
+              ),
+            ],
     );
   }
 }
 
 class SectionHandler {
-  final List<dynamic> sectionsMap;
+  List<dynamic> sectionsMap = [];
   Map<String, dynamic> entry = {};
 
-  SectionHandler({required this.sectionsMap}) : entry = sectionsMap[0] ?? {};
+  void setSectionMap(List<dynamic> sections) {
+    sectionsMap = sections;
+  }
 
   void setEntryFromID(String sectionID) {
     for (Map<String, dynamic> section in sectionsMap) {

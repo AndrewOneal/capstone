@@ -17,10 +17,19 @@ class EditLocations extends StatefulWidget {
 }
 
 class EditLocationsState extends State<EditLocations> {
+  late LocationHandler locationHandler;
+
+  @override
+  void initState() {
+    super.initState();
+    locationHandler = LocationHandler();
+    widget.locationsMap.isNotEmpty
+        ? locationHandler.setLocationsMap(widget.locationsMap)
+        : {};
+  }
+
   @override
   Widget build(BuildContext context) {
-    final LocationHandler locationHandler =
-        LocationHandler(locationsMap: widget.locationsMap);
     final Global global = Global();
     final EdgeInsets sideMargins = global.sideMargins;
     return Scaffold(
@@ -212,10 +221,14 @@ class _LocationDropdownState extends State<_LocationDropdown> {
   @override
   void initState() {
     super.initState();
-    id = widget.locationHandler.getLocationID();
-    name = widget.locationHandler.getNameFromID(id);
     locations = widget.locationHandler.getLocationMap();
-    widget.nameController.text = name;
+    if (locations.isEmpty) {
+      id = 'CREATEALOCATION';
+    } else {
+      id = locations[0]['id'];
+      name = widget.locationHandler.getNameFromID(id);
+      widget.nameController.text = name;
+    }
   }
 
   @override
@@ -230,29 +243,47 @@ class _LocationDropdownState extends State<_LocationDropdown> {
           widget.nameController.text = name;
         });
       },
-      items: [
-        ...locations.map<DropdownMenuItem<String>>((location) {
-          final locationID = location['id'];
-          final locationName = location['name'];
-          return DropdownMenuItem<String>(
-            value: locationID,
-            child: Text(locationName, style: TextStyles.listText),
-          );
-        }),
-        DropdownMenuItem<String>(
-          value: 'CREATEALOCATION',
-          child: Text('Create a Location', style: TextStyles.listText),
-        ),
-      ],
+      items: locations.isEmpty
+          ? [
+              DropdownMenuItem<String>(
+                value: 'CREATEALOCATION',
+                child: Text(
+                  'Create a Location',
+                  style: TextStyles.listText,
+                ),
+              ),
+            ]
+          : [
+              ...locations.map<DropdownMenuItem<String>>((location) {
+                final locationID = location['id'];
+                final locationName = location['name'];
+                return DropdownMenuItem<String>(
+                  value: locationID,
+                  child: Text(
+                    locationName,
+                    style: TextStyles.listText,
+                  ),
+                );
+              }),
+              DropdownMenuItem<String>(
+                value: 'CREATEALOCATION',
+                child: Text(
+                  'Create a Location',
+                  style: TextStyles.listText,
+                ),
+              ),
+            ],
     );
   }
 }
 
 class LocationHandler {
-  final List<dynamic> locationsMap;
+  List<dynamic> locationsMap = [];
   Map<String, dynamic> entry = {};
 
-  LocationHandler({required this.locationsMap}) : entry = locationsMap[0] ?? {};
+  void setLocationsMap(List<dynamic> locations) {
+    locationsMap = locations;
+  }
 
   void setEntryFromID(String locationID) {
     for (Map<String, dynamic> location in locationsMap) {

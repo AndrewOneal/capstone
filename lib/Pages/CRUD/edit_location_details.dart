@@ -242,11 +242,7 @@ class _SectionDropdownState extends State<_SectionDropdown> {
     super.initState();
     sections = [];
     description = widget.locationHandler.getDescriptionFromSection(sectionNo);
-    widget.quillEditor.setInput([
-      {
-        "insert": '$description\n',
-      },
-    ]);
+    widget.quillEditor.setInput(description);
     fetchSections();
     widget.sectionNoHandler.setSectionID();
   }
@@ -272,11 +268,7 @@ class _SectionDropdownState extends State<_SectionDropdown> {
           description =
               widget.locationHandler.getDescriptionFromSection(sectionNo);
 
-          widget.quillEditor.setInput([
-            {
-              "insert": '$description\n',
-            },
-          ]);
+          widget.quillEditor.setInput(description);
 
           widget.sectionNoHandler.setSectionID();
         });

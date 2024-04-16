@@ -130,7 +130,9 @@ class _NewWikiForm extends StatelessWidget {
                   wiki_name: _titleController.text,
                   section_name: _sectionNamesController.text,
                   wiki_section_count: int.parse(_numSectionsController.text),
-                  wiki_description: quillEditor.getDocumentJson().toString(),
+                  wiki_description: {
+                    "flutter_quill": quillEditor.getDocumentJson()
+                  },
                 );
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(

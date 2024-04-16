@@ -17,10 +17,19 @@ class EditCharacters extends StatefulWidget {
 }
 
 class EditCharactersState extends State<EditCharacters> {
+  late CharacterHandler characterHandler;
+
+  @override
+  void initState() {
+    super.initState();
+    characterHandler = CharacterHandler();
+    widget.charactersMap.isNotEmpty
+        ? characterHandler.setCharacterMap(widget.charactersMap)
+        : {};
+  }
+
   @override
   Widget build(BuildContext context) {
-    final CharacterHandler characterHandler =
-        CharacterHandler(charactersMap: widget.charactersMap);
     final Global global = Global();
     final EdgeInsets sideMargins = global.sideMargins;
     return Scaffold(
@@ -212,10 +221,14 @@ class _CharacterDropdownState extends State<_CharacterDropdown> {
   @override
   void initState() {
     super.initState();
-    id = widget.characterHandler.getCharacterID();
-    name = widget.characterHandler.getNameFromID(id);
     characters = widget.characterHandler.getCharacterMap();
-    widget.nameController.text = name;
+    if (characters.isEmpty) {
+      id = 'CREATEACHARACTER';
+    } else {
+      id = characters[0]['id'];
+      name = widget.characterHandler.getNameFromID(id);
+      widget.nameController.text = name;
+    }
   }
 
   @override
@@ -230,30 +243,47 @@ class _CharacterDropdownState extends State<_CharacterDropdown> {
           widget.nameController.text = name;
         });
       },
-      items: [
-        ...characters.map<DropdownMenuItem<String>>((character) {
-          final characterID = character['id'];
-          final characterName = character['name'];
-          return DropdownMenuItem<String>(
-            value: characterID,
-            child: Text(characterName, style: TextStyles.listText),
-          );
-        }),
-        DropdownMenuItem<String>(
-          value: 'CREATEACHARACTER',
-          child: Text('Create a Character', style: TextStyles.listText),
-        ),
-      ],
+      items: characters.isEmpty
+          ? [
+              DropdownMenuItem<String>(
+                value: 'CREATEACHARACTER',
+                child: Text(
+                  'Create a Character',
+                  style: TextStyles.listText,
+                ),
+              ),
+            ]
+          : [
+              ...characters.map<DropdownMenuItem<String>>((character) {
+                final characterID = character['id'];
+                final characterName = character['name'];
+                return DropdownMenuItem<String>(
+                  value: characterID,
+                  child: Text(
+                    characterName,
+                    style: TextStyles.listText,
+                  ),
+                );
+              }),
+              DropdownMenuItem<String>(
+                value: 'CREATEACHARACTER',
+                child: Text(
+                  'Create a Character',
+                  style: TextStyles.listText,
+                ),
+              ),
+            ],
     );
   }
 }
 
 class CharacterHandler {
-  final List<dynamic> charactersMap;
+  List<dynamic> charactersMap = [];
   Map<String, dynamic> entry = {};
 
-  CharacterHandler({required this.charactersMap})
-      : entry = charactersMap[0] ?? {};
+  void setCharacterMap(List<dynamic> characterMap) {
+    charactersMap = characterMap;
+  }
 
   void setEntryFromID(String characterID) {
     for (Map<String, dynamic> character in charactersMap) {
