@@ -260,12 +260,6 @@ class _AcceptRejectButtons extends StatelessWidget {
     }
 
     void acceptCreateSection() {
-      print(verificationHandler.getCurrentRequest());
-      print(
-        verificationHandler.getCurrentRequest()['wiki_id'],
-      );
-      print(verificationHandler.getRequestPackage()['name']);
-      print(verificationHandler.getSectionNo());
       dbHandler.createSection(
           associated_wiki_id:
               verificationHandler.getCurrentRequest()['wiki_id'],
