@@ -272,11 +272,12 @@ class DBHandler {
       {required String wiki_name,
       required int wiki_section_count,
       required wiki_description,
-      required String section_name}) async {
+      required String section_name
+      required string wiki_admin_id}) async {
     //Create new wiki record
     final body = <String, dynamic>{
       "wiki_name": "${wiki_name}",
-      "wiki_admin": null,
+      "wiki_admin": ""${wiki_admin_id}",
       "wiki_section_count": wiki_section_count,
       "wiki_description": jsonEncode(wiki_description)
     };
