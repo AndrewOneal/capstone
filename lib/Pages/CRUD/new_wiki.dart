@@ -130,6 +130,7 @@ class _NewWikiForm extends StatelessWidget {
                   wiki_name: _titleController.text,
                   section_name: _sectionNamesController.text,
                   wiki_section_count: int.parse(_numSectionsController.text),
+                  wiki_admin_id: pb.authStore.model.id,
                   wiki_description: {
                     "flutter_quill": quillEditor.getDocumentJson()
                   },

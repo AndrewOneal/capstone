@@ -52,7 +52,9 @@ class WikiHomePageState extends State<WikiHomePage> {
   @override
   Widget build(BuildContext context) {
     final String wikiTitle = widget.wikiMap['wiki_name'];
-    final String wikiDescription = widget.wikiMap['wiki_description'];
+    final List<Map<String, dynamic>> wikiDescription =
+        (widget.wikiMap['wiki_description']['flutter_quill'] as List)
+            .cast<Map<String, dynamic>>();
     final Global global = Global();
     final EdgeInsets sideMargins = global.sideMargins;
     final SizedBox titleSizedBox = global.titleSizedBox;
@@ -171,7 +173,7 @@ class _TitleText extends StatelessWidget {
 }
 
 class _WikiCard extends StatelessWidget {
-  final String wikiDescription;
+  final List<Map<String, dynamic>> wikiDescription;
   final cardPadding = const EdgeInsets.symmetric(horizontal: 10, vertical: 20);
 
   const _WikiCard({required this.wikiDescription});
@@ -185,15 +187,7 @@ class _WikiCard extends StatelessWidget {
         child: Column(
           children: [
             Center(
-              child: DefaultQuillRead(input: [
-                {
-                  "insert": wikiDescription,
-                  "attributes": {"color": "#FF363942"}
-                },
-                {
-                  "insert": "\n",
-                }
-              ]),
+              child: DefaultQuillRead(input: wikiDescription),
             ),
           ],
         ),
