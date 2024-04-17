@@ -18,10 +18,18 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Installing
 
-Install the dependencies
+Install the dependencies and convert .env.example to .env
 
 ```sh-session
 flutter pub get
+```
+
+### Pocketbase
+
+This project uses [Pocketbase](https://pocketbase.io/docs/) as the backend. To host a local instance of the database run the following commands
+
+```sh-session
+./database/pocketbase serve
 ```
 
 #### Android
@@ -33,9 +41,12 @@ flutter build apk
 flutter install
 ```
 
-#### iOS
+#### Windows
 
-To Be Added
+```sh-session
+flutter build windows
+flutter install
+```
 
 ## Running the tests
 
