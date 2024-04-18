@@ -5,7 +5,7 @@ import 'package:capstone/Utilities/db_util.dart';
 final pb = PocketBase('http://127.0.0.1:8090');
 
 void populateFakeData() async {
-  await DBHandler().createWiki(wiki_name: "Fringe", wiki_section_count: 5, wiki_description: "Sci/Fi TV Series", section_name: "Season");
+  await DBHandler().createWiki(wiki_name: "Fringe", wiki_section_count: 5, wiki_description: "Sci/Fi TV Series", section_name: "Season", wiki_admin_id: '');
   await DBHandler().createCharacter(character_name: "Olivia Dunham", associated_wiki_id: await DBHandler().getWikiIDFromName(wikiName: "Fringe"));
   await DBHandler().createCharacter(character_name: "Dr. Robert", associated_wiki_id: await DBHandler().getWikiIDFromName(wikiName: "Fringe"));
   await DBHandler().createLocation(location_name: "NYC HQ", associated_wiki_id: await DBHandler().getWikiIDFromName(wikiName: "Fringe"));
@@ -13,10 +13,6 @@ void populateFakeData() async {
   // await Future.delayed(const Duration(seconds: 5));
   // await DBHandler().deleteWiki(wikiID: await DBHandler().getWikiIDFromName(wikiName: "Fringe"));
 }
-void deleteFakeData() async {
-
-}
-
 Future<void> main() async {
   setUpAll(() => {
     populateFakeData()
@@ -28,7 +24,7 @@ Future<void> main() async {
       expect(wikis.length, greaterThan(0));
     });
     test('CREATE Wiki', () async {
-      await DBHandler().createWiki(wiki_name: "Wheel of Time", wiki_section_count: 14, wiki_description: "Fantasy book series", section_name: "Book");
+      await DBHandler().createWiki(wiki_name: "Wheel of Time", wiki_section_count: 14, wiki_description: "Fantasy book series", section_name: "Book", wiki_admin_id: '');
       var wiki = await DBHandler().getWiki(wikiID: await DBHandler().getWikiIDFromName(wikiName: "Wheel of Time"));
       expect(wiki["wiki_name"], "Wheel of Time");
     });
@@ -40,9 +36,6 @@ Future<void> main() async {
     test('DELETE Wiki', () async {
       //Needs slight adjustment
       await DBHandler().deleteWiki(wikiID: await DBHandler().getWikiIDFromName(wikiName: "Wheel of Time"));
-    });
-    test('', () async {
-
     });
   });
   group("Testing Characters collection", () {
@@ -74,7 +67,7 @@ Future<void> main() async {
     });
     test('Delete Sections', () async {
       //Delete sections will also not be used by the application, this will be done automatically in the database when a specific wiki is delted
-      await DBHandler().createWiki(wiki_name: "Wheel of Time", wiki_section_count: 14, wiki_description: "Fantasy book series", section_name: "Book");
+      await DBHandler().createWiki(wiki_name: "Wheel of Time", wiki_section_count: 14, wiki_description: "Fantasy book series", section_name: "Book", wiki_admin_id: '');
       var sectionList = await DBHandler().getSections(wikiID: await DBHandler().getWikiIDFromName(wikiName: "Wheel of Time"));
       expect(sectionList.length, equals(14));
       await DBHandler().deleteWiki(wikiID: await DBHandler().getWikiIDFromName(wikiName: "Wheel"));
