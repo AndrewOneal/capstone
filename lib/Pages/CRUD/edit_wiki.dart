@@ -74,15 +74,13 @@ class _EditWikiDetailsForm extends StatelessWidget {
     final SizedBox largeSizedBox = global.largeSizedBox;
     final SizedBox extraLargeSizedBox = global.extraLargeSizedBox;
     final wikiID = wikiMap['id'];
-    final wikiDescription = wikiMap['wiki_description'];
+    final wikiDescription =
+        (wikiMap['wiki_description']['flutter_quill'] as List)
+            .cast<Map<String, dynamic>>();
     final DBHandler dbHandler = DBHandler();
     QuillEditorManager quillEditor = QuillEditorManager();
     quillEditor.setBackgroundColor(lightPurple['200']!);
-    quillEditor.setInput([
-      {
-        "insert": '$wikiDescription\n',
-      },
-    ]);
+    quillEditor.setInput(wikiDescription);
     final double buttonWidth = MediaQuery.of(context).size.width > 514
         ? MediaQuery.of(context).size.width * 0.4
         : MediaQuery.of(context).size.width * 0.8;
